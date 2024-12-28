@@ -45,7 +45,8 @@
         console.log('Logged in with:', userCredential.user);
 
         // Redirect ke chat.html setelah login berhasil
-        window.location.href = "chat.html";
+        console.log("Redirecting to chat.html...");
+window.location.replace("https://tolepcoy.github.io/SecretServer/chat.html");
       })
       .catch(error => {
         alert('Error: ' + error.message);
@@ -55,4 +56,3 @@
     alert('Please fill in both email and password.');
   }
 });
-
