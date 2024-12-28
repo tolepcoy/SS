@@ -4,11 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Global Chat</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="chatstyle.css">
 </head>
 <body>
+  <!-- Sidebar Navbar -->
+  <div id="sidebar">
+    <div class="icon" id="userProfile">
+      <img src="icon/user-icon.png" alt="User Profile">
+    </div>
+    <div class="icon" id="settings">
+      <img src="icon/settings-icon.png" alt="Settings">
+    </div>
+    <div class="icon" id="aboutApp">
+      <img src="icon/about-icon.png" alt="About App">
+    </div>
+  </div>
+
+  <!-- Chat Container -->
   <div id="chatContainer">
-    <h1>Global Chat</h1>
+    <h3 style="text-align:center">SECRET SERVER</h3><hr>
     <div id="chatBox">
       <!-- Chat messages will appear here -->
     </div>
@@ -18,17 +32,81 @@
     </form>
   </div>
 
-  <script>
-    // Contoh event handler sederhana (nanti kita hubungkan ke Firebase)
-    document.getElementById('messageForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const message = document.getElementById('messageInput').value;
-      if (message.trim() !== '') {
-        const chatBox = document.getElementById('chatBox');
-        chatBox.innerHTML += `<p>${message}</p>`;
-        document.getElementById('messageInput').value = ''; // Clear input
-      }
-    });
-  </script>
+  <!-- Slide-In Elements -->
+  <!-- Panel Profil untuk menampilkan hasil -->
+<div id="profile" class="sidePanel">
+  <h2 id="profileNameDisplay">Rita</h2>
+  
+  <div>Avatar User: <img id="profileAvatarDisplay" src="avatar-placeholder.jpg" alt="User Avatar"></div>
+  
+  <div>Username User: <span id="profileUsernameDisplay">john_doe</span></div>
+  
+  <div>Status Member User: <span id="profileStatusDisplay">Active Member</span></div>
+  
+  <div>Profile Details: <span id="profileDetailsDisplay">Detail profile user</span></div>
+  
+  <div>Profile Location: <span id="profileLocationDisplay">Lokasi user</span></div>
+  
+  <div>Profile Age: <span id="profileAgeDisplay">25</span></div>
+  
+  <div>Gender User: <span id="profileGenderDisplay">Male</span></div>
+    <div>Rate User: <span id="profileRateDisplay">Contact Admin</span></div>
+    
+    <div>Bergabung Sejak: <span id="profileJoinDateDisplay">January 2021</span></div>
+    
+  <button onclick="closePanel('profile')">Close</button>
+</div>
+
+<!-- setting -->
+  <!-- Panel Settings -->
+<div id="settingsPanel" class="sidePanel">
+  <h2>Settings</h2>
+
+  <div>
+    <label for="profileName">Nama User:</label>
+    <input type="text" id="profileName" placeholder="Masukkan nama">
+  </div>
+  
+  <div>
+      <label for="profileAvatarInput">Avatar User:</label>
+      <input type="file" id="profileAvatarInput" accept="image/*">
+    </div>
+    
+  <div>
+    <label for="profileDetails">Profile Details:</label>
+    <input type="text" id="profileDetails" placeholder="Masukkan detail profile">
+  </div>
+  
+  <div>
+    <label for="profileLocation">Profile Location:</label>
+    <input type="text" id="profileLocation" placeholder="Masukkan lokasi profile">
+  </div>
+  
+  <div>
+    <label for="profileAge">Profile Age:</label>
+    <input type="text" id="profileAge" placeholder="Masukkan usia (2 digit)">
+  </div>
+  
+  <div>
+      <label for="profileGenderInput">Gender User:</label>
+      <select id="profileGenderInput">
+        <option value="male" selected>Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+  
+  <button id="saveProfileBtn">savesavesaveSave</button>
+  <button onclick="closePanel('settingsPanel')">Close</button>
+</div>
+
+<!-- TENTANG APP -->
+  <div id="aboutPanel" class="sidePanel">
+    <h2>About the App</h2>
+    <p>Information about the app goes here.</p>
+    <button onclick="closePanel('aboutPanel')">Close</button>
+  </div>
+
+  <script src="chat.js"></script>
 </body>
 </html>
