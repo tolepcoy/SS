@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Chat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="chatContainer">
+    <h1>Global Chat</h1>
+    <div id="chatBox">
+      <!-- Chat messages will appear here -->
+    </div>
+    <form id="messageForm">
+      <input type="text" id="messageInput" placeholder="Type your message..." required>
+      <button type="submit" id="sendButton">Send</button>
+    </form>
+  </div>
+
+  <script>
+    // Contoh event handler sederhana (nanti kita hubungkan ke Firebase)
+    document.getElementById('messageForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const message = document.getElementById('messageInput').value;
+      if (message.trim() !== '') {
+        const chatBox = document.getElementById('chatBox');
+        chatBox.innerHTML += `<p>${message}</p>`;
+        document.getElementById('messageInput').value = ''; // Clear input
+      }
+    });
+  </script>
+</body>
+</html>
