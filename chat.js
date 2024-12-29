@@ -2,6 +2,13 @@
 document.getElementById('userProfile').addEventListener('click', () => openPanel('profile'));
 document.getElementById('settings').addEventListener('click', () => openPanel('settingsPanel'));
 document.getElementById('aboutApp').addEventListener('click', () => openPanel('aboutPanel'));
+document.getElementById('logout').addEventListener('click', () => {
+    firebase.auth().signOut().then(() => {
+        alert("You have been logged out");
+    }).catch((error) => {
+        console.error("Error logging out: ", error);
+    });
+});
 
 // Fungsi untuk membuka side panel
 function openPanel(panelId) {
@@ -106,7 +113,6 @@ document.getElementById('saveProfileButton').addEventListener('click', async () 
 
   saveUserProfile({
     name,
-    status,
     location,
     age: parseInt(age, 10),
     gender,
@@ -182,3 +188,61 @@ document.getElementById('updateProfileButton').addEventListener('click', () => {
     location: newLocation
   });
 });
+
+// DOM Elements untuk chat
+const messageForm = document.getElementById('messageForm');
+const messageInput = document.getElementById('messageInput');
+const chatBox = document.getElementById('chatBox');
+const sendButton = document.getElementById('sendButton');
+
+// User Info (sample static values, bisa dinamis dari Firebase)
+const username = 'Bang Tolep';
+const userAvatar = 'icon/default_avatar.jpg';
+
+// Function untuk menampilkan pesan
+function displayMessage(message, sender, avatar) {
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message');
+    
+    const avatarImg = document.createElement('img');
+    avatarImg.classList.add('avatar');
+    avatarImg.src = avatar;
+    messageDiv.appendChild(avatarImg);
+
+    const messageContent = document.createElement('div');
+    messageContent.classList.add('messageContent');
+    messageContent.innerHTML = `<strong>${sender}</strong><p>${message}</p>`;
+    messageDiv.appendChild(messageContent);
+
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Submit message event
+messageForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const message = messageInput.value;
+    if (message.trim()) {
+        // Save message to Firestore
+        firestore.collection('chats').add({
+            message: message,
+            sender: username,
+            avatar: userAvatar,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // Clear input field
+        messageInput.value = '';
+    }
+});
+
+// Get messages from Firestore
+firestore.collection('chats').orderBy('timestamp')
+    .onSnapshot((snapshot) => {
+        chatBox.innerHTML = ''; // Clear previous messages
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            displayMessage(data.message, data.sender, data.avatar);
+        });
+    });
