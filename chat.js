@@ -69,8 +69,6 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
-
-
 // zoom avatar
 document.getElementById('avatar').addEventListener('click', function() {
   this.classList.toggle('zoom');
