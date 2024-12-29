@@ -1,0 +1,135 @@
+/* Style untuk chat */
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  margin: 0;
+  height: 100vh;
+}
+
+/* Sidebar Navbar */
+#sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 15%;
+  height: 100%;
+  background-color: #2C3E50;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#sidebar .icon {
+  margin: auto;
+  border-radius: 6px;
+}
+
+#sidebar .icon img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+#sidebar .icon img:hover {
+  opacity: 0.7;
+}
+
+/* Style untuk panel yang slide-in */
+.sidePanel {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 85%;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(-100%);
+}
+
+.closeBtnPnl {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.sidePanel button:hover {
+  background-color: #555;
+}
+
+.sidePanel h2 {
+  margin-bottom: 20px;
+}
+
+#profileAvatarDisplay {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+#saveProfileBtn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Chat Container */
+#chatContainer {
+  flex-grow: 1;
+  padding: 20px;
+  margin-right: 15%;
+}
+
+#chatBox {
+  height: 70vh;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+}
+
+#messageForm {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: auto;
+}
+
+#messageInput {
+  width: 80%;
+  padding: 10px;
+  border-radius: 6px 0 0 6px;
+  border: 1px solid #ddd;
+}
+
+#sendButton {
+  padding: 10px 20px;
+  border: none;
+  background: url('icon/bgBtn.png');
+  background-size: 100% 100%;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 0 6px 6px 0;
+  opacity: 0.8;
+}
+
+#sendButton:hover {
+  background-color: #45a049;
+}
