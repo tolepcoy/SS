@@ -38,24 +38,24 @@
   <!-- Slide-In Elements -->
   <!-- Panel Profil untuk menampilkan hasil -->
 <div id="profile" class="sidePanel">
-  <h2 id="profileNameDisplay">Rita</h2>
+  <h2 id="profileNameDisplay">Bang Tolep</h2>
   
-  <div>Avatar User: <img id="profileAvatarDisplay" src="avatar-placeholder.jpg" alt="User Avatar"></div>
+  <div><img id="profileAvatarDisplay" src="avatar-placeholder.jpg" alt="User Avatar"></div>
   
-  <div>Username User: <span id="profileUsernameDisplay">john_doe</span></div>
+  <div>Username : <span id="profileUsernameDisplay">tolepcoy</span></div>
   
-  <div>Status Member User: <span id="profileStatusDisplay">Active Member</span></div>
+  <div>Status : <span id="profileStatusDisplay">Biasa</span></div>
   
-  <div>Profile Details: <span id="profileDetailsDisplay">Detail profile user</span></div>
+  <div id="profileDetailsDisplay">Detail profile user</div>
   
-  <div>Profile Location: <span id="profileLocationDisplay">Lokasi user</span></div>
+  <div>Lokasi : <span id="profileLocationDisplay">Lokasi user</span></div>
   
-  <div>Profile Age: <span id="profileAgeDisplay">25</span></div>
+  <div>Umur : <span style="font-weight:bold" id="profileAgeDisplay">25</span> Thn</div>
   
-  <div>Gender User: <span id="profileGenderDisplay">Male</span></div>
-    <div>Rate User: <span id="profileRateDisplay">Contact Admin</span></div>
+  <div>Gender : <span id="profileGenderDisplay">Male</span></div>
+    <div id="rate">Rate : <span id="profileRateDisplay">13Rpm - 23Rpm</span></div>
     
-    <div>Bergabung Sejak: <span id="profileJoinDateDisplay">January 2021</span></div>
+    <div>Bergabung : <span id="profileJoinDateDisplay">January 2021</span></div>
     
   <button class="closeBtnPnl" onclick="closePanel('profile')">Close</button>
 </div>
@@ -66,36 +66,30 @@
   <h2>Settings</h2>
 
   <div>
-    <label for="profileName">Nama User:</label>
-    <input type="text" id="profileName" placeholder="Masukkan nama">
+    <input type="text" id="profileName" placeholder="Edit Nama">
   </div>
   
   <div>
-      <label for="profileAvatarInput">Avatar User:</label>
-      <input type="file" id="profileAvatarInput" accept="image/*">
-    </div>
+  <label for="profileAvatarInput" class="custom-file-label">Pilih Avatar</label>
+  <input id="profileAvatarInput" type="file" accept="image/*" style="display: none;">
+</div>
     
   <div>
-    <label for="profileDetails">Profile Details:</label>
-    <input type="text" id="profileDetails" placeholder="Masukkan detail profile">
+    <input type="text" id="profileDetails" placeholder="Edit Detail">
   </div>
   
   <div>
-    <label for="profileLocation">Profile Location:</label>
-    <input type="text" id="profileLocation" placeholder="Masukkan lokasi profile">
+    <input type="text" id="profileLocation" placeholder="Edit Lokasi">
   </div>
   
   <div>
-    <label for="profileAge">Profile Age:</label>
     <input type="text" id="profileAge" placeholder="Masukkan usia (2 digit)">
   </div>
   
   <div>
-      <label for="profileGenderInput">Gender User:</label>
       <select id="profileGenderInput">
-        <option value="male" selected>Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other</option>
+        <option value="Laki-laki" selected>Laki-laki</option>
+        <option value="Perempuan">Perempuan</option>
       </select>
     </div>
   
