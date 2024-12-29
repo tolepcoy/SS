@@ -14,7 +14,12 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
-// Pastikan DOM selesai dimuat sebelum menambahkan event listener
+
+// Fungsi untuk menutup side panel
+function closePanel(panelId) {
+  document.getElementById(panelId).style.transform = "translateX(-100%)";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   // Event listeners untuk sidebar icons
   document.getElementById('userProfile').addEventListener('click', () => openPanel('profile'));
@@ -37,11 +42,6 @@ function openPanel(panelId) {
   panels.forEach(panel => {
     document.getElementById(panel).style.transform = panel === panelId ? "translateX(0)" : "translateX(-100%)";
   });
-}
-
-// Fungsi untuk menutup side panel
-function closePanel(panelId) {
-  document.getElementById(panelId).style.transform = "translateX(-100%)";
 }
 
 // Fungsi untuk menampilkan profil user setelah login
