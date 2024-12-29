@@ -4,6 +4,7 @@ body {
   display: flex;
   margin: 0;
   height: 100vh;
+  background: #eee;
 }
 
 /* Sidebar Navbar */
@@ -48,12 +49,12 @@ body {
   left: 0;
   width: 85%;
   height: 100%;
-  background: #555;
+  background: linear-gradient(to right, #555, #333);
   color: white;
   border-radius: 0 16px 16px 0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
   transition: transform 0.3s ease-in-out;
-  transform: translateX(-100%);
+  transform: translateX(-105%);
 }
 
 #profileDetailsDisplay {
@@ -140,7 +141,17 @@ body {
   height: 100px;
   border-radius: 50%;
   box-shadow: -1px 4px 3px #333;
-  border: 2px groove #ddd;
+  border: 2px aolid #ddd;
+}
+
+#profileAvatarDisplay:hover {
+  border-radius: 0;
+  position: absolute;
+  width: 97%;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .saveProfileBtn {
@@ -173,7 +184,7 @@ body {
   overflow-y: auto;
   border: 1px solid #ddd;
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   background-color: #f9f9f9;
   border-radius: 6px;
 }
@@ -181,7 +192,6 @@ body {
 #messageForm {
   display: flex;
   justify-content: space-between;
-  margin-bottom: auto;
 }
 
 #messageInput {
