@@ -110,7 +110,7 @@ document.getElementById('saveProfileButton').addEventListener('click', async () 
   if (!location.trim()) return alert("Lokasi tidak boleh kosong.");
   if (!/^[1-6][0-9]$/.test(age)) return alert("Usia harus 10-69 tahun.");
 
-  let avatarUrl = "default_avatar.png";
+  let avatarUrl = "icon/default_avatar.jpg";
   if (avatarFile) {
     avatarUrl = await uploadAvatar(avatarFile);
   }
@@ -136,18 +136,62 @@ function loadUserProfile() {
         document.getElementById('profileLocationDisplay').innerText = profile.location || "Belum diisi";
         document.getElementById('profileAgeDisplay').innerText = profile.age || "Belum diisi";
         document.getElementById('profileGenderDisplay').innerText = profile.gender || "Belum diisi";
-        document.getElementById('profileAvatarDisplay').src = profile.avatar || "default_avatar.png";
+        document.getElementById('profileAvatarDisplay').src = profile.avatar || "icon/default_avatar.jpg";
       })
       .catch(err => console.error("Gagal mengambil data:", err));
   }
 }
 
+document.getElementById('profileAvatarInput').addEventListener('change', function() {
+  const fileName = this.files[0] ? this.files[0].name : 'Pilih Avatar';
+  document.querySelector('.custom-file-label').textContent = fileName;
+});
+
 // Logout User
-document.getElementById('logoutButton').addEventListener('click', () => {
+document.getElementById('logout').addEventListener('click', () => {
   auth.signOut().then(() => alert("Berhasil logout."));
 });
 
 // Trigger load profile saat login
 auth.onAuthStateChanged(user => {
   if (user) loadUserProfile();
+});
+
+function updateUserProfile(newData) {
+  const user = auth.currentUser;
+  if (user) {
+    // Akses node user berdasarkan UID
+    const userRef = database.ref('users/' + user.uid);
+
+    // Update data yang diinginkan
+    userRef.update(newData)
+      .then(() => {
+        alert("Profil berhasil diupdate!");
+      })
+      .catch(err => {
+        console.error("Gagal update data:", err);
+      });
+  } else {
+    alert("User belum login.");
+  }
+}
+
+// Data yang ingin diupdate
+const newProfileData = {
+  age: 39,  // Contoh umur
+  location: "Perum, Sako"  // Contoh lokasi
+};
+
+// Panggil fungsi update
+updateUserProfile(newProfileData);
+
+document.getElementById('updateProfileButton').addEventListener('click', () => {
+  const newAge = document.getElementById('profileAgeInput').value;
+  const newLocation = document.getElementById('profileLocationInput').value;
+
+  // Panggil fungsi update dengan data yang baru
+  updateUserProfile({
+    age: newAge,
+    location: newLocation
+  });
 });
