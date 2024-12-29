@@ -26,23 +26,6 @@ function closePanel(panelId) {
   document.getElementById(panelId).style.transform = "translateX(-100%)";
 }
 
-// Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyAxhhXU90GluSwrjaoqxmP23bgfHR18ez4",
-  authDomain: "secretserver-chat.firebaseapp.com",
-  projectId: "secretserver-chat",
-  storageBucket: "secretserver-chat.appspot.com",
-  messagingSenderId: "105772354036",
-  appId: "1:105772354036:web:b3962f9ec0260be47491a1",
-  measurementId: "G-2FY0BDMFWD"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const firestore = firebase.firestore(); // Hanya Firestore yang digunakan
-
-
 // Logout User
 document.getElementById('logout').addEventListener('click', () => {
   auth.signOut().then(() => alert("Berhasil logout."));
@@ -76,4 +59,50 @@ firebase.auth().onAuthStateChanged(user => {
 // zoom avatar
 document.getElementById('avatar').addEventListener('click', function() {
   this.classList.toggle('zoom');
+});
+
+/////////////////////////////
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyAxhhXU90GluSwrjaoqxmP23bgfHR18ez4",
+  authDomain: "secretserver-chat.firebaseapp.com",
+  projectId: "secretserver-chat",
+  storageBucket: "secretserver-chat.appspot.com",
+  messagingSenderId: "105772354036",
+  appId: "1:105772354036:web:b3962f9ec0260be47491a1",
+  measurementId: "G-2FY0BDMFWD"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const firestore = firebase.firestore(); // Hanya Firestore yang digunakan
+
+/*! USERNAMA NAMA USER */
+// Pastikan Firebase sudah diinisialisasi
+firebase.auth().onAuthStateChanged(userSS => {
+  if (user) {
+    // Ambil UID user yang sedang login
+    const uid = userSS.uid;
+
+    // Akses koleksi `users` di Firestore dan ambil dokumen sesuai UID
+    const userDocRef = firebase.firestore().collection('userSS').doc(uid);
+    userDocRef.get()
+      .then(doc => {
+        if (doc.exists) {
+          // Ambil field `nama` dari dokumen
+          const nama = doc.data().nama;
+
+          // Update elemen HTML dengan nama user
+          document.getElementById('username').innerText = nama;
+        } else {
+          console.error("Dokumen user tidak ditemukan di Firestore.");
+        }
+      })
+      .catch(error => {
+        console.error("Error saat mengambil data user:", error);
+      });
+  } else {
+    console.error("User belum login.");
+  }
 });
