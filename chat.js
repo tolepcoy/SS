@@ -69,8 +69,77 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
+
+
 // zoom avatar
 document.getElementById('avatar').addEventListener('click', function() {
   this.classList.toggle('zoom');
+});});
+
+// Fungsi untuk simpan data user ke Firestore
+function saveUserProfile(profileData) {
+  const user = auth.currentUser;
+  if (user) {
+    const userRef = firestore.collection('userSS').doc(user.uid);
+    userRef.set(profileData, { merge: true }) // Hanya overwrite field yang diedit
+      .then(() => alert("Data user berhasil disimpan."))
+      .catch(err => console.error("Gagal menyimpan data:", err));
+  } else {
+    alert("User belum login.");
+  }
+}
+
+// Fungsi untuk handle save profile dengan Firebase
+document.getElementById('save-button').addEventListener('click', async () => {
+  const name = document.getElementById('user-nama').value.trim();
+  const location = document.getElementById('user-lokasi').value.trim();
+  const age = document.getElementById('user-umur').value.trim();
+  const gender = document.getElementById('user-gender').value;
+  const avatar = document.getElementById('user-avatar').files[0];
+
+  // Validasi Nama: Max 15 karakter, hanya huruf dan spasi
+  if (!/^[a-zA-Z\s]{1,15}$/.test(name)) {
+    return alert("Nama hanya boleh huruf dan spasi, maksimal 15 karakter.");
+  }
+
+  // Validasi Lokasi: Max 20 karakter termasuk spasi
+  if (location.length > 20) {
+    return alert("Lokasi maksimal 20 karakter.");
+  }
+
+  // Validasi Umur: Rentang 16–60 tahun
+  if (!/^\d{2}$/.test(age) || age < 16 || age > 60) {
+    return alert("Usia harus angka antara 16–60 tahun.");
+  }
+
+  // Validasi Avatar: Hanya file .jpg
+  if (avatar && !avatar.type.includes('image/jpeg')) {
+    return alert("Avatar harus file .jpg.");
+  }
+
+  let avatarUrl = "icon/default_avatar.jpg";
+  if (avatar) {
+    avatarUrl = await uploadAvatar(avatar); // Pastikan fungsi uploadAvatar ada dan bekerja
+  }
+
+  saveUserProfile({
+    nama: name, // Sesuai dengan nama field di Firestore
+    lokasi: location,
+    umur: parseInt(age, 10),
+    gender,
+    avatar: avatarUrl
+  });
 });
-});
+
+// Fungsi untuk upload avatar ke Firebase Storage
+async function uploadAvatar(file) {
+  try {
+    const storageRef = firebase.storage().ref();
+    const avatarRef = storageRef.child(`avatars/${auth.currentUser.uid}.jpg`);
+    await avatarRef.put(file);
+    return await avatarRef.getDownloadURL();
+  } catch (err) {
+    console.error("Gagal upload avatar:", err);
+    return "icon/default_avatar.jpg"; // Kembali ke default jika gagal upload
+  }
+}

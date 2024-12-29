@@ -58,6 +58,7 @@
   <div>Umur : <span style="font-weight:bold" id="umur">25</span> Thn</div>
   
   <div>Gender : <span id="gender">Male</span></div>
+  
     <div id="rate">Rate : <span id="rate">13Rpm - 23Rpm</span></div>
     
     <div>Bergabung : <span id="bergabung">January 2021</span></div>
@@ -71,34 +72,34 @@
   <h2>Settings</h2>
 
   <div>
-    <input type="text" id="profileName" placeholder="Edit Nama">
+    <input type="text" id="user-nama" placeholder="Edit Nama">
   </div>
   
   <div>
   <label for="profileAvatarInput" class="custom-file-label">Pilih Avatar</label>
-  <input id="profileAvatarInput" type="file" accept="image/*" style="display: none;">
+  <input id="user-avatar" type="file" accept="image/*" style="display: none;">
 </div>
     
   <div>
-    <input type="text" id="profileDetails" placeholder="Edit Detail">
+    <input type="text" id="user-detail" placeholder="Edit Detail">
   </div>
   
   <div>
-    <input type="text" id="profileLocation" placeholder="Edit Lokasi">
+    <input type="text" id="user-lokasi" placeholder="Edit Lokasi">
   </div>
   
   <div>
-    <input type="text" id="profileAge" placeholder="Masukkan usia (2 digit)">
+    <input type="text" id="user-umur" placeholder="Masukkan usia (2 digit)">
   </div>
   
   <div>
-      <select id="profileGenderInput">
-        <option value="Laki-laki" selected>Laki-laki</option>
-        <option value="Perempuan">Perempuan</option>
+      <select id="user-gender">
+        <option id="cowok" value="Laki-laki" selected>Laki-laki</option>
+        <option id="cewek" value="Perempuan">Perempuan</option>
       </select>
     </div>
   
-  <button class="saveProfileBtn">Simpan</button>
+  <button class="saveProfileBtn" id="save-button">Simpan</button>
   <button class="closeBtnPnl" onclick="closePanel('settingsPanel')">Tutup</button>
 </div>
 
