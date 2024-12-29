@@ -74,3 +74,27 @@ document.getElementById('avatar').addEventListener('click', function() {
   this.classList.toggle('zoom');
 });
 });
+
+/*! PENTING TESTING NAMA */
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    // Ambil UID user yang sedang login
+    const userRef = firestore.collection('userSS').doc(user.uid);
+    
+    // Ambil data user dari Firestore
+    userRef.get().then(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+
+        // Update elemen HTML dengan nama user
+        document.getElementById('username').innerText = data.nama; // Update nama di <h2 id="username">
+      } else {
+        console.log("Data user tidak ditemukan di Firestore");
+      }
+    }).catch(error => {
+      console.error("Error saat mengambil data user:", error);
+    });
+  } else {
+    console.log("User belum login");
+  }
+});
