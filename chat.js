@@ -55,10 +55,11 @@ firebase.auth().onAuthStateChanged(user => {
         document.getElementById('username').innerText = data.nama;
         document.getElementById('avatar').src = data.avatar;
         document.getElementById('status').innerText = data.status;
+        document.getElementById('detail').innerText = data.detail;
         document.getElementById('lokasi').innerText = data.lokasi;
         document.getElementById('umur').innerText = data.umur;
         document.getElementById('gender').innerText = data.gender;
-        document.getElementById('rate').innerText = data.umur;
+        document.getElementById('rate').innerText = data.rate;
         document.getElementById('bergabung').innerText = data.bergabung;
       } else {
         console.log("User data not found in Firestore");
@@ -141,3 +142,35 @@ async function uploadAvatar(file) {
     return "icon/default_avatar.jpg"; // Kembali ke default jika gagal upload
   }
 }
+
+// New User Register send data
+auth.createUserWithEmailAndPassword(email, password)
+  .then(async (userCredential) => {
+    const user = userCredential.user;
+
+    // Generate nama unik
+    const randomStr = Math.random().toString(36).substring(2, 6); // 4 karakter random
+    const uniqueName = `user${randomStr}`;
+
+    // Data default
+    const defaultProfile = {
+      nama: uniqueName,
+      avatar: "icon/default_avatar.jpg",
+      status: "User",
+      detail: "Bio",
+      lokasi: "%",
+      umur: "%",
+      gender: "%",
+      rate: "N/A",
+      bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }) // Format: "Desember 2024"
+    };
+
+    // Simpan data default ke Firestore
+    return firestore.collection('userSS').doc(user.uid).set(defaultProfile);
+  })
+  .then(() => {
+    alert("User berhasil register dan profil dibuat.");
+  })
+  .catch((error) => {
+    console.error("Gagal register user:", error);
+  });
