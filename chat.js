@@ -146,7 +146,7 @@ async function uploadAvatar(file) {
 // New User Register send data
 auth.createUserWithEmailAndPassword(email, password)
   .then(async (userCredential) => {
-    const user = userCredential.user;
+    const userReg = userCredential.user;
 
     // Generate nama unik
     const randomStr = Math.random().toString(36).substring(2, 6); // 4 karakter random
