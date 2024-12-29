@@ -166,7 +166,7 @@ auth.createUserWithEmailAndPassword(email, password)
     };
 
     // Simpan data default ke Firestore
-    return firestore.collection('userSS').doc(user.uid).set(defaultProfile);
+    return firestore.collection('userSS').doc(userReg.uid).set(defaultProfile);
   })
   .then(() => {
     alert("User berhasil register dan profil dibuat.");
