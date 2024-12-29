@@ -9,26 +9,33 @@
 <body>
   <!-- Sidebar Navbar -->
   <div id="sidebar">
+    
     <div class="icon" id="userProfile">
       <img src="icon/profile-icon.png" alt="User Profile">
     </div>
+    
     <div class="icon" id="settings">
       <img src="icon/setting-icon.png" alt="Settings">
     </div>
+    
     <div class="icon" id="aboutApp">
       <img src="icon/about-icon.png" alt="About App">
     </div>
+    
     <div class="icon" id="logout">
       <img src="icon/logout-icon.png" alt="Logout">
       </div>
+      
   </div>
 
   <!-- Chat Container -->
   <div id="chatContainer">
     <h3 style="text-align:center">SECRET SERVER</h3><hr>
+      
     <div id="chatBox">
       <!-- Chat messages will appear here -->
     </div>
+    
     <form id="messageForm">
       <input type="text" id="messageInput" placeholder="Type your message..." required>
       <button type="submit" id="sendButton">Send</button>
@@ -38,24 +45,22 @@
   <!-- Slide-In Elements -->
   <!-- Panel Profil untuk menampilkan hasil -->
 <div id="profile" class="sidePanel">
-  <h2 id="profileNameDisplay">Bang Tolep</h2>
+  <h2 id="username">Bang Tolep</h2>
   
-  <div><img id="profileAvatarDisplay" src="icon/default_avatar.jpg" alt="User Avatar"></div>
+  <div><img id="avatar" src="icon/default_avatar.jpg" alt="User Avatar"></div>
   
-  <div>Username : <span id="profileUsernameDisplay">tolepcoy</span></div>
+  <div>Status : <span id="status">Biasa</span></div>
   
-  <div>Status : <span id="profileStatusDisplay">Biasa</span></div>
+  <div id="detail">Detail profile user</div>
   
-  <div id="profileDetailsDisplay">Detail profile user</div>
+  <div>Lokasi : <span id="lokasi">Lokasi</span></div>
   
-  <div>Lokasi : <span id="profileLocationDisplay">Lokasi user</span></div>
+  <div>Umur : <span style="font-weight:bold" id="umur">25</span> Thn</div>
   
-  <div>Umur : <span style="font-weight:bold" id="profileAgeDisplay">25</span> Thn</div>
-  
-  <div>Gender : <span id="profileGenderDisplay">Male</span></div>
-    <div id="rate">Rate : <span id="profileRateDisplay">13Rpm - 23Rpm</span></div>
+  <div>Gender : <span id="gender">Male</span></div>
+    <div id="rate">Rate : <span id="rate">13Rpm - 23Rpm</span></div>
     
-    <div>Bergabung : <span id="profileJoinDateDisplay">January 2021</span></div>
+    <div>Bergabung : <span id="bergabung">January 2021</span></div>
     
   <button class="closeBtnPnl" onclick="closePanel('profile')">Close</button>
 </div>
@@ -104,6 +109,9 @@
     <button class="closeBtnPnl" onclick="closePanel('aboutPanel')">Close</button>
   </div>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="chat.js"></script>
 </body>
 </html>
