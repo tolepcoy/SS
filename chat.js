@@ -72,30 +72,19 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-const database = firebase.database();
-const storage = firebase.storage();
+const firestore = firebase.firestore(); // Hanya Firestore yang digunakan
 
-// Simpan data user ke Firebase
+// Simpan data user ke Firebase Firestore
 function saveUserProfile(profileData) {
   const user = auth.currentUser;
   if (user) {
-    const userRef = database.ref('users/' + user.uid);
+    const userRef = firestore.collection('userSS').doc(user.uid);
     userRef.set(profileData)
       .then(() => alert("Data user berhasil disimpan."))
       .catch(err => console.error("Gagal menyimpan data:", err));
   } else {
     alert("User belum login.");
   }
-}
-
-// Upload avatar ke Firebase Storage
-function uploadAvatar(file) {
-  const user = auth.currentUser;
-  if (user && file) {
-    const storageRef = storage.ref('avatars/' + user.uid);
-    return storageRef.put(file).then(snapshot => snapshot.ref.getDownloadURL());
-  }
-  return Promise.resolve(null);
 }
 
 // Fungsi untuk handle save profile dengan Firebase
@@ -117,6 +106,7 @@ document.getElementById('saveProfileButton').addEventListener('click', async () 
 
   saveUserProfile({
     name,
+    status,
     location,
     age: parseInt(age, 10),
     gender,
@@ -124,14 +114,14 @@ document.getElementById('saveProfileButton').addEventListener('click', async () 
   });
 });
 
-// Load profil dari Firebase
+// Load profil dari Firebase Firestore
 function loadUserProfile() {
   const user = auth.currentUser;
   if (user) {
-    const userRef = database.ref('users/' + user.uid);
-    userRef.once('value')
+    const userRef = firestore.collection('userSS').doc(user.uid);
+    userRef.get()
       .then(snapshot => {
-        const profile = snapshot.val();
+        const profile = snapshot.data();
         document.getElementById('profileNameDisplay').innerText = profile.name || "Belum diisi";
         document.getElementById('profileLocationDisplay').innerText = profile.location || "Belum diisi";
         document.getElementById('profileAgeDisplay').innerText = profile.age || "Belum diisi";
@@ -160,10 +150,8 @@ auth.onAuthStateChanged(user => {
 function updateUserProfile(newData) {
   const user = auth.currentUser;
   if (user) {
-    // Akses node user berdasarkan UID
-    const userRef = database.ref('users/' + user.uid);
+    const userRef = firestore.collection('userSS').doc(user.uid);
 
-    // Update data yang diinginkan
     userRef.update(newData)
       .then(() => {
         alert("Profil berhasil diupdate!");
@@ -189,7 +177,6 @@ document.getElementById('updateProfileButton').addEventListener('click', () => {
   const newAge = document.getElementById('profileAgeInput').value;
   const newLocation = document.getElementById('profileLocationInput').value;
 
-  // Panggil fungsi update dengan data yang baru
   updateUserProfile({
     age: newAge,
     location: newLocation
