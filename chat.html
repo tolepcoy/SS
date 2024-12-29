@@ -10,14 +10,17 @@
   <!-- Sidebar Navbar -->
   <div id="sidebar">
     <div class="icon" id="userProfile">
-      <img src="icon/user-icon.png" alt="User Profile">
+      <img src="icon/profile-icon.png" alt="User Profile">
     </div>
     <div class="icon" id="settings">
-      <img src="icon/settings-icon.png" alt="Settings">
+      <img src="icon/setting-icon.png" alt="Settings">
     </div>
     <div class="icon" id="aboutApp">
       <img src="icon/about-icon.png" alt="About App">
     </div>
+    <div class="icon" id="logout">
+      <img src="icon/logout-icon.png" alt="Logout">
+      </div>
   </div>
 
   <!-- Chat Container -->
@@ -54,7 +57,7 @@
     
     <div>Bergabung Sejak: <span id="profileJoinDateDisplay">January 2021</span></div>
     
-  <button onclick="closePanel('profile')">Close</button>
+  <button class="closeBtnPnl" onclick="closePanel('profile')">Close</button>
 </div>
 
 <!-- setting -->
@@ -96,15 +99,15 @@
       </select>
     </div>
   
-  <button id="saveProfileBtn">savesavesaveSave</button>
-  <button onclick="closePanel('settingsPanel')">Close</button>
+  <button id="saveProfileBtn">Simpan</button>
+  <button class="closeBtnPnl" onclick="closePanel('settingsPanel')">Tutup</button>
 </div>
 
 <!-- TENTANG APP -->
   <div id="aboutPanel" class="sidePanel">
     <h2>About the App</h2>
     <p>Information about the app goes here.</p>
-    <button onclick="closePanel('aboutPanel')">Close</button>
+    <button class="closeBtnPnl" onclick="closePanel('aboutPanel')">Close</button>
   </div>
 
   <script src="chat.js"></script>
