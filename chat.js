@@ -225,7 +225,7 @@ function showAlert(message) {
     ...defaultProfileData, // Tambahkan field default
     nama: name,
     avatar: avatarUrl,
-    status: status || "Banci",
+    status: "Banci",
     lokasi: location,
     umur: parseInt(age, 10),
     gender
