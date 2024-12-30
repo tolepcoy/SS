@@ -216,6 +216,7 @@ function showAlert(message) {
 
   // Tambahkan data default
   const defaultProfileData = {
+  status: "User",
   detail: detail || "Bio",
   rate: rate || "N/A",
   bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }) 
@@ -225,7 +226,6 @@ function showAlert(message) {
     ...defaultProfileData, // Tambahkan field default
     nama: name,
     avatar: avatarUrl,
-    status: status,
     lokasi: location,
     umur: parseInt(age, 10),
     gender
