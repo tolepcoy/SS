@@ -217,8 +217,8 @@ function showAlert(message) {
   // Tambahkan data default
   const defaultProfileData = {
   status: "User",
-  detail: detail || "Bio",
-  rate: rate || "N/A",
+  detail: "Bio",
+  rate: "N/A",
   bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }) 
 };
 
