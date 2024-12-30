@@ -85,7 +85,7 @@ firebase.auth().onAuthStateChanged(user => {
 
 // Fungsi upload ke Imgur
 async function uploadToImgur(file) {
-  const clientID = "884d1c013620753";
+  const clientID = "e64b5436f5fbfcf";
   const url = "https://api.imgur.com/3/image";
   
   const formData = new FormData();
@@ -100,9 +100,9 @@ async function uploadToImgur(file) {
       body: formData
     });
 
-    const data = await response.json();
-    if (data.success) {
-      return data.data.link; // URL gambar yang di-upload
+    const dataFile = await response.json();
+    if (dataFile.success) {
+      return dataFile.data.link;
     } else {
       throw new Error("Gagal upload gambar ke Imgur");
     }
@@ -142,8 +142,8 @@ function showAlert(message) {
 /* end alert global */
   
   if (user) {
-    const userRef = firestore.collection('userSS').doc(user.uid);
-    userRef.set(profileData, { merge: true }) 
+    const userRef2 = firestore.collection('userSS').doc(user.uid);
+    userRef2.set(profileData, { merge: true }) 
       .then(() => showAlert("Berhasil disimpan."))
       .catch(err => console.error("Gagal menyimpan data:", err));
   } else {
