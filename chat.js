@@ -215,16 +215,17 @@ function showAlert(message) {
 
   // Tambahkan data default
   const defaultProfileData = {
-    status: "User",
-    detail: "Bio",
-    rate: "N/A",
-    bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }) 
-  };
+  status: status || "User",
+  detail: detail || "Bio",
+  rate: rate || "N/A",
+  bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }) 
+};
 
   saveUserProfile({
     ...defaultProfileData, // Tambahkan field default
     nama: name,
     avatar: avatarUrl,
+    status,
     lokasi: location,
     umur: parseInt(age, 10),
     gender
