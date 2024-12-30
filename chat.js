@@ -84,8 +84,9 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 // Fungsi upload ke Imgur
+// Fungsi upload ke Imgur dengan token
 async function uploadToImgur(file) {
-  const clientID = "e64b5436f5fbfcf";
+  const accessToken = "6e72b748a0d7becd6751810b6c1557de073ccb0e"; // Ganti dengan token ente
   const url = "https://api.imgur.com/3/image";
   
   const formData = new FormData();
@@ -95,7 +96,7 @@ async function uploadToImgur(file) {
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        Authorization: `Client-ID ${clientID}`
+        Authorization: `Bearer ${accessToken}` // Menggunakan Bearer token
       },
       body: formData
     });
