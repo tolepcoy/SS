@@ -5,7 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Secret Server Chat</title>
   <link rel="stylesheet" href="chat.css">
+  <link rel="stylesheet" href="font/tolepfonts.css">
 </head>
+<!-- KUMPULAN FUNGSI ELEMEN 999999 -->
+<div id="custom-logout-dialog" class="custom-dialog" style="display: none;">
+  <div class="custom-dialog-content">
+    <p>Logout dari server?</p>
+    <div class="custom-dialog-buttons">
+      <button id="confirm-logout" class="btn-confirm">Logout</button>
+      <button id="cancel-logout" class="btn-cancel">Batal</button>
+    </div>
+  </div>
+</div>
+
+<!-- alert global -->
+<div class="custom-alert">
+  <div class="alert-box">
+    <span class="alert-message"></span>
+    <button class="alert-ok">OK</button>
+  </div>
+</div>
+<!-- END 99999 -->
 <body>
   <!-- Sidebar Navbar -->
   <div id="sidebar">
@@ -76,8 +96,8 @@
   </div>
   
   <div>
-  <label for="profileAvatarInput" class="custom-file-label">Pilih Avatar</label>
-  <input id="user-avatar" type="file" accept="image/*" style="display: none;">
+
+  <input id="user-avatar" type="file" accept="image/*" style="opacity: 0.1;">
 </div>
   
   <div>

@@ -19,18 +19,42 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
+// CUSTOM ALERT REGISTER
+function showAlert(message) {
+  const alertBox = document.createElement('div');
+  alertBox.classList.add('custom-alert'); // Tambahkan class untuk alert
+  alertBox.innerHTML = `
+    <div class="alert-box">
+      <span class="alert-message">${message}</span>
+      <button class="alert-ok">OK</button>
+    </div>
+  `;
+
+  // Tambahkan alert ke body
+  document.body.appendChild(alertBox);
+
+  // Menampilkan alert
+  alertBox.style.display = 'flex';
+
+  // Close alert saat tombol OK diklik
+  alertBox.querySelector('.alert-ok').addEventListener('click', () => {
+    alertBox.style.display = 'none';
+    document.body.removeChild(alertBox);
+  });
+}
+// END CUSTOM ALERT REGISTER
       if (email && password) {
         auth.createUserWithEmailAndPassword(email, password)
           .then(userCredential => {
-            alert('Registration successful!');
+            showAlert('Registrasi berhasil!');
             console.log('Registered with:', userCredential.user);
           })
           .catch(error => {
-            alert('Error: ' + error.message);
+            showAlert('Error!');
             console.error(error);
           });
       } else {
-        alert('Please fill in both email and password.');
+        showAlert('Isi dulu mang!');
       }
     });
 
@@ -38,21 +62,46 @@
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
+// CUSTOM ALERT LOGIN
+function showAlert(message) {
+  const alertBox2 = document.createElement('div');
+  alertBox2.classList.add('custom-alert');
+  alertBox2.innerHTML = `
+    <div class="alert-box">
+      <span class="alert-message">${message}</span>
+      <button class="alert-ok">OK</button>
+    </div>
+  `;
+
+  // Tambahkan alert ke body
+  document.body.appendChild(alertBox2);
+
+  // Menampilkan alert
+  alertBox2.style.display = 'flex';
+
+  // Close alert saat tombol OK diklik
+  alertBox2.querySelector('.alert-ok').addEventListener('click', () => {
+    alertBox2.style.display = 'none';
+    document.body.removeChild(alertBox2);
+  });
+}
+// END CUSTOM ALERT LOGIN
+
   if (email && password) {
     auth.signInWithEmailAndPassword(email, password)
       .then(userCredential => {
-        alert('Login successful!');
+        showAlert('Login berhasil!');
         console.log('Logged in with:', userCredential.user);
 
         // Redirect ke chat.html setelah login berhasil
-        console.log("Redirecting to chat.html...");
+        console.log("Menuju ke global chat...");
 window.location.replace("https://tolepcoy.github.io/SecretServer/chat.html");
       })
       .catch(error => {
-        alert('Error: ' + error.message);
+        showAlert('Error!');
         console.error(error);
       });
   } else {
-    alert('Please fill in both email and password.');
+    showAlert('Isi dulu mang!');
   }
 });
