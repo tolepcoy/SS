@@ -213,13 +213,13 @@ function showAlert(message) {
     avatarUrl = await uploadToImgur(avatar);
   }
 
-/*  // Tambahkan data default
+  // Tambahkan data default
   const defaultProfileData = {
     status: "User",
     detail: "Bio",
     rate: "N/A",
     bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }) 
-  };*/
+  };
 
   saveUserProfile({
     ...defaultProfileData, // default
