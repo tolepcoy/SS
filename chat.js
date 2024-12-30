@@ -70,11 +70,6 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
-// zoom avatar
-document.getElementById('avatar').addEventListener('click', function() {
-  this.classList.toggle('zoom');
-});});
-
 // Fungsi untuk simpan data user ke Firestore
 function saveUserProfile(profileData) {
   const user = auth.currentUser;
@@ -95,6 +90,10 @@ document.getElementById('save-button').addEventListener('click', async () => {
   const age = document.getElementById('user-umur').value.trim();
   const gender = document.getElementById('user-gender').value;
   const avatar = document.getElementById('user-avatar').files[0];
+  const statusSet = document.getElementById('status').innerText = data.status;
+  const detailSet = document.getElementById('detail').innerText = data.detail;
+  const rateSet = document.getElementById('rate').innerText = data.rate;
+  const bergabungSet = document.getElementById('bergabung').innerText = data.bergabung;
 
   // Validasi Nama: Max 15 karakter, hanya huruf dan spasi
   if (!/^[a-zA-Z\s]{1,15}$/.test(name)) {
@@ -122,11 +121,15 @@ document.getElementById('save-button').addEventListener('click', async () => {
   }
 
   saveUserProfile({
-    nama: name, // Sesuai dengan nama field di Firestore
+    nama: name,
+    avatar: avatarUrl,
+    status: statusSet,
+    detail: detailSet,
     lokasi: location,
     umur: parseInt(age, 10),
     gender,
-    avatar: avatarUrl
+    rate: rateSet,
+    bergabung: bergabungSet
   });
 });
 
@@ -143,34 +146,7 @@ async function uploadAvatar(file) {
   }
 }
 
-// New User Register send data
-auth.createUserWithEmailAndPassword(email, password)
-  .then(async (userCredential) => {
-    const userReg = userCredential.user;
-
-    // Generate nama unik
-    const randomStr = Math.random().toString(36).substring(2, 6);
-    const uniqueName = `user${randomStr}`;
-
-    // Data default
-    const defaultProfile = {
-      nama: uniqueName,
-      avatar: "icon/default_avatar.jpg",
-      status: "User",
-      detail: "Bio",
-      lokasi: "%",
-      umur: "%",
-      gender: "%",
-      rate: "N/A",
-      bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' })
-    };
-
-    // Simpan ke Firestore
-    return firestore.collection('userSS').doc(userReg.uid).set(defaultProfile);
-  })
-  .then(() => {
-    alert("User berhasil register dan profil dibuat.");
-  })
-  .catch((error) => {
-    console.error("Gagal register user:", error);
-  });
+// zoom avatar
+document.getElementById('avatar').addEventListener('click', function() {
+  this.classList.toggle('zoom');
+});});
