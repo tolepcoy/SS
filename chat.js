@@ -123,13 +123,13 @@ document.getElementById('save-button').addEventListener('click', async () => {
   saveUserProfile({
     nama: name,
     avatar: avatarUrl,
-    status: statusSet,
-    detail: detailSet,
+    status,
+    detail,
     lokasi: location,
     umur: parseInt(age, 10),
     gender,
-    rate: rateSet,
-    bergabung: bergabungSet
+    rate,
+    bergabung
   });
 });
 
