@@ -149,7 +149,7 @@ auth.createUserWithEmailAndPassword(email, password)
     const userReg = userCredential.user;
 
     // Generate nama unik
-    const randomStr = Math.random().toString(36).substring(2, 6); // 4 karakter random
+    const randomStr = Math.random().toString(36).substring(2, 6);
     const uniqueName = `user${randomStr}`;
 
     // Data default
@@ -162,10 +162,10 @@ auth.createUserWithEmailAndPassword(email, password)
       umur: "%",
       gender: "%",
       rate: "N/A",
-      bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }) // Format: "Desember 2024"
+      bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' })
     };
 
-    // Simpan data default ke Firestore
+    // Simpan ke Firestore
     return firestore.collection('userSS').doc(userReg.uid).set(defaultProfile);
   })
   .then(() => {
