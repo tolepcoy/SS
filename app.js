@@ -48,6 +48,7 @@ function showAlert(message) {
           .then(userCredential => {
             showAlert('Registrasi berhasil!');
             console.log('Registered with:', userCredential.user);
+    window.location.replace("https://tolepcoy.github.io/SecretServer/chat.html");
           })
           .catch(error => {
             showAlert('Error!');
@@ -93,7 +94,6 @@ function showAlert(message) {
         showAlert('Login berhasil!');
         console.log('Logged in with:', userCredential.user);
 
-        // Redirect ke chat.html setelah login berhasil
         console.log("Menuju ke global chat...");
 window.location.replace("https://tolepcoy.github.io/SecretServer/chat.html");
       })
