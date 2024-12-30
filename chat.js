@@ -83,7 +83,6 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
-// Fungsi upload ke Imgur
 // Fungsi upload ke Imgur dengan token
 async function uploadToImgur(file) {
   const accessToken = "6e72b748a0d7becd6751810b6c1557de073ccb0e"; // Ganti dengan token ente
@@ -143,13 +142,18 @@ function showAlert(message) {
 /* end alert global */
   
   if (user) {
-    const userRef2 = firestore.collection('userSS').doc(user.uid);
-    userRef2.set(profileData, { merge: true }) 
-      .then(() => showAlert("Berhasil disimpan."))
-      .catch(err => console.error("Gagal menyimpan data:", err));
-  } else {
-    showAlert("Anda belum login.");
-  }
+  const userRef2 = firestore.collection('userSS').doc(user.uid);
+  userRef2.set(profileData, { merge: true })
+    .then(() => {
+      showAlert("Berhasil disimpan.", () => {
+        setTimeout(() => {
+          location.reload(); // Refresh halaman setelah alert muncul
+        }, 1000);
+      });
+    })
+    .catch(err => console.error("Gagal menyimpan data:", err));
+} else {
+  showAlert("Anda belum login.");
 }
 
 // Fungsi untuk handle save profile dengan Firebase
