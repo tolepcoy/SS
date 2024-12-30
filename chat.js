@@ -158,6 +158,7 @@ function showAlert(message) {
 document.getElementById('save-button').addEventListener('click', async () => {
   const name = document.getElementById('user-nama').value.trim();
   const avatar = document.getElementById('user-avatar').files[0];
+  const status = document.getElementById('status').value;
   const location = document.getElementById('user-lokasi').value.trim();
   const age = document.getElementById('user-umur').value.trim();
   const gender = document.getElementById('user-gender').value;
@@ -215,17 +216,16 @@ function showAlert(message) {
 
   // Tambahkan data default
   const defaultProfileData = {
-    status: "User",
-    detail: "Bio",
-    rate: "N/A",
-    bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }) 
-  };
+  status: status,
+  detail: detail || "Bio",
+  rate: rate || "N/A",
+  bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }) 
+};
 
   saveUserProfile({
-    ...defaultProfileData, // default
+    ...defaultProfileData, // Tambahkan field default
     nama: name,
     avatar: avatarUrl,
-    status,
     lokasi: location,
     umur: parseInt(age, 10),
     gender
