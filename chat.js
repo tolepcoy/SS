@@ -90,10 +90,10 @@ document.getElementById('save-button').addEventListener('click', async () => {
   const age = document.getElementById('user-umur').value.trim();
   const gender = document.getElementById('user-gender').value;
   const avatar = document.getElementById('user-avatar').files[0];
-  const statusSet = document.getElementById('status').innerText = data.status;
-  const detailSet = document.getElementById('detail').innerText = data.detail;
-  const rateSet = document.getElementById('rate').innerText = data.rate;
-  const bergabungSet = document.getElementById('bergabung').innerText = data.bergabung;
+  const statusSet = document.getElementById('status').value;
+  const detailSet = document.getElementById('detail').value;
+  const rateSet = document.getElementById('rate').value;
+  const bergabungSet = document.getElementById('bergabung').value;
 
   // Validasi Nama: Max 15 karakter, hanya huruf dan spasi
   if (!/^[a-zA-Z\s]{1,15}$/.test(name)) {
