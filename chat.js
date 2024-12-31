@@ -82,6 +82,7 @@ firebase.auth().onAuthStateChanged(user => {
     console.log("User not logged in");
   }
 });
+});
 
 // EDIT USERNAME
 const usernameEl = document.getElementById('username');
@@ -134,5 +135,4 @@ editUsernameBtn.addEventListener('click', () => {
       console.log("User not logged in");
     }
   });
-});
 });
