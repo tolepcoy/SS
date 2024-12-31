@@ -467,8 +467,8 @@ editGenderBtn.addEventListener('click', () => {
 
       // Daftar pilihan gender dengan URL gambar
       const genderOptions = [
-        { text: 'Laki-laki', value: 'icon/cowok.png' },
-        { text: 'Perempuan', value: 'icon/cewek.png' }
+        { text: 'Laki-laki', value: 'https://tolepcoy.github.io/SecretServer/icon/cowok.png' },
+        { text: 'Perempuan', value: 'https://tolepcoy.github.io/SecretServer/icon/cewek.png' }
       ];
 
       genderOptions.forEach(gender => {
