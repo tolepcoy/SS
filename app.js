@@ -12,6 +12,7 @@
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const firestore = firebase.firestore();
 
     // Fungsi Register
 const registerButton = document.getElementById('registerButton');
