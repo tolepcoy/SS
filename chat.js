@@ -96,6 +96,9 @@ editNamaBtn.addEventListener('click', () => {
       // Simpan value lama
       const currentNama = namaEl.textContent.trim();
 
+      // Sembunyikan tombol edit saat mengedit
+      editNamaBtn.style.display = 'none';
+
       // Ubah h2 menjadi input
       namaEl.innerHTML = `
         <input type="text" id="nama-input" value="${currentNama}" maxlength="15" />
@@ -126,9 +129,15 @@ editNamaBtn.addEventListener('click', () => {
 
           // Kembalikan tampilan awal
           namaEl.textContent = newNama;
+
+          // Tampilkan kembali tombol edit setelah selesai
+          editNamaBtn.style.display = 'inline-block';
         } catch (error) {
           console.error("Gagal update nama:", error);
           alert("Gagal menyimpan nama baru, coba lagi.");
+          
+          // Tampilkan kembali tombol edit jika gagal
+          editNamaBtn.style.display = 'inline-block';
         }
       });
     } else {
