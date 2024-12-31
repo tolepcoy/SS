@@ -99,7 +99,7 @@ editNamaBtn.addEventListener('click', () => {
       // Ubah h2 menjadi input
       namaEl.innerHTML = `
         <input type="text" id="nama-input" value="${currentNama}" maxlength="15" />
-        <button id="save-nama">Save</button>
+        <button class="edul" id="save-nama">Save</button>
       `;
 
       // Ambil elemen input dan tombol save
@@ -159,6 +159,7 @@ editAvatarBtn.addEventListener('click', () => {
 
       const saveAvatarBtn = document.createElement('button');
       saveAvatarBtn.id = 'save-avatar';
+      saveAvatarBtn.addClasslist = '.edul';
       saveAvatarBtn.textContent = 'Save';
 
       // Tambahkan elemen input file dan tombol save setelah avatar

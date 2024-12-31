@@ -9,7 +9,7 @@ body {
 }
 
 /*! ETC */
-button {
+.edul {
   background: url('icon/bgBtn.png');
   background-size: 100% 100%;
   color: white;
@@ -20,7 +20,7 @@ button {
   opacity: 1;
 }
 
-button:hover {
+.edul:hover {
   opacity: 0.7;
 }
 
