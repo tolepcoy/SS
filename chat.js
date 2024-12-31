@@ -534,3 +534,15 @@ firebase.auth().onAuthStateChanged(user => {
     console.log("User belum login");
   }
 });
+
+// EMAIL USER
+// Menunggu user login
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    // Ambil Email dan tampilkan di #email
+    const email = document.getElementById('email');
+    email.textContent = user.email; // Menampilkan Email
+  } else {
+    console.log("User belum login");
+  }
+});
