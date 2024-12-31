@@ -276,3 +276,62 @@ editDetailBtn.addEventListener('click', () => {
     }
   });
 });
+
+// EDIT LOKASI
+const lokasiEl = document.getElementById('lokasi');
+const editLokasiBtn = document.getElementById('edit-lokasi');
+
+// Fungsi untuk handle klik tombol edit lokasi
+editLokasiBtn.addEventListener('click', () => {
+  // Menunggu user login terlebih dahulu
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      // Buat elemen select dan tombol save secara dinamis
+      const lokasiSelect = document.createElement('select');
+      lokasiSelect.id = 'lokasi-select';
+
+      // Daftar pilihan lokasi
+      const lokasiOptions = ['Perum', 'Skojo', 'Kertapati', 'Boom Baru', 'Plaju', 'Jakabaring'];
+
+      lokasiOptions.forEach(location => {
+        const option = document.createElement('option');
+        option.value = location;
+        option.textContent = location;
+        lokasiSelect.appendChild(option);
+      });
+
+      const saveLokasiBtn = document.createElement('button');
+      saveLokasiBtn.id = 'save-lokasi';
+      saveLokasiBtn.classlist.add('edul');
+      saveLokasiBtn.textContent = 'Save';
+
+      // Tambahkan elemen select dan tombol save setelah lokasi
+      const lokasiParentDiv = lokasiEl.parentNode;
+      lokasiParentDiv.appendChild(lokasiSelect);
+      lokasiParentDiv.appendChild(saveLokasiBtn);
+
+      // Handle klik tombol save
+      saveLokasiBtn.addEventListener('click', async () => {
+        const selectedLokasi = lokasiSelect.value; // Ambil nilai lokasi yang dipilih
+
+        // Update lokasi di Firestore
+        try {
+          const lokasiFirestoreRef = firestore.collection('userSS').doc(user.uid);
+          await lokasiFirestoreRef.update({ lokasi: selectedLokasi });
+
+          // Update tampilan lokasi di halaman
+          lokasiEl.textContent = selectedLokasi;
+
+          // Hapus elemen select dan tombol save setelah selesai
+          lokasiSelect.remove();
+          saveLokasiBtn.remove();
+        } catch (error) {
+          console.error("Gagal update lokasi:", error);
+          alert("Terjadi kesalahan, coba lagi.");
+        }
+      });
+    } else {
+      console.log("User not logged in");
+    }
+  });
+});
