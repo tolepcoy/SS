@@ -66,7 +66,7 @@ registerButton.addEventListener('click', () => {
           verimail: '<span style="color:#f88">Belum Verifikasi X</span>',
           ponsel: '-',
           veriphone: '-',
-          facebook: 'FB'
+          facebook: '-'
         })
         .then(() => {
           // Custom alert berhasil
