@@ -56,6 +56,32 @@ function openPanel(panelId) {
     document.getElementById(panel).style.transform = panel === panelId ? "translateX(0)" : "translateX(-100%)";
   });
 }
+
+// Fungsi untuk menampilkan profil user setelah login
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    const userRef = firestore.collection('userSS').doc(user.uid);
+    userRef.get().then(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+        // Update elemen HTML dengan data user yang diambil dari Firestore
+        document.getElementById('nama').innerText = data.nama;
+        document.getElementById('avatar').src = data.avatar;
+        document.getElementById('status').innerText = data.status;
+        document.getElementById('detail').innerText = data.detail;
+        document.getElementById('lokasi').innerText = data.lokasi;
+        document.getElementById('umur').innerText = data.umur;
+        document.getElementById('gender').innerText = data.gender;
+        document.getElementById('rate').innerText = data.rate;
+        document.getElementById('bergabung').innerText = data.bergabung;
+      } else {
+        console.log("User data not found in Firestore");
+      }
+    }).catch(error => console.error("Error fetching user data:", error));
+  } else {
+    console.log("User not logged in");
+  }
+});
 });
 
 // EDIT NAMA
