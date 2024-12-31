@@ -14,6 +14,20 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    if (!user.emailVerified) {
+      user.sendEmailVerification()
+        .then(() => {
+          alert('Email verifikasi berhasil dikirim. Cek inbox email ente!');
+        })
+        .catch((error) => {
+          console.error('Gagal kirim email verifikasi:', error);
+        });
+    }
+  }
+});
+
 
 // Fungsi untuk menutup side panel
 function closePanel(panelId) {
