@@ -427,6 +427,7 @@ const editGenderBtn = document.getElementById('edit-gender');
 // Fungsi untuk handle klik tombol edit gender
 editGenderBtn.addEventListener('click', () => {
   editGenderBtn.style.display = 'none';
+
   // Menunggu user login terlebih dahulu
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -437,11 +438,11 @@ editGenderBtn.addEventListener('click', () => {
       // Daftar pilihan gender
       const genderOptions = [
         { text: 'Laki-laki', value: '♂' },
-        { text: 'Perempuan', value: '<span id="cewek">♀</span>' }
+        { text: 'Perempuan', value: '♀', id: 'cewek' } // Tambahkan ID untuk styling
       ];
 
       genderOptions.forEach(gender => {
-        const genderOption = document.createElement('option'); // Ganti nama variabel
+        const genderOption = document.createElement('option');
         genderOption.value = gender.value;
         genderOption.textContent = gender.text;
         genderSelect.appendChild(genderOption);
@@ -467,7 +468,15 @@ editGenderBtn.addEventListener('click', () => {
           await genderFirestoreRef.update({ gender: selectedGender });
 
           // Update tampilan gender di halaman
-          genderEl.textContent = selectedGender;
+          const selectedOption = genderOptions.find(option => option.value === selectedGender);
+
+          if (selectedOption?.id) {
+            genderEl.innerHTML = `<span id="${selectedOption.id}">${selectedOption.value}</span>`;
+          } else {
+            genderEl.textContent = selectedGender;
+          }
+
+          // Tampilkan kembali tombol edit
           editGenderBtn.style.display = 'block';
 
           // Hapus elemen select dan tombol save setelah selesai
