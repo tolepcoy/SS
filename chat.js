@@ -624,6 +624,10 @@ function cekStatusFacebook() {
       facebookEl.textContent = 'Terhubung √';
       facebookEl.style.color = 'green';
       facebookEl.style.pointerEvents = 'none'; // Menonaktifkan klik
+      // Kirim status ke Firestore
+      firebase.firestore().collection('userSS').doc(user.uid).update({
+        facebook: 'Terhubung √',
+      });
     } else {
       facebookEl.textContent = 'Hubungkan';
       facebookEl.style.color = 'blue';
@@ -643,13 +647,10 @@ facebookEl.addEventListener('click', () => {
     firebase.auth().signInWithPopup(provider)
       .then((result) => {
         console.log('Facebook terhubung:', result);
-        
-        // Perbarui elemen UI hanya setelah berhasil terhubung dengan Facebook
         facebookEl.textContent = 'Terhubung √';
         facebookEl.style.color = 'green';
-        facebookEl.style.pointerEvents = 'none'; // Menonaktifkan klik
-        
-        // Kirim status ke Firestore hanya setelah berhasil
+        facebookEl.style.pointerEvents = 'none';
+        // Kirim status ke Firestore
         firebase.firestore().collection('userSS').doc(user.uid).update({
           facebook: 'Terhubung √',
         });
