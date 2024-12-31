@@ -28,7 +28,6 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 });
 
-
 // Fungsi untuk menutup side panel
 function closePanel(panelId) {
   document.getElementById(panelId).style.transform = "translateX(-100%)";
@@ -61,7 +60,7 @@ document.getElementById('logout').addEventListener('click', () => {
     dialog.style.display = 'none';
   });
 });
-/* kustom alert end */
+/* kustom dialog end */
 
 // Fungsi untuk membuka side panel
 function openPanel(panelId) {
@@ -88,6 +87,10 @@ firebase.auth().onAuthStateChanged(user => {
         document.getElementById('gender').src = data.gender;
         document.getElementById('rate').innerText = data.rate;
         document.getElementById('bergabung').innerText = data.bergabung;
+        document.getElementById('email').innerText = data.email;
+        document.getElementById('verimail').innerText = data.verimail;
+        document.getElementById('ponsel').innerText = data.ponsel;
+        document.getElementById('veriphone').innerText = data.veriphone;
       } else {
         console.log("User data not found in Firestore");
       }
@@ -563,7 +566,7 @@ firebase.auth().onAuthStateChanged(user => {
 
 // STATUS VERIFIKASI EMAIL
 // Elemen status verifikasi
-const statusVerifikasiEl = document.getElementById('status-verifikasi-email');
+const statusVerifikasiEl = document.getElementById('verimail');
 
 // Fungsi untuk update status verifikasi
 function cekStatusVerifikasi() {

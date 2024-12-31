@@ -1,4 +1,8 @@
 /* Style untuk chat */
+html input {
+  border-radius: 4px;
+}
+
 body {
   font-family: Arial, sans-serif;
   display: flex;
@@ -237,18 +241,16 @@ body {
 
 #uniqueID {
   font-size: 12px;
-  color: #fcc;
   font-weight: bold;
 }
 
 #email, #ponsel {
   font-size: 14px;
-  color: #cfc;
   font-weight: bold;
 }
 
-#status-verifikasi-email, 
-#status-verifikasi-ponsel {
+#verimail, 
+#veriphone {
   font-size: 10px;
   font-style: italic;
 }
@@ -256,6 +258,22 @@ body {
 #ubah-email {
   background: url('icon/logBtn.png');
   background-size: 100% 100%;
+}
+
+#email-input-wrapper {
+  position: relative;
+  left: 50%;
+  transform: translateX(-25%);
+}
+
+#email-input-wrapper input {
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+#email-input-wrapper button {
+  position: relative;
+  left: 18%;
 }
 
 #ubah-password {
