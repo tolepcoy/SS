@@ -75,7 +75,7 @@ firebase.auth().onAuthStateChanged(user => {
         // Update elemen HTML dengan data user yang diambil dari Firestore
         document.getElementById('nama').innerText = data.nama;
         document.getElementById('avatar').src = data.avatar;
-        document.getElementById('status').innerHtml = data.status;
+        document.getElementById('status').innerHTML = data.status;
         document.getElementById('detail').innerText = data.detail;
         document.getElementById('lokasi').innerText = data.lokasi;
         document.getElementById('umur').innerText = data.umur;
