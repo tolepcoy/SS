@@ -83,156 +83,66 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
-// Fungsi upload ke Imgur dengan token
-async function uploadToImgur(file) {
-  const accessToken = "6e72b748a0d7becd6751810b6c1557de073ccb0e"; // Ganti dengan token ente
-  const url = "https://api.imgur.com/3/image";
-  
-  const formData = new FormData();
-  formData.append("image", file);
-
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}` // Menggunakan Bearer token
-      },
-      body: formData
-    });
-
-    const dataFile = await response.json();
-    if (dataFile.success) {
-      return dataFile.data.link;
-    } else {
-      throw new Error("Gagal upload gambar ke Imgur");
-    }
-  } catch (error) {
-    console.error("Error saat upload ke Imgur:", error);
-    return null;
-  }
-}
-
 // Fungsi untuk simpan data user ke Firestore
 function saveUserProfile(profileData) {
   const user = auth.currentUser;
-  
-// Fungsi untuk custom alert
-function showAlert(message) {
-  const alertBox = document.createElement('div');
-  alertBox.classList.add('custom-alert');
-  alertBox.innerHTML = `
-    <div class="alert-box">
-      <span class="alert-message">${message}</span>
-      <button class="alert-ok">OK</button>
-    </div>
-  `;
-
-  // Tambahkan alert ke body
-  document.body.appendChild(alertBox);
-
-  // Menampilkan alert
-  alertBox.style.display = 'flex';
-
-  // Close alert saat tombol OK diklik
-  alertBox.querySelector('.alert-ok').addEventListener('click', () => {
-    alertBox.style.display = 'none';
-    document.body.removeChild(alertBox);
-  });
-}
-/* end alert global */
   
   if (user) {
     const userRef2 = firestore.collection('userSS').doc(user.uid);
     userRef2.set(profileData, { merge: true }) 
       .then(() => {
-  showAlert("Berhasil disimpan.");
+  alert("Berhasil disimpan.");
   setTimeout(() => location.reload(), 1000);
 })
       .catch(err => console.error("Gagal menyimpan data:", err));
   } else {
-    showAlert("Anda belum login.");
+    alert("Anda belum login.");
   }
 }
-
-// Fungsi untuk handle save profile dengan Firebase
-document.getElementById('save-button').addEventListener('click', async () => {
-  const name = document.getElementById('user-nama').value.trim();
-  const avatar = document.getElementById('user-avatar').files[0];
-  const status = document.getElementById('status').value;
-  const location = document.getElementById('user-lokasi').value.trim();
-  const age = document.getElementById('user-umur').value.trim();
-  const gender = document.getElementById('user-gender').value;
-  
-// Fungsi untuk custom alert
-function showAlert(message) {
-  const alertBox = document.createElement('div');
-  alertBox.classList.add('custom-alert');
-  alertBox.innerHTML = `
-    <div class="alert-box">
-      <span class="alert-message">${message}</span>
-      <button class="alert-ok">OK</button>
-    </div>
-  `;
-
-  // Tambahkan alert ke body
-  document.body.appendChild(alertBox);
-
-  // Menampilkan alert
-  alertBox.style.display = 'flex';
-
-  // Close alert saat tombol OK diklik
-  alertBox.querySelector('.alert-ok').addEventListener('click', () => {
-    alertBox.style.display = 'none';
-    document.body.removeChild(alertBox);
-  });
-}
-/* end alert global */
-
-  // Validasi Nama: Max 15 karakter, hanya huruf dan spasi
-  if (!/^[a-zA-Z\s]{1,15}$/.test(name)) {
-    return showAlert("Nama hanya boleh huruf dan spasi, maksimal 15 karakter.");
-  }
-
-  // Validasi Lokasi: Max 20 karakter termasuk spasi
-  if (location.length > 20) {
-    return showAlert("Lokasi maksimal 20 karakter.");
-  }
-
-  // Validasi Umur: Rentang 16–60 tahun
-  if (!/^\d{2}$/.test(age) || age < 16 || age > 60) {
-    return showAlert("Usia tidak valid!");
-  }
-
-  // Validasi Avatar: Hanya file .jpg
-  if (avatar && !avatar.type.includes('image/jpeg')) {
-    return showAlert("Avatar harus file .jpg.");
-  }
-
-  let avatarUrl = "icon/default_avatar.jpg";
-
-  if (avatar) {
-    avatarUrl = await uploadToImgur(avatar);
-  }
-
-  // Tambahkan data default
-  const defaultProfileData = {
-  status: "User",
-  detail: "Bio",
-  rate: "N/A",
-  bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }) 
-};
-
-  saveUserProfile({
-    ...defaultProfileData, // Tambahkan field default
-    nama: name,
-    avatar: avatarUrl,
-    lokasi: location,
-    umur: parseInt(age, 10),
-    gender
-  });
 });
 
-// zoom avatar
-document.getElementById('avatar').addEventListener('click', function() {
-  this.classList.toggle('zoom');
-});});
+// EDIT USERNAME
+const usernameEl = document.getElementById('username');
+const editUsernameBtn = document.getElementById('edit-username');
+
+// Fungsi untuk handle klik tombol edit
+editUsernameBtn.addEventListener('click', () => {
+  // Simpan value lama
+  const currentUsername = usernameEl.textContent.trim();
+
+  // Ubah h2 menjadi input
+  usernameEl.innerHTML = `
+    <input type="text" id="username-input" value="${currentUsername}" maxlength="15" />
+    <button id="save-username">Save</button>
+  `;
+
+  // Ambil elemen input dan tombol save
+  const usernameInput = document.getElementById('username-input');
+  const saveBtn = document.getElementById('save-username');
+
+  // Fokuskan input
+  usernameInput.focus();
+
+  // Handle klik tombol save
+  saveBtn.addEventListener('click', async () => {
+    const newUsername = usernameInput.value.trim();
+
+    // Validasi username
+    if (!/^[a-zA-Z\s]{1,15}$/.test(newUsername)) {
+      alert("Nama hanya boleh huruf dan spasi, maksimal 15 karakter.");
+      return;
+    }
+
+    // Simpan ke Firestore
+    try {
+      const userRef = firestore.collection('userSS').doc(user.uid); // Ganti dengan ID user sebenarnya
+      await userRef.update({ username: newUsername });
+
+      // Kembalikan tampilan awal
+      usernameEl.textContent = newUsername;
+    } catch (error) {
+      console.error("Gagal update username:", error);
+      alert("Gagal menyimpan nama baru, coba lagi.");
+    }
+  });
+});

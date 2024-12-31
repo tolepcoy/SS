@@ -43,26 +43,42 @@
     </form>
   </div>
 
-  <!-- Slide-In Elements -->
   <!-- Panel Profil -->
 <div id="profile" class="sidePanel">
-  <h2 id="username">user01</h2>
+
+  <div class="username">
+<h2 id="username">*username*</h2>
+<span class="icon-pencil" id="edit-username">&#x270E;</span></div>
   
-  <div><img id="avatar" src="icon/default_avatar.jpg" alt="User Avatar"></div>
+  <div class="prof">
+<img id="avatar" src="icon/default_avatar.jpg">
+<span class="icon-pencil" id="edit-avatar">&#x270E;</span>
+</div>
   
-  <div>Status : <span id="status"></span></div>
+  <div id="status">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
   
-  <div id="detail">Bio</div>
+  <div class="prof">
+<div id="detail">Padamu Negeri</div>
+<span class="icon-pencil" id="edit-detail">&#x270E;</span></div>
   
-  <div>Lokasi : <span id="lokasi"> % </span></div>
+  <div class="prof">
+<div id="lokasi">Skojo</div>
+<span class="icon-pencil" id="edit-lokasi">&#x270E;</span>
+</div>
   
-  <div>Umur : <span style="font-weight:bold" id="umur"> % </span> Thn</div>
+  <div class="prof">
+<div id="umur">40 Tahun</div>
+<span class="icon-pencil" id="edit-umur">&#x270E;</span>
+</div>
   
-  <div>Gender : <span id="gender">%</span></div>
+  <div class="prof">
+<div id="gender">&#9794; - &#9792;</div>
+<span class="icon-pencil" id="edit-gender">&#x270E;</span>
+</div>
   
-    <div id="Bgrate">Rate : <span id="rate"> N/A </span></div>
+    <div id="Bgrate">Rate : <span id="rate"></span></div>
     
-    <div>Bergabung : <span id="bergabung"> Belum Verifikasi </span></div>
+    <div>Bergabung &nbsp;: <span id="bergabung"></span></div>
     
   <button class="closeBtnPnl" onclick="closePanel('profile')">Close</button>
 </div>
@@ -71,32 +87,7 @@
   <!-- Panel Settings -->
 <div id="settingsPanel" class="sidePanel">
   <h2>Settings</h2>
-
-  <div>
-    <input type="text" id="user-nama" placeholder="Edit Nama">
-  </div>
-  
-  <div>
-
-  <input id="user-avatar" type="file" accept="image/*" style="opacity: 0.1;">
-</div>
-  
-  <div>
-    <input type="text" id="user-lokasi" placeholder="Edit Lokasi">
-  </div>
-  
-  <div>
-    <input type="text" id="user-umur" placeholder="Masukkan usia (2 digit)">
-  </div>
-  
-  <div>
-      <select id="user-gender">
-        <option id="cowok" value="Laki-laki" selected>Laki-laki</option>
-        <option id="cewek" value="Perempuan">Perempuan</option>
-      </select>
-    </div>
-  
-  <button class="saveProfileBtn" id="save-button">Simpan</button>
+8888
   <button class="closeBtnPnl" onclick="closePanel('settingsPanel')">Tutup</button>
 </div>
 
