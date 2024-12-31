@@ -302,7 +302,7 @@ editLokasiBtn.addEventListener('click', () => {
 
       const saveLokasiBtn = document.createElement('button');
       saveLokasiBtn.id = 'save-lokasi';
-      saveLokasiBtn.classlist.add('edul');
+      saveLokasiBtn.classList.add('edul');
       saveLokasiBtn.textContent = 'Save';
 
       // Tambahkan elemen select dan tombol save setelah lokasi
