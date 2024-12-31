@@ -65,7 +65,7 @@ firebase.auth().onAuthStateChanged(user => {
       if (doc.exists) {
         const data = doc.data();
         // Update elemen HTML dengan data user yang diambil dari Firestore
-        document.getElementById('username').innerText = data.nama;
+        document.getElementById('nama').innerText = data.nama;
         document.getElementById('avatar').src = data.avatar;
         document.getElementById('status').innerText = data.status;
         document.getElementById('detail').innerText = data.detail;
@@ -86,7 +86,7 @@ firebase.auth().onAuthStateChanged(user => {
 
 // EDIT NAMA
 const namaEl = document.getElementById('nama');
-const editNamaBtn = document.getElementById('edit-username');
+const editNamaBtn = document.getElementById('edit-nama');
 
 // Fungsi untuk handle klik tombol edit
 editNamaBtn.addEventListener('click', () => {
