@@ -528,3 +528,15 @@ document.getElementById('avatar').addEventListener('click', function() {
   this.classList.toggle('zoom');
 });
 
+/*! PANEL SETTING */
+// UNIQUE ID
+// Menunggu user login
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    // Ambil UID dan tampilkan di #uniqueID
+    const uniqueIDEl = document.getElementById('uniqueID');
+    uniqueIDEl.textContent = user.uid; // Menampilkan UID
+  } else {
+    console.log("User belum login");
+  }
+});
