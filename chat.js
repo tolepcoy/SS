@@ -158,9 +158,9 @@ editAvatarBtn.addEventListener('click', () => {
       avatarInputFile.accept = 'image/jpeg';
 
       const saveAvatarBtn = document.createElement('button');
-      saveAvatarBtn.id = 'save-avatar';
-      saveAvatarBtn.addClasslist = '.edul';
-      saveAvatarBtn.textContent = 'Save';
+  saveAvatarBtn.id = 'save-avatar';
+  saveAvatarBtn.classList.add('edul');
+  saveAvatarBtn.textContent = 'Save';
 
       // Tambahkan elemen input file dan tombol save setelah avatar
       const avatarParentDiv = avatarEl.parentNode;
