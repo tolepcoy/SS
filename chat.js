@@ -65,7 +65,7 @@ firebase.auth().onAuthStateChanged(user => {
       if (doc.exists) {
         const data = doc.data();
         // Update elemen HTML dengan data user yang diambil dari Firestore
-        document.getElementById('username').innerText = data.username;
+        document.getElementById('username').innerText = data.nama;
         document.getElementById('avatar').src = data.avatar;
         document.getElementById('status').innerText = data.status;
         document.getElementById('detail').innerText = data.detail;
