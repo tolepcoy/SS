@@ -71,7 +71,7 @@ firebase.auth().onAuthStateChanged(user => {
         document.getElementById('detail').innerText = data.detail;
         document.getElementById('lokasi').innerText = data.lokasi;
         document.getElementById('umur').innerText = data.umur;
-        document.getElementById('gender').innerText = data.gender;
+        document.getElementById('gender').src = data.gender;
         document.getElementById('rate').innerText = data.rate;
         document.getElementById('bergabung').innerText = data.bergabung;
       } else {
