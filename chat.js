@@ -548,6 +548,7 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 // DOM UBAH EMAIL
+// Element DOM
 const ubahEmailBtn = document.getElementById('ubah-email');
 const emailInputWrapper = document.getElementById('email-input-wrapper');
 const emailInput = document.getElementById('email-baru');
@@ -559,7 +560,7 @@ ubahEmailBtn.addEventListener('click', () => {
   emailInputWrapper.style.display = 'block'; // Tampilkan input email
 });
 
-// Event Listener untuk tombol kirim
+// Event Listener untuk tombol Kirim
 kirimEmailBtn.addEventListener('click', async () => {
   const emailBaru = emailInput.value.trim(); // Ambil nilai input
 
@@ -569,11 +570,25 @@ kirimEmailBtn.addEventListener('click', async () => {
     return;
   }
 
-  // Proses ubah email di Firebase
+  // Proses login ulang sebelum ubah email
   firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
+      const currentEmail = user.email;
+      const password = prompt('Untuk keamanan, masukkan password akun Anda:'); // Minta password ulang
+
+      if (!password) {
+        alert('Password tidak boleh kosong.');
+        return;
+      }
+
+      const credential = firebase.auth.EmailAuthProvider.credential(currentEmail, password);
+
       try {
-        await user.updateEmail(emailBaru); // Ubah email di Firebase
+        // Login ulang dengan credential
+        await user.reauthenticateWithCredential(credential);
+
+        // Ubah email setelah login ulang berhasil
+        await user.updateEmail(emailBaru);
         alert('Email berhasil diubah. Cek inbox untuk verifikasi.');
 
         // Reset tampilan
@@ -582,8 +597,8 @@ kirimEmailBtn.addEventListener('click', async () => {
         ubahEmailBtn.style.display = 'block';
 
         // (Opsional) Update email di Firestore jika ada
-        const userRefEmail = firestore.collection('userSS').doc(user.uid);
-        await userRefEmail.update({ email: emailBaru });
+        const userDocRef = firestore.collection('userSS').doc(user.uid); // Ganti nama variabel
+        await userDocRef.update({ email: emailBaru });
       } catch (error) {
         console.error('Gagal mengubah email:', error);
         alert('Terjadi kesalahan. Pastikan email valid dan akun terautentikasi.');
