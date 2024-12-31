@@ -143,6 +143,11 @@ const editAvatarBtn = document.getElementById('edit-avatar');
 
 // Fungsi untuk handle klik tombol edit avatar
 editAvatarBtn.addEventListener('click', () => {
+  // Cek apakah elemen input dan tombol Save sudah ada
+  if (document.getElementById('avatar-input') || document.getElementById('save-avatar')) {
+    return; // Jangan buat elemen baru jika sudah ada
+  }
+
   // Menunggu user login terlebih dahulu
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
