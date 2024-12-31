@@ -83,23 +83,6 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
-// Fungsi untuk simpan data user ke Firestore
-function saveUserProfile(profileData) {
-  const user = auth.currentUser;
-  
-  if (user) {
-    const userRef2 = firestore.collection('userSS').doc(user.uid);
-    userRef2.set(profileData, { merge: true }) 
-      .then(() => {
-  alert("Berhasil disimpan.");
-  setTimeout(() => location.reload(), 1000);
-})
-      .catch(err => console.error("Gagal menyimpan data:", err));
-  } else {
-    alert("Anda belum login.");
-  }
-}
-
 // EDIT USERNAME
 const usernameEl = document.getElementById('username');
 const editUsernameBtn = document.getElementById('edit-username');
@@ -134,8 +117,8 @@ editUsernameBtn.addEventListener('click', () => {
 
     // Simpan ke Firestore
     try {
-      const userRef = firestore.collection('userSS').doc(user.uid); // Ganti dengan ID user sebenarnya
-      await userRef.update({ username: newUsername });
+      const userDef = firestore.collection('userSS').doc(user.uid);
+      await userDef.update({ username: newUsername });
 
       // Kembalikan tampilan awal
       usernameEl.textContent = newUsername;
