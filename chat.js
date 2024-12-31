@@ -612,6 +612,7 @@ cekStatusVerifikasi();
 // TAMBAH PONSEL
 const ponselEl = document.getElementById('ponsel');
 const veriphoneEl = document.getElementById('veriphone');
+let recaptchaVerifier; // Variable untuk menyimpan instance reCAPTCHA
 
 // Fungsi untuk update status ponsel
 function cekStatusPonsel() {
@@ -640,7 +641,7 @@ function cekStatusPonsel() {
   });
 }
 
-// Fungsi untuk menampilkan input ponsel
+// Fungsi untuk menampilkan input ponsel dan render reCAPTCHA
 function tampilkanInputPonsel() {
   veriphoneEl.onclick = null;
 
@@ -649,13 +650,27 @@ function tampilkanInputPonsel() {
   inputEl.placeholder = 'Masukkan nomor ponsel (misal: +6281234567890)';
 
   const tombolTambahEl = document.createElement('button');
-  tombolTambahEl.textContent = 'Verifikasi';
+  tombolTambahEl.textContent = 'Kirim OTP';
   tombolTambahEl.style.marginLeft = '10px';
 
   veriphoneEl.textContent = '';
   veriphoneEl.appendChild(inputEl);
   veriphoneEl.appendChild(tombolTambahEl);
 
+  // Render reCAPTCHA
+  recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+    size: 'normal', // Normal untuk tampil di layar
+    callback: () => {
+      tombolTambahEl.disabled = false; // Aktifkan tombol jika reCAPTCHA valid
+    },
+    'expired-callback': () => {
+      tombolTambahEl.disabled = true; // Nonaktifkan tombol jika reCAPTCHA kedaluwarsa
+      alert('reCAPTCHA expired. Silakan refresh halaman.');
+    },
+  });
+  recaptchaVerifier.render();
+
+  // Tombol untuk mengirim OTP
   tombolTambahEl.addEventListener('click', () => {
     const nomorBaru = inputEl.value.trim();
     if (nomorBaru) {
@@ -668,10 +683,6 @@ function tampilkanInputPonsel() {
 
 // Fungsi untuk mengirim kode verifikasi
 function kirimKodeVerifikasi(nomorBaru) {
-  const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-    size: 'invisible',
-  });
-
   firebase.auth().signInWithPhoneNumber(nomorBaru, recaptchaVerifier)
     .then((confirmationResult) => {
       const kodeVerifikasi = prompt('Masukkan kode OTP yang dikirim ke nomor ente:');
@@ -687,8 +698,8 @@ function kirimKodeVerifikasi(nomorBaru) {
       cekStatusPonsel();
 
       // Simpan nomor ke Firestore
-      const userSSRef = firebase.firestore().collection('userSS').doc(user.uid);
-      return userSSRef.set({ ponsel: user.phoneNumber, veriphone: true }, { merge: true });
+      const userSSRef2 = firebase.firestore().collection('userSS').doc(user.uid);
+      return userSSRef2.set({ ponsel: user.phoneNumber, veriphone: true }, { merge: true });
     })
     .catch((error) => {
       console.error('Gagal menambahkan nomor ponsel:', error);
