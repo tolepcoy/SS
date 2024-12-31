@@ -86,6 +86,7 @@ firebase.auth().onAuthStateChanged(user => {
         document.getElementById('verimail').innerHTML = data.verimail;
         document.getElementById('ponsel').innerHTML = data.ponsel;
         document.getElementById('veriphone').innerHTML = data.veriphone;
+        document.getElementById('facebook').innerHTML = data.facebook;
       } else {
         console.log("User data not found in Firestore");
       }
@@ -560,7 +561,6 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 // STATUS VERIFIKASI EMAIL
-// Elemen status verifikasi
 const statusVerifikasiEl = document.getElementById('verimail');
 
 // Fungsi untuk update status verifikasi
@@ -573,9 +573,25 @@ function cekStatusVerifikasi() {
           if (user.emailVerified) {
             statusVerifikasiEl.textContent = 'Verifikasi √';
             statusVerifikasiEl.style.color = 'green';
+            statusVerifikasiEl.style.cursor = 'default'; // Tidak clickable jika sudah diverifikasi
           } else {
             statusVerifikasiEl.textContent = 'Belum Verifikasi ✘';
             statusVerifikasiEl.style.color = 'red';
+            statusVerifikasiEl.style.cursor = 'pointer'; // Jadikan clickable
+            // Tambahkan event listener untuk klik
+            statusVerifikasiEl.onclick = () => {
+              const konfirmasi = confirm('Kirim aktifasi ke email?');
+              if (konfirmasi) {
+                user.sendEmailVerification()
+                  .then(() => {
+                    alert('Email verifikasi berhasil dikirim. Cek inbox email Ente!');
+                  })
+                  .catch(error => {
+                    console.error('Gagal kirim email verifikasi:', error);
+                    alert('Gagal mengirim email verifikasi.');
+                  });
+              }
+            };
           }
         })
         .catch(error => {
@@ -584,9 +600,11 @@ function cekStatusVerifikasi() {
     } else {
       statusVerifikasiEl.textContent = 'User belum login';
       statusVerifikasiEl.style.color = 'orange';
+      statusVerifikasiEl.style.cursor = 'default';
     }
   });
 }
+
 // Panggil fungsi saat halaman selesai dimuat
 cekStatusVerifikasi();
 // end verifikasi

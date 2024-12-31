@@ -54,18 +54,19 @@ registerButton.addEventListener('click', () => {
         const userSSRef = firestore.collection('userSS').doc(user.uid);
         userSSRef.set({
           nama: 'userSS',
-          avatar: 'https://tolepcoy.github.io/icon/default-avatar.jpg',
+          avatar: 'https://tolepcoy.github.io/SecretServer/icon/default-avatar.jpg',
           status: '&#9733;',
           detail: 'Bio',
           lokasi: 'Palembang',
           umur: '-',
-          gender: '-',
+          gender: 'https://tolepcoy.github.io/SecretServer/icon/defaultgender.png',
           rate: 'N/A',
           bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
           email: user.email,
           verimail: '<span style="color:#f88">Belum Verifikasi X</span>',
           ponsel: '-',
-          veriphone: '-'
+          veriphone: '-',
+          facebook: 'FB'
         })
         .then(() => {
           // Custom alert berhasil
