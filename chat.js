@@ -397,3 +397,65 @@ editUmurBtn.addEventListener('click', () => {
     }
   });
 });
+
+// EDIT GENDER
+const genderEl = document.getElementById('gender');
+const editGenderBtn = document.getElementById('edit-gender');
+
+// Fungsi untuk handle klik tombol edit gender
+editGenderBtn.addEventListener('click', () => {
+  // Menunggu user login terlebih dahulu
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      // Buat elemen select dan tombol save secara dinamis
+      const genderSelect = document.createElement('select');
+      genderSelect.id = 'gender-select';
+
+      // Daftar pilihan gender
+      const genderOptions = [
+        { text: 'Laki-laki', value: '♂' },
+        { text: 'Perempuan', value: '♀' }
+      ];
+
+      genderOptions.forEach(gender => {
+        const genderOption = document.createElement('option'); // Ganti nama variabel
+        genderOption.value = gender.value;
+        genderOption.textContent = gender.text;
+        genderSelect.appendChild(genderOption);
+      });
+
+      const saveGenderBtn = document.createElement('button');
+      saveGenderBtn.id = 'save-gender';
+      saveGenderBtn.classList.add('edul');
+      saveGenderBtn.textContent = 'Save';
+
+      // Tambahkan elemen select dan tombol save setelah gender
+      const genderParentDiv = genderEl.parentNode;
+      genderParentDiv.appendChild(genderSelect);
+      genderParentDiv.appendChild(saveGenderBtn);
+
+      // Handle klik tombol save
+      saveGenderBtn.addEventListener('click', async () => {
+        const selectedGender = genderSelect.value; // Ambil nilai gender yang dipilih
+
+        // Update gender di Firestore
+        try {
+          const genderFirestoreRef = firestore.collection('userSS').doc(user.uid);
+          await genderFirestoreRef.update({ gender: selectedGender });
+
+          // Update tampilan gender di halaman
+          genderEl.textContent = selectedGender;
+
+          // Hapus elemen select dan tombol save setelah selesai
+          genderSelect.remove();
+          saveGenderBtn.remove();
+        } catch (error) {
+          console.error("Gagal update gender:", error);
+          alert("Terjadi kesalahan, coba lagi.");
+        }
+      });
+    } else {
+      console.log("User not logged in");
+    }
+  });
+});
