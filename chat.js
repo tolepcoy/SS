@@ -89,42 +89,49 @@ const editUsernameBtn = document.getElementById('edit-username');
 
 // Fungsi untuk handle klik tombol edit
 editUsernameBtn.addEventListener('click', () => {
-  // Simpan value lama
-  const currentUsername = usernameEl.textContent.trim();
+  // Menunggu user login terlebih dahulu
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      // Simpan value lama
+      const currentUsername = usernameEl.textContent.trim();
 
-  // Ubah h2 menjadi input
-  usernameEl.innerHTML = `
-    <input type="text" id="username-input" value="${currentUsername}" maxlength="15" />
-    <button id="save-username">Save</button>
-  `;
+      // Ubah h2 menjadi input
+      usernameEl.innerHTML = `
+        <input type="text" id="username-input" value="${currentUsername}" maxlength="15" />
+        <button id="save-username">Save</button>
+      `;
 
-  // Ambil elemen input dan tombol save
-  const usernameInput = document.getElementById('username-input');
-  const saveBtn = document.getElementById('save-username');
+      // Ambil elemen input dan tombol save
+      const usernameInput = document.getElementById('username-input');
+      const saveBtn = document.getElementById('save-username');
 
-  // Fokuskan input
-  usernameInput.focus();
+      // Fokuskan input
+      usernameInput.focus();
 
-  // Handle klik tombol save
-  saveBtn.addEventListener('click', async () => {
-    const newUsername = usernameInput.value.trim();
+      // Handle klik tombol save
+      saveBtn.addEventListener('click', async () => {
+        const newUsername = usernameInput.value.trim();
 
-    // Validasi username
-    if (!/^[a-zA-Z\s]{1,15}$/.test(newUsername)) {
-      alert("Nama hanya boleh huruf dan spasi, maksimal 15 karakter.");
-      return;
-    }
+        // Validasi username
+        if (!/^[a-zA-Z\s]{1,15}$/.test(newUsername)) {
+          alert("Nama hanya boleh huruf dan spasi, maksimal 15 karakter.");
+          return;
+        }
 
-    // Simpan ke Firestore
-    try {
-      const userDef = firestore.collection('userSS').doc(user.uid);
-      await userDef.update({ username: newUsername });
+        // Simpan ke Firestore
+        try {
+          const userDef = firestore.collection('userSS').doc(user.uid);
+          await userDef.update({ username: newUsername });
 
-      // Kembalikan tampilan awal
-      usernameEl.textContent = newUsername;
-    } catch (error) {
-      console.error("Gagal update username:", error);
-      alert("Gagal menyimpan nama baru, coba lagi.");
+          // Kembalikan tampilan awal
+          usernameEl.textContent = newUsername;
+        } catch (error) {
+          console.error("Gagal update username:", error);
+          alert("Gagal menyimpan nama baru, coba lagi.");
+        }
+      });
+    } else {
+      console.log("User not logged in");
     }
   });
 });
