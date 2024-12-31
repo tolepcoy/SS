@@ -335,3 +335,65 @@ editLokasiBtn.addEventListener('click', () => {
     }
   });
 });
+
+// EDIT UMUR
+const umurEl = document.getElementById('umur');
+const editUmurBtn = document.getElementById('edit-umur');
+
+// Fungsi untuk handle klik tombol edit umur
+editUmurBtn.addEventListener('click', () => {
+  // Menunggu user login terlebih dahulu
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      // Buat elemen select dan tombol save secara dinamis
+      const umurSelect = document.createElement('select');
+      umurSelect.id = 'umur-select';
+
+      // Daftar pilihan umur dari 16 sampai 60
+      const umurOptions = [];
+      for (let i = 16; i <= 60; i++) {
+        umurOptions.push(i);
+      }
+
+      umurOptions.forEach(age => {
+        const option = document.createElement('option');
+        option.value = age;
+        option.textContent = age;
+        umurSelect.appendChild(option);
+      });
+
+      const saveUmurBtn = document.createElement('button');
+      saveUmurBtn.id = 'save-umur';
+      saveUmurBtn.classList.add('edul');
+      saveUmurBtn.textContent = 'Save';
+
+      // Tambahkan elemen select dan tombol save setelah umur
+      const umurParentDiv = umurEl.parentNode;
+      umurParentDiv.appendChild(umurSelect);
+      umurParentDiv.appendChild(saveUmurBtn);
+
+      // Handle klik tombol save
+      saveUmurBtn.addEventListener('click', async () => {
+        const selectedUmur = umurSelect.value; // Ambil nilai umur yang dipilih
+
+        // Update umur di Firestore
+        try {
+          const umurFirestoreRef = firestore.collection('userSS').doc(user.uid);
+          await umurFirestoreRef.update({ umur: selectedUmur });
+
+          // Update tampilan umur di halaman
+          umurEl.textContent = selectedUmur;
+
+          // Hapus elemen select dan tombol save setelah selesai
+          umurSelect.remove();
+          saveUmurBtn.remove();
+        } catch (error) {
+          console.error("Gagal update umur:", error);
+          alert("Terjadi kesalahan, coba lagi.");
+        }
+      });
+    } else {
+      console.log("User not logged in");
+    }
+  });
+});
