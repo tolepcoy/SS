@@ -64,8 +64,6 @@ registerButton.addEventListener('click', () => {
           bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
           email: user.email,
           verimail: '',
-          ponsel: '',
-          veriphone: '',
           facebook: ''
         })
         .then(() => {

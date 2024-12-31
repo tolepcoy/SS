@@ -84,8 +84,6 @@ firebase.auth().onAuthStateChanged(user => {
         document.getElementById('bergabung').innerHTML = data.bergabung;
         document.getElementById('email').innerHTML = data.email;
         document.getElementById('verimail').innerHTML = data.verimail;
-        document.getElementById('ponsel').innerHTML = data.ponsel;
-        document.getElementById('veriphone').innerHTML = data.veriphone;
         document.getElementById('facebook').innerHTML = data.facebook;
       } else {
         console.log("User data not found in Firestore");
@@ -609,106 +607,60 @@ function cekStatusVerifikasi() {
 cekStatusVerifikasi();
 // end verifikasi
 
-// TAMBAH PONSEL
-const ponselEl = document.getElementById('ponsel');
-const veriphoneEl = document.getElementById('veriphone');
-let recaptchaVerifier; // Variable untuk menyimpan instance reCAPTCHA
 
-// Fungsi untuk update status ponsel
-function cekStatusPonsel() {
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      if (user.phoneNumber) {
-        ponselEl.textContent = user.phoneNumber;
-        veriphoneEl.textContent = 'Verifikasi √';
-        veriphoneEl.style.color = 'green';
-        veriphoneEl.style.cursor = 'default';
-        veriphoneEl.onclick = null;
-      } else {
-        ponselEl.textContent = '-';
-        veriphoneEl.textContent = 'Tambahkan Ponsel';
-        veriphoneEl.style.color = 'blue';
-        veriphoneEl.style.cursor = 'pointer';
-        veriphoneEl.onclick = tampilkanInputPonsel;
-      }
+// FACEBOOK SYNC
+// Mendapatkan elemen Facebook
+const facebookEl = document.getElementById('facebook');
+
+// Firebase Facebook Auth Provider
+const provider = new firebase.auth.FacebookAuthProvider();
+
+// Fungsi untuk mengecek status Facebook terhubung
+function cekStatusFacebook() {
+  const user = firebase.auth().currentUser;
+  if (user) {
+    // Cek jika akun sudah terhubung dengan Facebook
+    if (user.providerData.some((provider) => provider.providerId === 'facebook.com')) {
+      facebookEl.textContent = 'Terhubung √';
+      facebookEl.style.color = 'green';
+      facebookEl.style.pointerEvents = 'none'; // Menonaktifkan klik
     } else {
-      ponselEl.textContent = '-';
-      veriphoneEl.textContent = 'Tambahkan Ponsel';
-      veriphoneEl.style.color = 'blue';
-      veriphoneEl.style.cursor = 'pointer';
-      veriphoneEl.onclick = tampilkanInputPonsel;
+      facebookEl.textContent = 'Hubungkan';
+      facebookEl.style.color = 'blue';
+      facebookEl.style.pointerEvents = 'auto'; // Mengaktifkan klik
     }
-  });
+  }
 }
 
-// Fungsi untuk menampilkan input ponsel dan render reCAPTCHA
-function tampilkanInputPonsel() {
-  veriphoneEl.onclick = null;
+// Panggil fungsi cek status saat halaman selesai dimuat
+cekStatusFacebook();
 
-  const inputEl = document.createElement('input');
-  inputEl.type = 'text';
-  inputEl.placeholder = 'Masukkan nomor ponsel (misal: +6281234567890)';
-
-  const tombolTambahEl = document.createElement('button');
-  tombolTambahEl.textContent = 'Kirim OTP';
-  tombolTambahEl.style.marginLeft = '10px';
-
-  veriphoneEl.textContent = '';
-  veriphoneEl.appendChild(inputEl);
-  veriphoneEl.appendChild(tombolTambahEl);
-
-  // Render reCAPTCHA
-  recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-    size: 'normal', // Normal untuk tampil di layar
-    callback: () => {
-      tombolTambahEl.disabled = false; // Aktifkan tombol jika reCAPTCHA valid
-    },
-    'expired-callback': () => {
-      tombolTambahEl.disabled = true; // Nonaktifkan tombol jika reCAPTCHA kedaluwarsa
-      alert('reCAPTCHA expired. Silakan refresh halaman.');
-    },
-  });
-  recaptchaVerifier.render();
-
-  // Tombol untuk mengirim OTP
-  tombolTambahEl.addEventListener('click', () => {
-    const nomorBaru = inputEl.value.trim();
-    if (nomorBaru) {
-      kirimKodeVerifikasi(nomorBaru);
-    } else {
-      alert('Nomor ponsel tidak boleh kosong!');
-    }
-  });
-}
-
-// Fungsi untuk mengirim kode verifikasi
-function kirimKodeVerifikasi(nomorBaru) {
-  firebase.auth().signInWithPhoneNumber(nomorBaru, recaptchaVerifier)
-    .then((confirmationResult) => {
-      const kodeVerifikasi = prompt('Masukkan kode OTP yang dikirim ke nomor ente:');
-      if (kodeVerifikasi) {
-        return confirmationResult.confirm(kodeVerifikasi);
-      } else {
-        throw new Error('Kode OTP tidak dimasukkan.');
-      }
-    })
-    .then((result) => {
-      const user = result.user;
-      alert('Nomor ponsel berhasil ditambahkan!');
-      cekStatusPonsel();
-
-      // Simpan nomor ke Firestore
-      const userSSRef2 = firebase.firestore().collection('userSS').doc(user.uid);
-      return userSSRef2.set({ ponsel: user.phoneNumber, veriphone: true }, { merge: true });
-    })
-    .catch((error) => {
-      console.error('Gagal menambahkan nomor ponsel:', error);
-      alert('Gagal menambahkan nomor ponsel: ' + error.message);
-    });
-}
-
-// Panggil fungsi saat halaman selesai dimuat
-cekStatusPonsel();
+// Event listener untuk klik hubungkan Facebook
+facebookEl.addEventListener('click', () => {
+  const user = firebase.auth().currentUser;
+  if (user) {
+    // Jika user sudah login, lakukan autentikasi Facebook
+    firebase.auth().signInWithPopup(provider)
+      .then((result) => {
+        console.log('Facebook terhubung:', result);
+        
+        // Perbarui elemen UI hanya setelah berhasil terhubung dengan Facebook
+        facebookEl.textContent = 'Terhubung √';
+        facebookEl.style.color = 'green';
+        facebookEl.style.pointerEvents = 'none'; // Menonaktifkan klik
+        
+        // Kirim status ke Firestore hanya setelah berhasil
+        firebase.firestore().collection('userSS').doc(user.uid).update({
+          facebook: 'Terhubung √',
+        });
+      })
+      .catch((error) => {
+        console.error('Terjadi kesalahan saat menghubungkan Facebook:', error);
+      });
+  } else {
+    console.log('User tidak terautentikasi');
+  }
+});
 
 
 

@@ -245,13 +245,12 @@ body {
   font-weight: bold;
 }
 
-#email, #ponsel {
+#email {
   font-size: 14px;
   font-weight: bold;
 }
 
-#verimail, 
-#veriphone {
+#verimail {
   font-size: 10px;
   font-style: italic;
 }
