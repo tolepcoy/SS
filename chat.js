@@ -122,7 +122,7 @@ editUsernameBtn.addEventListener('click', () => {
         // Simpan ke Firestore
         try {
           const userDef = firestore.collection('userSS').doc(user.uid);
-          await userDef.update({ username: newUsername });
+          await userDef.update({ nama: newUsername });
 
           // Kembalikan tampilan awal
           usernameEl.textContent = newUsername;
