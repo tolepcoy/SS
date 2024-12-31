@@ -16,14 +16,9 @@ const firestore = firebase.firestore();
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
+    // Cek jika email belum diverifikasi
     if (!user.emailVerified) {
-      user.sendEmailVerification()
-        .then(() => {
-          alert('Email verifikasi berhasil dikirim. Cek inbox email ente!');
-        })
-        .catch((error) => {
-          console.error('Gagal kirim email verifikasi:', error);
-        });
+      alert('Anda belum memverifikasi email!');
     }
   }
 });
