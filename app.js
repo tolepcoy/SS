@@ -63,10 +63,10 @@ registerButton.addEventListener('click', () => {
           rate: 'N/A',
           bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
           email: user.email,
-          verimail: '<span style="color:#f88">Belum Verifikasi X</span>',
-          ponsel: '-',
-          veriphone: '-',
-          facebook: '-'
+          verimail: '',
+          ponsel: '',
+          veriphone: '',
+          facebook: ''
         })
         .then(() => {
           // Custom alert berhasil
