@@ -136,3 +136,67 @@ editUsernameBtn.addEventListener('click', () => {
     }
   });
 });
+
+// EDIT AVATAR
+const avatarEl = document.getElementById('avatar');
+const editAvatarBtn = document.getElementById('edit-avatar');
+
+// Fungsi untuk handle klik tombol edit avatar
+editAvatarBtn.addEventListener('click', () => {
+  // Ubah gambar menjadi input file
+  avatarEl.innerHTML = `
+    <input type="file" id="avatar-input" accept="image/jpeg" />
+    <button id="save-avatar">Save</button>
+  `;
+
+  const avatarInput = document.getElementById('avatar-input');
+  const saveBtnAvatar = document.getElementById('save-avatar');
+
+  // Handle klik tombol save
+  saveBtnAvatar.addEventListener('click', async () => {
+    const file = avatarInput.files[0]; // Ambil file yang dipilih
+
+    if (!file) {
+      alert("Silakan pilih gambar terlebih dahulu.");
+      return;
+    }
+
+    // Validasi format file
+    if (file.type !== 'image/jpeg') {
+      alert("Hanya file gambar JPEG yang diperbolehkan.");
+      return;
+    }
+
+    // Upload gambar ke Imgur
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const response = await fetch('https://api.imgur.com/3/image', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer 6e72b748a0d7becd6751810b6c1557de073ccb0e' // Ganti dengan token Imgur milikmu
+        },
+        body: formData
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        const imageUrl = result.data.link; // Dapatkan URL gambar yang di-upload
+
+        // Update avatar di Firestore
+        const userDef2 = firestore.collection('userSS').doc(user.uid);
+        await userDef2.update({ avatar: imageUrl });
+
+        // Update tampilan gambar avatar di halaman
+        avatarEl.innerHTML = `<img id="avatar" src="${imageUrl}" />`;
+      } else {
+        alert("Gagal upload gambar, coba lagi.");
+      }
+    } catch (error) {
+      console.error("Gagal upload gambar:", error);
+      alert("Terjadi kesalahan, coba lagi.");
+    }
+  });
+});
