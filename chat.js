@@ -90,55 +90,85 @@ const editNamaBtn = document.getElementById('edit-nama');
 
 // Fungsi untuk handle klik tombol edit
 editNamaBtn.addEventListener('click', () => {
+  editNamaBtn.style.display = 'none';
+
   // Menunggu user login terlebih dahulu
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
-      // Simpan value lama
-      const currentNama = namaEl.textContent.trim();
+      const userDef = firestore.collection('userSS').doc(user.uid);
 
-      // Sembunyikan tombol edit saat mengedit
-      editNamaBtn.style.display = 'none';
+      // Ambil data terakhir update nama
+      userDef.get().then(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          const lastUpdate = data.lastNamaUpdate?.toDate() || null;
+          const now = new Date();
 
-      // Ubah h2 menjadi input
-      namaEl.innerHTML = `
-        <input type="text" id="nama-input" value="${currentNama}" maxlength="15" />
-        <button class="edul" id="save-nama">Save</button>
-      `;
+          if (lastUpdate && (now - lastUpdate) / (1000 * 60 * 60 * 24) < 30) {
+            const remainingDays = 30 - Math.floor((now - lastUpdate) / (1000 * 60 * 60 * 24));
+            alert(`Anda hanya bisa mengubah nama setiap 30 hari. Sisa waktu: ${remainingDays} hari.`);
+            editNamaBtn.style.display = 'block';
+            return;
+          }
 
-      // Ambil elemen input dan tombol save
-      const namaInput = document.getElementById('nama-input');
-      const saveBtnNama = document.getElementById('save-nama');
+          // Simpan value lama
+          const currentNama = namaEl.textContent.trim();
 
-      // Fokuskan input
-      namaInput.focus();
+          // Ubah h2 menjadi input
+          namaEl.innerHTML = `
+            <input type="text" id="nama-input" value="${currentNama}" maxlength="15" />
+            <button class="edul" id="save-nama">Save</button>
+            <button class="edul" id="cancel-nama">Batal</button>
+          `;
 
-      // Handle klik tombol save
-      saveBtnNama.addEventListener('click', async () => {
-        const newNama = namaInput.value.trim();
+          // Ambil elemen input dan tombol
+          const namaInput = document.getElementById('nama-input');
+          const saveBtnNama = document.getElementById('save-nama');
+          const cancelBtnNama = document.getElementById('cancel-nama');
 
-        // Validasi nama
-        if (!/^[a-zA-Z\s]{1,15}$/.test(newNama)) {
-          alert("Nama hanya boleh huruf dan spasi, maksimal 15 karakter.");
-          return;
+          // Fokuskan input
+          namaInput.focus();
+
+          // Handle klik tombol batal
+          cancelBtnNama.addEventListener('click', () => {
+            namaEl.textContent = currentNama;
+            editNamaBtn.style.display = 'block';
+          });
+
+          // Handle klik tombol save
+          saveBtnNama.addEventListener('click', async () => {
+            const newNama = namaInput.value.trim();
+
+            // Validasi nama
+            if (!/^[a-zA-Z\s]{3,15}$/.test(newNama)) {
+              alert("Nama hanya boleh huruf dan spasi, 3 - 15 karakter.");
+              return;
+            }
+
+            // Simpan ke Firestore
+            try {
+              await userDef.update({
+                nama: newNama,
+                lastNamaUpdate: firebase.firestore.Timestamp.now() // Simpan waktu update terakhir
+              });
+
+              // Kembalikan tampilan awal
+              namaEl.textContent = newNama;
+              editNamaBtn.style.display = 'block';
+            } catch (error) {
+              console.error("Gagal update nama:", error);
+              alert("Gagal menyimpan nama baru, coba lagi.");
+            }
+          });
+        } else {
+          console.error("Dokumen user tidak ditemukan.");
+          alert("Terjadi kesalahan, coba lagi.");
+          editNamaBtn.style.display = 'block';
         }
-
-        // Simpan ke Firestore
-        try {
-          const userDef = firestore.collection('userSS').doc(user.uid);
-          await userDef.update({ nama: newNama }); // Update field "nama"
-
-          // Kembalikan tampilan awal
-          namaEl.textContent = newNama;
-
-          // Tampilkan kembali tombol edit setelah selesai
-          editNamaBtn.style.display = 'inline-block';
-        } catch (error) {
-          console.error("Gagal update nama:", error);
-          alert("Gagal menyimpan nama baru, coba lagi.");
-          
-          // Tampilkan kembali tombol edit jika gagal
-          editNamaBtn.style.display = 'inline-block';
-        }
+      }).catch(error => {
+        console.error("Gagal mengambil data user:", error);
+        alert("Terjadi kesalahan, coba lagi.");
+        editNamaBtn.style.display = 'block';
       });
     } else {
       console.log("User not logged in");
@@ -251,7 +281,7 @@ editDetailBtn.addEventListener('click', () => {
 
       // Ubah div menjadi textarea dan tambahkan tombol save
       detailEl.innerHTML = `
-        <textarea id="detail-textarea" maxlength="200">${currentDetail}</textarea>
+        <textarea id="detail-textarea" maxlength="50">${currentDetail}</textarea>
         <button class="edul" id="save-detail">Save</button>
       `;
 
@@ -267,8 +297,8 @@ editDetailBtn.addEventListener('click', () => {
         const newDetail = detailTextarea.value.trim();
 
         // Validasi isi biodata
-        if (newDetail.length > 200) {
-          alert("Biodata maksimal 200 karakter.");
+        if (newDetail.length > 50) {
+          alert("Biodata maksimal 50 karakter.");
           return;
         }
 
@@ -492,3 +522,9 @@ editGenderBtn.addEventListener('click', () => {
     }
   });
 });
+
+// zoom avatar
+document.getElementById('avatar').addEventListener('click', function() {
+  this.classList.toggle('zoom');
+});
+
