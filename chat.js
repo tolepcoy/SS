@@ -609,6 +609,7 @@ cekStatusVerifikasi();
 
 
 // FACEBOOK SYNC
+// FACEBOOK SYNC
 // Mendapatkan elemen Facebook
 const facebookEl = document.getElementById('facebook');
 
@@ -643,30 +644,32 @@ cekStatusFacebook();
 facebookEl.addEventListener('click', () => {
   const user = firebase.auth().currentUser;
   if (user) {
-    // Jika user sudah login, lakukan autentikasi Facebook
-    firebase.auth().signInWithPopup(provider)
-      .then((result) => {
-        console.log('Facebook terhubung:', result);
-        facebookEl.textContent = 'Terhubung √';
-        facebookEl.style.color = 'green';
-        facebookEl.style.pointerEvents = 'none';
-        // Kirim status ke Firestore
-        firebase.firestore().collection('userSS').doc(user.uid).update({
-          facebook: 'Terhubung √',
-        });
-      })
-      .catch((error) => {
-        console.error('Terjadi kesalahan saat menghubungkan Facebook:', error);
-      });
+    // Jika user sudah login, lakukan autentikasi Facebook dengan redirect
+    firebase.auth().signInWithRedirect(provider);
   } else {
     console.log('User tidak terautentikasi');
   }
 });
 
+// Menangani hasil redirect setelah login berhasil
+firebase.auth().getRedirectResult().then((result) => {
+  if (result.user) {
+    // Facebook berhasil terhubung, perbarui tampilan elemen
+    facebookEl.textContent = 'Terhubung √';
+    facebookEl.style.color = 'green';
+    facebookEl.style.pointerEvents = 'none';
+    
+    // Kirim status ke Firestore
+    firebase.firestore().collection('userSS').doc(result.user.uid).update({
+      facebook: 'Terhubung √',
+    });
 
-
-
-
+    // Redirect ke halaman chat setelah terhubung
+    window.location.replace('chat.html');
+  }
+}).catch((error) => {
+  console.error('Terjadi kesalahan saat menghubungkan Facebook:', error);
+});
 
 // DOM UBAH EMAIL
 // Elemen DOM
