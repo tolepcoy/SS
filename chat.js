@@ -99,7 +99,6 @@ function saveUserProfile(profileData) {
     alert("Anda belum login.");
   }
 }
-});
 
 // EDIT USERNAME
 const usernameEl = document.getElementById('username');
@@ -145,4 +144,5 @@ editUsernameBtn.addEventListener('click', () => {
       alert("Gagal menyimpan nama baru, coba lagi.");
     }
   });
+});
 });
