@@ -546,3 +546,50 @@ firebase.auth().onAuthStateChanged(user => {
     console.log("User belum login");
   }
 });
+
+// DOM UBAH EMAIL
+const ubahEmailBtn = document.getElementById('ubah-email');
+const emailInputWrapper = document.getElementById('email-input-wrapper');
+const emailInput = document.getElementById('email-baru');
+const kirimEmailBtn = document.getElementById('kirim-email');
+
+// Event Listener untuk klik tombol Ubah Email
+ubahEmailBtn.addEventListener('click', () => {
+  ubahEmailBtn.style.display = 'none'; // Sembunyikan tombol ubah email
+  emailInputWrapper.style.display = 'block'; // Tampilkan input email
+});
+
+// Event Listener untuk tombol kirim
+kirimEmailBtn.addEventListener('click', async () => {
+  const emailBaru = emailInput.value.trim(); // Ambil nilai input
+
+  // Validasi email
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailBaru)) {
+    alert('Masukkan email yang valid.');
+    return;
+  }
+
+  // Proses ubah email di Firebase
+  firebase.auth().onAuthStateChanged(async (user) => {
+    if (user) {
+      try {
+        await user.updateEmail(emailBaru); // Ubah email di Firebase
+        alert('Email berhasil diubah. Cek inbox untuk verifikasi.');
+
+        // Reset tampilan
+        emailInput.value = '';
+        emailInputWrapper.style.display = 'none';
+        ubahEmailBtn.style.display = 'block';
+
+        // (Opsional) Update email di Firestore jika ada
+        const userRefEmail = firestore.collection('userSS').doc(user.uid);
+        await userRefEmail.update({ email: emailBaru });
+      } catch (error) {
+        console.error('Gagal mengubah email:', error);
+        alert('Terjadi kesalahan. Pastikan email valid dan akun terautentikasi.');
+      }
+    } else {
+      console.log('User belum login.');
+    }
+  });
+});
