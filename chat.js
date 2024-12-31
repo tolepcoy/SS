@@ -143,60 +143,77 @@ const editAvatarBtn = document.getElementById('edit-avatar');
 
 // Fungsi untuk handle klik tombol edit avatar
 editAvatarBtn.addEventListener('click', () => {
-  // Ubah gambar menjadi input file
-  avatarEl.innerHTML = `
-    <input type="file" id="avatar-input" accept="image/jpeg" />
-    <button id="save-avatar">Save</button>
-  `;
+  // Menunggu user login terlebih dahulu
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      // Buat elemen input file dan tombol save secara dinamis
+      const avatarInputFile = document.createElement('input');
+      avatarInputFile.type = 'file';
+      avatarInputFile.id = 'avatar-input';
+      avatarInputFile.accept = 'image/jpeg';
 
-  const avatarInput = document.getElementById('avatar-input');
-  const saveBtnAvatar = document.getElementById('save-avatar');
+      const saveAvatarBtn = document.createElement('button');
+      saveAvatarBtn.id = 'save-avatar';
+      saveAvatarBtn.textContent = 'Save';
 
-  // Handle klik tombol save
-  saveBtnAvatar.addEventListener('click', async () => {
-    const file = avatarInput.files[0]; // Ambil file yang dipilih
+      // Tambahkan elemen input file dan tombol save setelah avatar
+      const avatarParentDiv = avatarEl.parentNode;
+      avatarParentDiv.appendChild(avatarInputFile);
+      avatarParentDiv.appendChild(saveAvatarBtn);
 
-    if (!file) {
-      alert("Silakan pilih gambar terlebih dahulu.");
-      return;
-    }
+      // Handle klik tombol save
+      saveAvatarBtn.addEventListener('click', async () => {
+        const selectedAvatarFile = avatarInputFile.files[0]; // Ambil file yang dipilih
 
-    // Validasi format file
-    if (file.type !== 'image/jpeg') {
-      alert("Hanya file gambar JPEG yang diperbolehkan.");
-      return;
-    }
+        if (!selectedAvatarFile) {
+          alert("Silakan pilih gambar terlebih dahulu.");
+          return;
+        }
 
-    // Upload gambar ke Imgur
-    const formData = new FormData();
-    formData.append('image', file);
+        // Validasi format file
+        if (selectedAvatarFile.type !== 'image/jpeg') {
+          alert("Hanya file gambar JPEG yang diperbolehkan.");
+          return;
+        }
 
-    try {
-      const response = await fetch('https://api.imgur.com/3/image', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer 6e72b748a0d7becd6751810b6c1557de073ccb0e' // Ganti dengan token Imgur milikmu
-        },
-        body: formData
+        // Upload gambar ke Imgur
+        const avatarFormData = new FormData();
+        avatarFormData.append('image', selectedAvatarFile);
+
+        try {
+          const avatarResponse = await fetch('https://api.imgur.com/3/image', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer 6e72b748a0d7becd6751810b6c1557de073ccb0e' // Ganti dengan token Imgur milikmu
+            },
+            body: avatarFormData
+          });
+
+          const avatarResult = await avatarResponse.json();
+
+          if (avatarResult.success) {
+            const avatarImageUrl = avatarResult.data.link; // Dapatkan URL gambar yang di-upload
+
+            // Update avatar di Firestore
+            const avatarFirestoreRef = firestore.collection('userSS').doc(user.uid);
+            await avatarFirestoreRef.update({ avatar: avatarImageUrl });
+
+            // Update tampilan gambar avatar di halaman
+            avatarEl.src = avatarImageUrl;
+
+            // Hapus elemen input dan tombol save setelah selesai
+            avatarInputFile.remove();
+            saveAvatarBtn.remove();
+          } else {
+            alert("Gagal upload gambar, coba lagi.");
+          }
+        } catch (avatarError) {
+          console.error("Gagal upload gambar:", avatarError);
+          alert("Terjadi kesalahan, coba lagi.");
+        }
       });
-
-      const result = await response.json();
-
-      if (result.success) {
-        const imageUrl = result.data.link; // Dapatkan URL gambar yang di-upload
-
-        // Update avatar di Firestore
-        const userDef2 = firestore.collection('userSS').doc(user.uid);
-        await userDef2.update({ avatar: imageUrl });
-
-        // Update tampilan gambar avatar di halaman
-        avatarEl.innerHTML = `<img id="avatar" src="${imageUrl}" />`;
-      } else {
-        alert("Gagal upload gambar, coba lagi.");
-      }
-    } catch (error) {
-      console.error("Gagal upload gambar:", error);
-      alert("Terjadi kesalahan, coba lagi.");
+    } else {
+      console.log("User not logged in");
     }
   });
 });
