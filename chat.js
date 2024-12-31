@@ -223,3 +223,56 @@ editAvatarBtn.addEventListener('click', () => {
     }
   });
 });
+
+// EDIT DETAIL
+const detailEl = document.getElementById('detail');
+const editDetailBtn = document.getElementById('edit-detail');
+
+// Fungsi untuk handle klik tombol edit detail
+editDetailBtn.addEventListener('click', () => {
+  // Menunggu user login terlebih dahulu
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      // Simpan value lama
+      const currentDetail = detailEl.textContent.trim();
+
+      // Ubah div menjadi textarea dan tambahkan tombol save
+      detailEl.innerHTML = `
+        <textarea id="detail-textarea" maxlength="200">${currentDetail}</textarea>
+        <button class="edul" id="save-detail">Save</button>
+      `;
+
+      // Ambil elemen textarea dan tombol save
+      const detailTextarea = document.getElementById('detail-textarea');
+      const saveDetailBtn = document.getElementById('save-detail');
+
+      // Fokuskan textarea
+      detailTextarea.focus();
+
+      // Handle klik tombol save
+      saveDetailBtn.addEventListener('click', async () => {
+        const newDetail = detailTextarea.value.trim();
+
+        // Validasi isi biodata
+        if (newDetail.length > 200) {
+          alert("Biodata maksimal 200 karakter.");
+          return;
+        }
+
+        // Simpan ke Firestore
+        try {
+          const detailRef = firestore.collection('userSS').doc(user.uid);
+          await detailRef.update({ detail: newDetail });
+
+          // Kembalikan tampilan awal
+          detailEl.textContent = newDetail;
+        } catch (error) {
+          console.error("Gagal update biodata:", error);
+          alert("Gagal menyimpan biodata baru, coba lagi.");
+        }
+      });
+    } else {
+      console.log("User not logged in");
+    }
+  });
+});
