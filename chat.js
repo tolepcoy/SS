@@ -58,33 +58,6 @@ function openPanel(panelId) {
 }
 });
 
-/*
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    const userRef = firestore.collection('userSS').doc(user.uid);
-    userRef.get().then(doc => {
-      if (doc.exists) {
-        const data = doc.data();
-        // Update elemen HTML dengan data user yang diambil dari Firestore
-        document.getElementById('nama').innerText = data.nama;
-        document.getElementById('avatar').src = data.avatar;
-        document.getElementById('status').innerText = data.status;
-        document.getElementById('detail').innerText = data.detail;
-        document.getElementById('lokasi').innerText = data.lokasi;
-        document.getElementById('umur').innerText = data.umur;
-        document.getElementById('gender').innerText = data.gender;
-        document.getElementById('rate').innerText = data.rate;
-        document.getElementById('bergabung').innerText = data.bergabung;
-      } else {
-        console.log("User data not found in Firestore");
-      }
-    }).catch(error => console.error("Error fetching user data:", error));
-  } else {
-    console.log("User not logged in");
-  }
-});
-*/
-
 // EDIT NAMA
 const namaEl = document.getElementById('nama');
 const editNamaBtn = document.getElementById('edit-nama');
@@ -466,10 +439,10 @@ editGenderBtn.addEventListener('click', () => {
       const genderSelect = document.createElement('select');
       genderSelect.id = 'gender-select';
 
-      // Daftar pilihan gender
+      // Daftar pilihan gender dengan URL gambar
       const genderOptions = [
-        { text: 'Laki-laki', value: '♂', id: 'cowok' },
-        { text: 'Perempuan', value: '♀', id: 'cewek' }
+        { text: 'Laki-laki', value: 'icon/cowok.png' },
+        { text: 'Perempuan', value: 'icon/cewek.png' }
       ];
 
       genderOptions.forEach(gender => {
@@ -491,7 +464,7 @@ editGenderBtn.addEventListener('click', () => {
 
       // Handle klik tombol save
       saveGenderBtn.addEventListener('click', async () => {
-        const selectedGender = genderSelect.value; // Ambil nilai gender yang dipilih
+        const selectedGender = genderSelect.value; // Ambil nilai URL gambar gender yang dipilih
 
         // Update gender di Firestore
         try {
@@ -499,13 +472,7 @@ editGenderBtn.addEventListener('click', () => {
           await genderFirestoreRef.update({ gender: selectedGender });
 
           // Update tampilan gender di halaman
-          const selectedOption = genderOptions.find(option => option.value === selectedGender);
-
-          if (selectedOption?.id) {
-            genderEl.innerHTML = `<span id="${selectedOption.id}">${selectedOption.value}</span>`;
-          } else {
-            genderEl.textContent = selectedGender;
-          }
+          genderEl.innerHTML = `<img src="${selectedGender}" alt="Gender Icon" />`;
 
           // Tampilkan kembali tombol edit
           editGenderBtn.style.display = 'block';

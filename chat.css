@@ -163,16 +163,13 @@ body {
 }
 
 #gender {
-  font-size: 27px;
-  font-weight: bold;
+  width: 25px;
+  height: 25px;
 }
 
-#cowok {
-  color: #49f;
-}
-
-#cewek {
-  color: #f93;
+#gender img {
+  width: 100%;
+  height: 100%;
 }
 
 .closeBtnPnl {
