@@ -56,8 +56,9 @@ function openPanel(panelId) {
     document.getElementById(panel).style.transform = panel === panelId ? "translateX(0)" : "translateX(-100%)";
   });
 }
+});
 
-// Fungsi untuk menampilkan profil user setelah login
+/*
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     const userRef = firestore.collection('userSS').doc(user.uid);
@@ -82,7 +83,7 @@ firebase.auth().onAuthStateChanged(user => {
     console.log("User not logged in");
   }
 });
-});
+*/
 
 // EDIT NAMA
 const namaEl = document.getElementById('nama');
