@@ -561,6 +561,38 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
+// STATUS VERIFIKASI EMAIL
+// Elemen status verifikasi
+const statusVerifikasiEl = document.getElementById('status-verifikasi-email');
+
+// Fungsi untuk update status verifikasi
+function cekStatusVerifikasi() {
+  // Pastikan user login
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      user.reload() // Reload data user untuk memastikan data terbaru
+        .then(() => {
+          if (user.emailVerified) {
+            statusVerifikasiEl.textContent = 'Verifikasi √';
+            statusVerifikasiEl.style.color = 'green';
+          } else {
+            statusVerifikasiEl.textContent = 'Belum Verifikasi ✘';
+            statusVerifikasiEl.style.color = 'red';
+          }
+        })
+        .catch(error => {
+          console.error('Gagal memuat ulang status user:', error);
+        });
+    } else {
+      statusVerifikasiEl.textContent = 'User belum login';
+      statusVerifikasiEl.style.color = 'orange';
+    }
+  });
+}
+// Panggil fungsi saat halaman selesai dimuat
+cekStatusVerifikasi();
+// end verifikasi
+
 // DOM UBAH EMAIL
 // Elemen DOM
 const ubahEmailBtn = document.getElementById('ubah-email');

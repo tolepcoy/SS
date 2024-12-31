@@ -238,6 +238,19 @@ body {
 #uniqueID {
   font-size: 12px;
   color: #fcc;
+  font-weight: bold;
+}
+
+#email, #ponsel {
+  font-size: 14px;
+  color: #cfc;
+  font-weight: bold;
+}
+
+#status-verifikasi-email, 
+#status-verifikasi-ponsel {
+  font-size: 10px;
+  font-style: italic;
 }
 
 #ubah-email {
@@ -247,6 +260,11 @@ body {
 
 #ubah-password {
   background: url('icon/regBtn.png');
+  background-size: 100% 100%;
+}
+
+#request-rate {
+  background: url('icon/reqBtn.png');
   background-size: 100% 100%;
 }
 
