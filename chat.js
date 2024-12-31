@@ -230,6 +230,9 @@ const editDetailBtn = document.getElementById('edit-detail');
 
 // Fungsi untuk handle klik tombol edit detail
 editDetailBtn.addEventListener('click', () => {
+  // Sembunyikan tombol edit-detail
+  editDetailBtn.style.display = 'none';
+
   // Menunggu user login terlebih dahulu
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -266,6 +269,9 @@ editDetailBtn.addEventListener('click', () => {
 
           // Kembalikan tampilan awal
           detailEl.textContent = newDetail;
+
+          // Tampilkan kembali tombol edit-detail
+          editDetailBtn.style.display = 'block';
         } catch (error) {
           console.error("Gagal update biodata:", error);
           alert("Gagal menyimpan biodata baru, coba lagi.");
