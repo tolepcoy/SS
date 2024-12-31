@@ -80,12 +80,12 @@ firebase.auth().onAuthStateChanged(user => {
         document.getElementById('lokasi').innerText = data.lokasi;
         document.getElementById('umur').innerText = data.umur;
         document.getElementById('gender').src = data.gender;
-        document.getElementById('rate').innerText = data.rate;
-        document.getElementById('bergabung').innerText = data.bergabung;
-        document.getElementById('email').innerText = data.email;
-        document.getElementById('verimail').innerText = data.verimail;
-        document.getElementById('ponsel').innerText = data.ponsel;
-        document.getElementById('veriphone').innerText = data.veriphone;
+        document.getElementById('rate').innerHTML = data.rate;
+        document.getElementById('bergabung').innerHTML = data.bergabung;
+        document.getElementById('email').innerHTML = data.email;
+        document.getElementById('verimail').innerHTML = data.verimail;
+        document.getElementById('ponsel').innerHTML = data.ponsel;
+        document.getElementById('veriphone').innerHTML = data.veriphone;
       } else {
         console.log("User data not found in Firestore");
       }

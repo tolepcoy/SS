@@ -58,14 +58,14 @@ registerButton.addEventListener('click', () => {
           status: '&#9733;',
           detail: 'Bio',
           lokasi: 'Palembang',
-          umur: '',
-          gender: '',
+          umur: '-',
+          gender: '-',
           rate: 'N/A',
-          bergabung: new Date(),
+          bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
           email: user.email,
-          verimail: '',
-          ponsel: '',
-          veriphone: ''
+          verimail: '<span style="color:#f88">Belum Verifikasi X</span>',
+          ponsel: '-',
+          veriphone: '-'
         })
         .then(() => {
           // Custom alert berhasil
