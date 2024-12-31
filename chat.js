@@ -414,7 +414,7 @@ editGenderBtn.addEventListener('click', () => {
       // Daftar pilihan gender
       const genderOptions = [
         { text: 'Laki-laki', value: '♂' },
-        { text: 'Perempuan', value: '♀' }
+        { text: 'Perempuan', value: '<span id="cewek">♀</span>' }
       ];
 
       genderOptions.forEach(gender => {

@@ -130,6 +130,17 @@ body {
   padding: 5px;
 }
 
+#gender {
+  font-size: 25px;
+  font-weight: bold;
+  color: cyan;
+}
+
+#cewek {
+  color: pink;
+}
+
+/* Setting App */
 #settingsPanel {
   gap: 3%;
 }
