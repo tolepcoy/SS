@@ -11,55 +11,82 @@
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+const auth = firebase.auth();
 
     // Fungsi Register
-    const registerButton = document.getElementById('registerButton');
-    registerButton.addEventListener('click', () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+const registerButton = document.getElementById('registerButton');
+registerButton.addEventListener('click', () => {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
-// CUSTOM ALERT REGISTER
-function showAlert(message) {
-  const alertBox = document.createElement('div');
-  alertBox.classList.add('custom-alert'); // Tambahkan class untuk alert
-  alertBox.innerHTML = `
-    <div class="alert-box">
-      <span class="alert-message">${message}</span>
-      <button class="alert-ok">OK</button>
-    </div>
-  `;
+  // CUSTOM ALERT REGISTER
+  function showAlert(message) {
+    const alertBox = document.createElement('div');
+    alertBox.classList.add('custom-alert'); // Tambahkan class untuk alert
+    alertBox.innerHTML = `
+      <div class="alert-box">
+        <span class="alert-message">${message}</span>
+        <button class="alert-ok">OK</button>
+      </div>
+    `;
 
-  // Tambahkan alert ke body
-  document.body.appendChild(alertBox);
+    // Tambahkan alert ke body
+    document.body.appendChild(alertBox);
 
-  // Menampilkan alert
-  alertBox.style.display = 'flex';
+    // Menampilkan alert
+    alertBox.style.display = 'flex';
 
-  // Close alert saat tombol OK diklik
-  alertBox.querySelector('.alert-ok').addEventListener('click', () => {
-    alertBox.style.display = 'none';
-    document.body.removeChild(alertBox);
-  });
-}
-// END CUSTOM ALERT REGISTER
-      if (email && password) {
-        auth.createUserWithEmailAndPassword(email, password)
-          .then(userCredential => {
-            showAlert('Registrasi berhasil!');
-            console.log('Registered with:', userCredential.user);
-            
-            console.log("Menuju ke global chat...");
-    window.location.replace("https://tolepcoy.github.io/SecretServer/chat.html");
-          })
-          .catch(error => {
-            showAlert('Error!');
-            console.error(error);
-          });
-      } else {
-        showAlert('Isi dulu mang!');
-      }
+    // Close alert saat tombol OK diklik
+    alertBox.querySelector('.alert-ok').addEventListener('click', () => {
+      alertBox.style.display = 'none';
+      document.body.removeChild(alertBox);
     });
+  }
+
+  if (email && password) {
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        // Ambil user ID (UID) yang telah terdaftar
+        const user = userCredential.user;
+        
+        // Menyimpan data user ke Firestore pada collection userSS
+        const userSSRef = firestore.collection('userSS').doc(user.uid);
+        userSSRef.set({
+          nama: 'userSS',
+          avatar: 'icon/default-avatar.jpg',
+          status: '&#9733;',
+          detail: 'Bio',
+          lokasi: 'Palembang',
+          umur: null,
+          gender: '',
+          rate: 'N/A',
+          bergabung: new Date(),
+          email: user.email,
+          verimail: false,
+          ponsel: '',
+          veriphone: false
+        })
+        .then(() => {
+          // Custom alert berhasil
+          showAlert('Registrasi berhasil!');
+          console.log('Registered with:', userCredential.user);
+
+          // Redirect ke chat.html setelah registrasi berhasil
+          window.location.replace("https://tolepcoy.github.io/SecretServer/chat.html");
+        })
+        .catch(error => {
+          console.error('Error saving user data to Firestore:', error);
+          showAlert('Gagal menyimpan data pengguna!');
+        });
+      })
+      .catch(error => {
+        showAlert('Error!');
+        console.error(error);
+      });
+  } else {
+    showAlert('Isi dulu mang!');
+  }
+});
 
     loginButton.addEventListener('click', () => {
   const email = document.getElementById('email').value;
