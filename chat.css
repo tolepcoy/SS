@@ -235,6 +235,11 @@ body {
   width: 90%;
 }
 
+#uniqueID {
+  font-size: 10px;
+  color: #fcc;
+}
+
 #ubah-email {
   background: url('icon/logBtn.png');
   background-size: 100% 100%;
