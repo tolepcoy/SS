@@ -742,7 +742,7 @@ document.getElementById("kirim-email").addEventListener("click", () => {
 const reauthenticatePassword = (currentPassword) => {
   const userPas2 = firebase.auth().currentUser;
   const credPas2 = firebase.auth.EmailAuthProvider.credential(userPas2.email, currentPassword);
-  return userPas2.reauthenticateWithCredential(credPas);
+  return userPas2.reauthenticateWithCredential(credPas2);
 };
 
 // Fungsi untuk mengubah ke password baru
@@ -757,7 +757,7 @@ const updatePassword = (currentPassword, newPassword) => {
           document.getElementById("password-input-wrapper").style.display = "none";
 
           // Update password baru di Firestore
-          const userRefP = firebase.firestore().collection("userSS").doc(userUpdate.uid);
+          const userRefP = firebase.firestore().collection("userSS").doc(userUpdateP.uid);
           userRefP.update({
             password: newPassword
           }).then(() => {
