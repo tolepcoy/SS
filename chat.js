@@ -788,7 +788,7 @@ document.getElementById("batalkan").addEventListener("click", () => {
 });
 
 // Menambahkan event listener untuk tombol 'Ubah' pada form password
-document.getElementById("ubah-password").addEventListener("click", () => {
+document.getElementById("ubah").addEventListener("click", () => {
   const passwordLama = document.getElementById("password-lama").value.trim();
   const passwordBaru = document.getElementById("password-baru").value.trim();
 
