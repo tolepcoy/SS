@@ -738,3 +738,57 @@ kirimEmailBtn.addEventListener('click', async () => {
     }
   });
 });
+
+// REQUEST RATE
+// Elemen yang diperlukan
+const r2ButtonEl = document.getElementById('r2');
+const reqRateDivEl = document.getElementById('reqRate');
+const requestRateBtnEl = document.getElementById('request-rate');
+const minInputEl = document.getElementById('minInput');
+const maxInputEl = document.getElementById('maxInput');
+
+// Menambahkan class .active ke #r2 dan #reqRate
+r2ButtonEl.addEventListener('click', () => {
+  r2ButtonEl.classList.add('active');
+  reqRateDivEl.classList.add('active');
+});
+
+// Validasi input angka
+function isValidInput(value) {
+  const number = parseInt(value);
+  return /^\d{3,8}$/.test(value) && !isNaN(number);
+}
+
+// Event klik pada #request-rate
+requestRateBtnEl.addEventListener('click', () => {
+  const minValue = minInputEl.value.trim();
+  const maxValue = maxInputEl.value.trim();
+
+  // Validasi input
+  if (!isValidInput(minValue) || !isValidInput(maxValue)) {
+    alert('Input harus berupa angka dengan panjang minimal 3 dan maksimal 8 digit.');
+    return;
+  }
+
+  // Format value menjadi "min - max"
+  const requestRateValue = `${minValue} - ${maxValue}`;
+
+  // Kirim ke Firestore
+  const currentUser = firebase.auth().currentUser; // Ganti const user ke currentUser
+  if (currentUser) {
+    firebase.firestore().collection('userSS').doc(currentUser.uid).update({
+      requestRate: requestRateValue,
+    })
+    .then(() => {
+      alert('Request Rate berhasil disimpan ke Firestore!');
+      // Hapus class .active
+      r2ButtonEl.classList.remove('active');
+      reqRateDivEl.classList.remove('active');
+    })
+    .catch((error) => {
+      console.error('Terjadi kesalahan saat menyimpan Request Rate:', error);
+    });
+  } else {
+    alert('User tidak terautentikasi.');
+  }
+});

@@ -281,11 +281,88 @@ body {
   background-size: 100% 100%;
 }
 
-#request-rate {
+#r2 {
   background: url('icon/reqBtn.png');
   background-size: 100% 100%;
+  color: white;
+  font-weight: bold;
+  position: absolute;
+  cursor: pointer;
+  padding: 3px 12px;
+  bottom: 20px;
+  right: 20px;
+  border-radius: 6px 6px 12px 6px;
+  border: none;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(0, 0);
+  transition: opacity 5s ease, transform 2.5s ease;
 }
 
+#r2.active{
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-200%, -200%);
+}
+
+
+#reqRate {
+  background: linear-gradient(to bottom right, #555, #999, #444);
+  position: absolute;
+  width: 320px;
+  height: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px 16px;
+  border-top: 2px groove #bbb;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 5s ease;
+}
+
+#reqRate.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#reqRate input {
+  width: 40%;
+  height: 30px;
+  margin: auto;
+  border-radius: 6px;
+  border: none;
+}
+
+#reqRate input:focus,
+#reqRate input:hover,
+#reqRate input:active {
+  outline: none;
+  border: 1px solid magenta;
+}
+
+#request-rate {
+  position: absolute;
+  bottom: 20%;
+  background: url('icon/reqBtn.png');
+  background-size: 100% 100%;
+  color: white;
+  border-radius: 6px;
+  border: none;
+  padding: 5px 15px;
+}
+
+#reqRate h3 {
+  position: absolute;
+  top: 5%;
+  font-family: "Tolep Default";
+}
 
 
 
