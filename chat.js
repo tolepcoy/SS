@@ -696,27 +696,44 @@ kirimEmailBtn.addEventListener('click', () => {
   
   const user = firebase.auth().currentUser;
 
+  // Cek jika email baru dan password diisi
   if (!emailBaru || !password) {
-    alert('Email dan password harus diisi');
+    alert('Email baru dan password harus diisi');
     return;
   }
 
+  // Cek jika email baru sama dengan email lama
   if (emailBaru === user.email) {
     alert('Email baru tidak boleh sama dengan email saat ini');
     return;
   }
 
-  // Re-authenticate untuk memverifikasi password
+  // Menyiapkan kredensial untuk re-authenticate
   const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
   
+  // Log jika re-authenticate dimulai
+  console.log("Re-authenticating...");
+
+  // Re-authenticate untuk memverifikasi password
   user.reauthenticateWithCredential(credential)
     .then(() => {
+      console.log("Re-authentication berhasil!");
+
       // Setelah re-authentication berhasil, update email
       user.updateEmail(emailBaru)
         .then(() => {
           alert('Email berhasil diperbarui');
-          // Menutup form setelah berhasil update
           emailInputWrapper.style.display = 'none';
+
+          // Kirim email verifikasi ke email baru
+          user.sendEmailVerification()
+            .then(() => {
+              alert('Email verifikasi telah dikirim ke email baru');
+            })
+            .catch((error) => {
+              console.error('Gagal mengirim verifikasi email:', error);
+              alert('Gagal mengirim verifikasi email.');
+            });
         })
         .catch((error) => {
           console.error('Gagal memperbarui email:', error);
