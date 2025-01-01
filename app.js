@@ -64,9 +64,12 @@ registerButton.addEventListener('click', () => {
           bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
           email: user.email,
           verimail: '',
-          password: user.password,
           facebook: ''
         })
+        
+        userSSRef.update({
+  password: newPassword
+})
         .then(() => {
           // Custom alert berhasil
           showAlert('Registrasi berhasil!');
