@@ -607,8 +607,6 @@ function cekStatusVerifikasi() {
 cekStatusVerifikasi();
 // end verifikasi
 
-
-// FACEBOOK SYNC
 // FACEBOOK SYNC
 // Mendapatkan elemen Facebook
 const facebookEl = document.getElementById('facebook');
@@ -689,6 +687,16 @@ const sendVerificationLink = (currentPassword, newEmail) => {
         .then(() => {
           alert("Link verifikasi telah dikirim ke email baru. Silakan cek email Anda.");
           document.getElementById("email-input-wrapper").style.display = "none";
+
+          // Update email baru di Firestore
+          const userRef = firebase.firestore().collection("users").doc(userUpdate.uid);
+          userRef.update({
+            email: newEmail
+          }).then(() => {
+            console.log("Email berhasil diperbarui di Firestore");
+          }).catch((error) => {
+            console.error("Gagal memperbarui email di Firestore: ", error);
+          });
         })
         .catch((error) => {
           console.error("Error mengirim email verifikasi:", error);
