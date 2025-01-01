@@ -65,12 +65,7 @@ registerButton.addEventListener('click', () => {
           email: user.email,
           verimail: '',
           facebook: ''
-        })
-        
-        userSSRef.update({
-  password: newPassword
-})
-        .then(() => {
+        }).then(() => {
           // Custom alert berhasil
           showAlert('Registrasi berhasil!');
           console.log('Registered with:', userCredential.user);
