@@ -671,6 +671,7 @@ firebase.auth().getRedirectResult().then((result) => {
   console.error('Terjadi kesalahan saat menghubungkan Facebook:', error);
 });
 
+// UBAH EMAIL
 // Ambil elemen
 const btnUbahEmail = document.getElementById('ubah-email');
 const wrapperEmailInput = document.getElementById('email-input-wrapper');
@@ -700,10 +701,16 @@ btnKirimEmail.addEventListener('click', async () => {
 
   try {
     const firebaseUser = firebase.auth().currentUser;
-    const userCredential = firebase.auth.EmailAuthProvider.credential(currentEmail, currentPassword);
+    const userCredential = firebase.auth.EmailAuthProvider.credential(firebaseUser.email, currentPassword);
 
     // Re-authenticate user
     await firebaseUser.reauthenticateWithCredential(userCredential);
+
+    // Validasi input email baru (tidak boleh sama dengan email sekarang)
+    if (newEmail === firebaseUser.email) {
+      alert('Email baru tidak boleh sama dengan email saat ini!');
+      return;
+    }
 
     // Update email
     await firebaseUser.updateEmail(newEmail);
