@@ -1,1 +1,65 @@
-font
+/* ######### TOLEP DEFAULT ##### */
+@font-face {
+  font-family: 'Tolep Default';
+  src: url(./tolepdefault.woff2) format('woff2');
+}
+
+/* ###### TOLEP SCRIPT / SAMBUNG ### */
+@font-face {
+  font-family: 'Tolep Script';
+  src: url(./tolepscript.woff2) format('woff2');
+}
+
+/* ######### TOLEP CAVIAR ##### */
+@font-face {
+  font-family: 'Tolep Caviar';
+  src: url(./tolepcaviar.woff2) format('woff2');
+}
+
+/* ######### TOLEP ARSHINE ##### */
+@font-face {
+  font-family: 'Tolep Arshine';
+  src: url(./toleparshine.woff2) format('woff2');
+}
+
+/* ######### TOLEP CINDERELLA ##### */
+@font-face {
+  font-family: 'Tolep Cinderella';
+  src: url(./tolepcinderella.woff2) format('woff2');
+}
+
+/* ######### TOLEP MERCHANT ##### */
+@font-face {
+  font-family: 'Tolep Merchant';
+  src: url(./tolepmerchant.woff2) format('woff2');
+}
+
+/* ######### TOLEP NGEWE ##### */
+@font-face {
+  font-family: 'Tolep Ngewe';
+  src: url(./tolepngewe.woff2) format('woff2');
+}
+
+/* ######### TOLEP NGEWE BOLD ##### */
+@font-face {
+  font-family: 'Tolep Ngewe Tebel';
+  src: url(./tolepngewebold.woff2) format('woff2');
+}
+
+/* ######### TOLEP ROBOTO ##### */
+@font-face {
+  font-family: 'Tolep Roboto';
+  src: url(./toleproboto.woff2) format('woff2');
+}
+
+/* ######### TOLEP VIBES ##### */
+@font-face {
+  font-family: 'Tolep Vibes';
+  src: url(./tolepvibes.woff2) format('woff2');
+}
+
+/* ######### TOLEP Courgette ##### */
+@font-face {
+  font-family: 'Tolep Courgette';
+  src: url(./tolepcourgette.woff2) format('woff2');
+}
