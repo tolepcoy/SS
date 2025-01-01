@@ -745,18 +745,18 @@ const reauthenticatePassword = (currentPassword) => {
   return userPas2.reauthenticateWithCredential(credPas2);
 };
 
-// Fungsi untuk mengubah ke password baru
+// Fungsi untuk mengubah password ke yang baru
 const updatePassword = (currentPassword, newPassword) => {
   reauthenticatePassword(currentPassword)
     .then(() => {
       const userUpdateP = firebase.auth().currentUser;
-      // Update password di Firebase
+      // Update password di Firebase Authentication
       userUpdateP.updatePassword(newPassword)
         .then(() => {
           alert("Password berhasil diperbarui.");
           document.getElementById("password-input-wrapper").style.display = "none";
 
-          // Update password baru di Firestore
+          // Update password di Firestore
           const userRefP = firebase.firestore().collection("userSS").doc(userUpdateP.uid);
           userRefP.update({
             password: newPassword
@@ -777,17 +777,17 @@ const updatePassword = (currentPassword, newPassword) => {
     });
 };
 
-// Menambahkan event listener untuk tombol 'Ubah Password'
+// Event listener untuk tombol 'Ubah Password'
 document.getElementById("ubah-password").addEventListener("click", () => {
   document.getElementById("password-input-wrapper").style.display = "flex";
 });
 
-// Menambahkan event listener untuk tombol 'Batal'
+// Event listener untuk tombol 'Batal'
 document.getElementById("batalkan").addEventListener("click", () => {
   document.getElementById("password-input-wrapper").style.display = "none";
 });
 
-// Menambahkan event listener untuk tombol 'Ubah' pada form password
+// Event listener untuk tombol 'Ubah' pada form password
 document.getElementById("ubah").addEventListener("click", () => {
   const passwordLama = document.getElementById("password-lama").value.trim();
   const passwordBaru = document.getElementById("password-baru").value.trim();
