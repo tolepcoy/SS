@@ -260,7 +260,8 @@ body {
   background-size: 100% 100%;
 }
 
-#email-input-wrapper {
+#email-input-wrapper,
+#password-input-wrapper {
   position: relative;
   width: 90%;
   display: none;
@@ -270,7 +271,8 @@ body {
   text-align: center;
 }
 
-#email-input-wrapper input {
+#email-input-wrapper input,
+#password-input-wrapper input {
   width: 80%;
   margin-bottom: 10px;
   border-radius: 5px;
