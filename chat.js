@@ -690,23 +690,25 @@ btnBatalKirim.addEventListener('click', () => {
 
 // Event klik untuk tombol kirim
 btnKirimEmail.addEventListener('click', async () => {
-  const currentEmail = document.getElementById('email-sekarang').value.trim();
   const newEmail = document.getElementById('email-baru').value.trim();
   const currentPassword = document.getElementById('password').value.trim();
 
-  if (!currentEmail || !newEmail || !currentPassword) {
+  if (!newEmail || !currentPassword) {
     alert('Harap isi semua field!');
     return;
   }
 
   try {
     const firebaseUser = firebase.auth().currentUser;
-    const userCredential = firebase.auth.EmailAuthProvider.credential(firebaseUser.email, currentPassword);
+    const credential = firebase.auth.EmailAuthProvider.credential(
+      firebaseUser.email, // Ambil email langsung dari Firebase
+      currentPassword
+    );
 
     // Re-authenticate user
-    await firebaseUser.reauthenticateWithCredential(userCredential);
+    await firebaseUser.reauthenticateWithCredential(credential);
 
-    // Validasi input email baru (tidak boleh sama dengan email sekarang)
+    // Validasi email baru (tidak boleh sama dengan email sekarang)
     if (newEmail === firebaseUser.email) {
       alert('Email baru tidak boleh sama dengan email saat ini!');
       return;
@@ -722,7 +724,11 @@ btnKirimEmail.addEventListener('click', async () => {
     wrapperEmailInput.style.display = 'none'; // Sembunyikan form setelah berhasil
   } catch (error) {
     console.error('Terjadi kesalahan:', error);
-    alert('Gagal memperbarui email. Periksa kembali informasi yang Anda masukkan.');
+    if (error.code === 'auth/wrong-password') {
+      alert('Password yang Anda masukkan salah.');
+    } else {
+      alert('Gagal memperbarui email. Silakan coba lagi.');
+    }
   }
 });
 
