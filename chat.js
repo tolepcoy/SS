@@ -689,8 +689,8 @@ const sendVerificationLink = (currentPassword, newEmail) => {
           document.getElementById("email-input-wrapper").style.display = "none";
 
           // Update email baru di Firestore
-          const userRef = firebase.firestore().collection("users").doc(userUpdate.uid);
-          userRef.update({
+          const userRefz = firebase.firestore().collection("userSS").doc(userUpdate.uid);
+          userRefz.update({
             email: newEmail
           }).then(() => {
             console.log("Email berhasil diperbarui di Firestore");
