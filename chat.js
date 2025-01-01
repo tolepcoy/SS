@@ -673,66 +673,42 @@ firebase.auth().getRedirectResult().then((result) => {
 
 // UBAH EMAIL
 const ubahEmailBtn = document.getElementById('ubah-email');
-const emailInputWrapper = document.getElementById('email-input-wrapper');
-const kirimEmailBtn = document.getElementById('kirim-email');
-const batalKirimBtn = document.getElementById('batal-kirim');
 const emailBaruInput = document.getElementById('email-baru');
 const passwordInput = document.getElementById('password');
+const emailInputWrapper = document.getElementById('email-input-wrapper');
 
-// Fungsi untuk menampilkan form ubah email
+// Fungsi untuk mengubah email
 ubahEmailBtn.addEventListener('click', () => {
-  emailInputWrapper.style.display = 'flex';
-});
-
-// Fungsi untuk membatalkan form ubah email
-batalKirimBtn.addEventListener('click', () => {
-  emailInputWrapper.style.display = 'none';
-});
-
-// Fungsi untuk mengirimkan permintaan perubahan email
-kirimEmailBtn.addEventListener('click', () => {
   const emailBaru = emailBaruInput.value;
   const password = passwordInput.value;
-  
+
   const user = firebase.auth().currentUser;
 
-  // Cek jika email baru dan password diisi
   if (!emailBaru || !password) {
     alert('Email baru dan password harus diisi');
     return;
   }
 
-  // Cek jika email baru sama dengan email lama
   if (emailBaru === user.email) {
     alert('Email baru tidak boleh sama dengan email saat ini');
     return;
   }
 
-  // Menyiapkan kredensial untuk re-authenticate
   const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
-  
-  // Log jika re-authenticate dimulai
-  console.log("Re-authenticating...");
 
-  // Re-authenticate untuk memverifikasi password
   user.reauthenticateWithCredential(credential)
     .then(() => {
-      console.log("Re-authentication berhasil!");
-
-      // Setelah re-authentication berhasil, update email
       user.updateEmail(emailBaru)
         .then(() => {
           alert('Email berhasil diperbarui');
           emailInputWrapper.style.display = 'none';
 
-          // Kirim email verifikasi ke email baru
           user.sendEmailVerification()
             .then(() => {
-              alert('Email verifikasi telah dikirim ke email baru');
+              alert('Email verifikasi telah dikirim');
             })
             .catch((error) => {
               console.error('Gagal mengirim verifikasi email:', error);
-              alert('Gagal mengirim verifikasi email.');
             });
         })
         .catch((error) => {
@@ -741,8 +717,8 @@ kirimEmailBtn.addEventListener('click', () => {
         });
     })
     .catch((error) => {
-      console.error('Password salah atau error re-authentication:', error);
-      alert('Password salah atau terjadi kesalahan. Silakan coba lagi.');
+      console.error('Password salah atau kesalahan lainnya:', error);
+      alert('Password salah atau terjadi kesalahan.');
     });
 });
 
