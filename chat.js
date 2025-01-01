@@ -671,72 +671,52 @@ firebase.auth().getRedirectResult().then((result) => {
   console.error('Terjadi kesalahan saat menghubungkan Facebook:', error);
 });
 
-// DOM UBAH EMAIL
-// Elemen DOM
-const ubahEmailBtn = document.getElementById('ubah-email');
-const emailInputWrapper = document.getElementById('email-input-wrapper');
-const emailSekarangInput = document.getElementById('email-sekarang');
-const emailBaruInput = document.getElementById('email-baru');
-const passwordInput = document.getElementById('password');
-const kirimEmailBtn = document.getElementById('kirim-email');
+// Ambil elemen
+const btnUbahEmail = document.getElementById('ubah-email');
+const wrapperEmailInput = document.getElementById('email-input-wrapper');
+const btnBatalKirim = document.getElementById('batal-kirim');
+const btnKirimEmail = document.getElementById('kirim-email');
 
-// Event Listener untuk tombol Ubah Email
-ubahEmailBtn.addEventListener('click', () => {
-  ubahEmailBtn.style.display = 'none'; // Sembunyikan tombol Ubah Email
-  emailInputWrapper.style.display = 'block'; // Tampilkan input dan tombol
+// Event klik untuk membuka form ubah email
+btnUbahEmail.addEventListener('click', () => {
+  wrapperEmailInput.style.display = 'flex'; // Tampilkan form
 });
 
-// Event Listener untuk tombol Kirim
-kirimEmailBtn.addEventListener('click', async () => {
-  const emailSekarang = emailSekarangInput.value.trim();
-  const emailBaru = emailBaruInput.value.trim();
-  const password = passwordInput.value.trim();
+// Event klik untuk tombol batal
+btnBatalKirim.addEventListener('click', () => {
+  wrapperEmailInput.style.display = 'none'; // Sembunyikan form
+});
 
-  // Validasi input
-  if (!emailSekarang || !emailBaru || !password) {
-    alert('Semua field harus diisi.');
+// Event klik untuk tombol kirim
+btnKirimEmail.addEventListener('click', async () => {
+  const currentEmail = document.getElementById('email-sekarang').value.trim();
+  const newEmail = document.getElementById('email-baru').value.trim();
+  const currentPassword = document.getElementById('password').value.trim();
+
+  if (!currentEmail || !newEmail || !currentPassword) {
+    alert('Harap isi semua field!');
     return;
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailSekarang) || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailBaru)) {
-    alert('Masukkan email yang valid.');
-    return;
+
+  try {
+    const firebaseUser = firebase.auth().currentUser;
+    const userCredential = firebase.auth.EmailAuthProvider.credential(currentEmail, currentPassword);
+
+    // Re-authenticate user
+    await firebaseUser.reauthenticateWithCredential(userCredential);
+
+    // Update email
+    await firebaseUser.updateEmail(newEmail);
+
+    // Kirim email verifikasi
+    await firebaseUser.sendEmailVerification();
+
+    alert('Email berhasil diperbarui! Silakan cek email baru untuk verifikasi.');
+    wrapperEmailInput.style.display = 'none'; // Sembunyikan form setelah berhasil
+  } catch (error) {
+    console.error('Terjadi kesalahan:', error);
+    alert('Gagal memperbarui email. Periksa kembali informasi yang Anda masukkan.');
   }
-
-  firebase.auth().onAuthStateChanged(async (user) => {
-    if (user) {
-      try {
-        // Pastikan email sekarang sama dengan email user
-        if (user.email !== emailSekarang) {
-          alert('Email saat ini tidak cocok.');
-          return;
-        }
-
-        // Reauthenticate user dengan credential
-        const credential = firebase.auth.EmailAuthProvider.credential(emailSekarang, password);
-        await user.reauthenticateWithCredential(credential);
-
-        // Ubah email
-        await user.updateEmail(emailBaru);
-        alert('Email berhasil diubah. Silakan cek inbox untuk verifikasi.');
-
-        // (Opsional) Update Firestore jika perlu
-        const userDocRef = firestore.collection('userSS').doc(user.uid);
-        await userDocRef.update({ email: emailBaru });
-
-        // Reset tampilan
-        emailSekarangInput.value = '';
-        emailBaruInput.value = '';
-        passwordInput.value = '';
-        emailInputWrapper.style.display = 'none';
-        ubahEmailBtn.style.display = 'block';
-      } catch (error) {
-        console.error('Gagal mengubah email:', error);
-        alert('Terjadi kesalahan. Pastikan semua data valid.');
-      }
-    } else {
-      console.log('User belum login.');
-    }
-  });
 });
 
 // REQUEST RATE
@@ -792,3 +772,10 @@ requestRateBtnEl.addEventListener('click', () => {
     alert('User tidak terautentikasi.');
   }
 });
+
+// CloseReq button / cancel
+const closeReq = document.getElementById('closeReq');
+closeReq.onclick = () => {
+  document.getElementById('reqRate').classList.remove('active');
+  document.getElementById('r2').classList.remove('active');
+};

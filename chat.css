@@ -262,20 +262,30 @@ body {
 
 #email-input-wrapper {
   position: relative;
-  left: 50%;
-  transform: translateX(-25%);
+  width: 90%;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 #email-input-wrapper input {
+  width: 80%;
   margin-bottom: 10px;
-  border-radius: 4px;
+  border-radius: 5px;
+  text-align: center;
+  padding: 5px;
 }
 
-#email-input-wrapper button {
-  position: relative;
-  left: 18%;
+.buttonWrap {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
 }
 
+
+/* ubah password */
 #ubah-password {
   background: url('icon/regBtn.png');
   background-size: 100% 100%;
@@ -296,13 +306,13 @@ body {
   opacity: 1;
   pointer-events: auto;
   transform: translate(0, 0);
-  transition: opacity 5s ease, transform 2.5s ease;
+  transition: opacity 3s ease-in, transform 2.5s ease;
 }
 
 #r2.active{
   opacity: 0;
   pointer-events: none;
-  transform: translate(-200%, -200%);
+  transform: translate(200%, 0);
 }
 
 
@@ -324,7 +334,7 @@ body {
   flex-shrink: 0;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 5s ease;
+  transition: opacity 5s ease-in;
 }
 
 #reqRate.active {
@@ -364,7 +374,18 @@ body {
   font-family: "Tolep Default";
 }
 
-
+#closeReq {
+  position: absolute;
+  top: 2px;
+  right: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #333;
+  color: #fbb;
+  font-weight: bold;
+  font-size: 18px;
+}
 
 /* CUSTOM DIALOG LOGOUT */
 .custom-dialog {
