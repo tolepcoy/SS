@@ -676,34 +676,49 @@ const ubahEmailBtn = document.getElementById('ubah-email');
 const emailBaruInput = document.getElementById('email-baru');
 const passwordInput = document.getElementById('password');
 const emailInputWrapper = document.getElementById('email-input-wrapper');
+const batalKirimBtn = document.getElementById('batal-kirim');
+const kirimEmailBtn = document.getElementById('kirim-email');
 
-// Fungsi untuk mengubah email
+// Menampilkan form ubah email
 ubahEmailBtn.addEventListener('click', () => {
+  emailInputWrapper.style.display = 'flex';
+});
+
+// Membatalkan perubahan email
+batalKirimBtn.addEventListener('click', () => {
+  emailInputWrapper.style.display = 'none';
+});
+
+// Kirim permintaan perubahan email
+kirimEmailBtn.addEventListener('click', () => {
   const emailBaru = emailBaruInput.value;
   const password = passwordInput.value;
 
-  const user = firebase.auth().currentUser;
+  const currentUser = firebase.auth().currentUser;  // Ganti 'user' menjadi 'currentUser'
 
+  // Validasi input email dan password
   if (!emailBaru || !password) {
     alert('Email baru dan password harus diisi');
     return;
   }
 
-  if (emailBaru === user.email) {
+  // Cek apakah email baru sama dengan yang lama
+  if (emailBaru === currentUser.email) {
     alert('Email baru tidak boleh sama dengan email saat ini');
     return;
   }
 
-  const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
+  const authCredential = firebase.auth.EmailAuthProvider.credential(currentUser.email, password);  // Ganti 'credential' menjadi 'authCredential'
 
-  user.reauthenticateWithCredential(credential)
+  // Re-authenticate user
+  currentUser.reauthenticateWithCredential(authCredential)
     .then(() => {
-      user.updateEmail(emailBaru)
+      currentUser.updateEmail(emailBaru)
         .then(() => {
           alert('Email berhasil diperbarui');
           emailInputWrapper.style.display = 'none';
 
-          user.sendEmailVerification()
+          currentUser.sendEmailVerification()
             .then(() => {
               alert('Email verifikasi telah dikirim');
             })
