@@ -674,32 +674,25 @@ firebase.auth().getRedirectResult().then((result) => {
 // UBAH EMAIL
 // Fungsi untuk reauthenticate user
 const reauthenticate = (currentPassword) => {
-  const userG = firebase.auth().currentUser;
-  const credential = firebase.auth.EmailAuthProvider.credential(userG.email, currentPassword);
-  return userG.reauthenticateWithCredential(credential);
+  const userAuth = firebase.auth().currentUser;
+  const credAuth = firebase.auth.EmailAuthProvider.credential(userAuth.email, currentPassword);
+  return userAuth.reauthenticateWithCredential(credAuth);
 };
 
-// Fungsi untuk mengubah email
-const changeEmail = (currentPassword, newEmail) => {
+// Fungsi untuk mengirim link verifikasi ke email baru
+const sendVerificationLink = (currentPassword, newEmail) => {
   reauthenticate(currentPassword)
     .then(() => {
-      const userC = firebase.auth().currentUser;
-      userC.updateEmail(newEmail)
+      const userUpdate = firebase.auth().currentUser;
+      // Kirim link verifikasi ke email baru
+      userUpdate.verifyBeforeUpdateEmail(newEmail)
         .then(() => {
-          // Kirim link verifikasi ke email baru
-          userC.sendEmailVerification()
-            .then(() => {
-              alert("Email berhasil diubah! Link verifikasi telah dikirim ke email baru.");
-              document.getElementById("email-input-wrapper").style.display = "none";
-            })
-            .catch((error) => {
-              console.error("Error mengirim email verifikasi:", error);
-              alert("Gagal mengirim email verifikasi: " + error.message);
-            });
+          alert("Link verifikasi telah dikirim ke email baru. Silakan cek email Anda.");
+          document.getElementById("email-input-wrapper").style.display = "none";
         })
         .catch((error) => {
-          console.error("Error mengubah email:", error);
-          alert("Gagal mengubah email: " + error.message);
+          console.error("Error mengirim email verifikasi:", error);
+          alert("Gagal mengirim email verifikasi: " + error.message);
         });
     })
     .catch((error) => {
@@ -718,22 +711,22 @@ document.getElementById("batal-kirim").addEventListener("click", () => {
 });
 
 document.getElementById("kirim-email").addEventListener("click", () => {
-  const newEmail = document.getElementById("email-baru").value.trim();
-  const password = document.getElementById("password").value.trim();
+  const emailBaru = document.getElementById("email-baru").value.trim();
+  const passUser = document.getElementById("password").value.trim();
 
-  if (!newEmail || !password) {
+  if (!emailBaru || !passUser) {
     alert("Silakan masukkan email baru dan password!");
     return;
   }
 
   // Validasi format email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(newEmail)) {
+  if (!emailRegex.test(emailBaru)) {
     alert("Masukkan email yang valid!");
     return;
   }
 
-  changeEmail(password, newEmail);
+  sendVerificationLink(passUser, emailBaru);
 });
 
 // REQUEST RATE
