@@ -672,54 +672,53 @@ firebase.auth().getRedirectResult().then((result) => {
 });
 
 // UBAH EMAIL
-const ubahEmailBtn = document.getElementById('ubah-email');
-const emailBaruInput = document.getElementById('email-baru');
-const passwordInput = document.getElementById('password');
-const emailInputWrapper = document.getElementById('email-input-wrapper');
+// Fungsi untuk reauthenticate user
+const reauthenticate = (currentPassword) => {
+  const userG = firebase.auth().currentUser;
+  const credential = firebase.auth.EmailAuthProvider.credential(userG.email, currentPassword);
+  return userG.reauthenticateWithCredential(credential);
+};
 
 // Fungsi untuk mengubah email
-ubahEmailBtn.addEventListener('click', () => {
-  const emailBaru = emailBaruInput.value;
-  const password = passwordInput.value;
-
-  const currentUser = firebase.auth().currentUser;
-
-  if (!emailBaru || !password) {
-    alert('Email baru dan password harus diisi');
-    return;
-  }
-
-  if (emailBaru === currentUser.email) {
-    alert('Email baru tidak boleh sama dengan email saat ini');
-    return;
-  }
-
-  const emailCredential = firebase.auth.EmailAuthProvider.credential(currentUser.email, password);
-
-  currentUser.reauthenticateWithCredential(emailCredential)
+const changeEmail = (currentPassword, newEmail) => {
+  reauthenticate(currentPassword)
     .then(() => {
-      currentUser.updateEmail(emailBaru)
+      const userC = firebase.auth().currentUser;
+      userC.updateEmail(newEmail)
         .then(() => {
-          alert('Email berhasil diperbarui');
-          emailInputWrapper.style.display = 'none';
-
-          currentUser.sendEmailVerification()
-            .then(() => {
-              alert('Email verifikasi telah dikirim');
-            })
-            .catch((error) => {
-              console.error('Gagal mengirim verifikasi email:', error);
-            });
+          alert("Email berhasil diubah!");
+          document.getElementById("email-input-wrapper").style.display = "none";
         })
         .catch((error) => {
-          console.error('Gagal memperbarui email:', error);
-          alert('Gagal memperbarui email. Periksa kembali inputan.');
+          console.error(error);
+          alert("Gagal mengubah email: " + error.message);
         });
     })
     .catch((error) => {
-      console.error('Password salah atau kesalahan lainnya:', error);
-      alert('Password salah atau terjadi kesalahan.');
+      console.error(error);
+      alert("Gagal reauthenticate: " + error.message);
     });
+};
+
+// Menambahkan event listener
+document.getElementById("ubah-email").addEventListener("click", () => {
+  document.getElementById("email-input-wrapper").style.display = "flex";
+});
+
+document.getElementById("batal-kirim").addEventListener("click", () => {
+  document.getElementById("email-input-wrapper").style.display = "none";
+});
+
+document.getElementById("kirim-email").addEventListener("click", () => {
+  const newEmail = document.getElementById("email-baru").value;
+  const password = document.getElementById("password").value;
+
+  if (!newEmail || !password) {
+    alert("Silakan masukkan email baru dan password!");
+    return;
+  }
+
+  changeEmail(password, newEmail);
 });
 
 // REQUEST RATE
