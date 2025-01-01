@@ -686,16 +686,24 @@ const changeEmail = (currentPassword, newEmail) => {
       const userC = firebase.auth().currentUser;
       userC.updateEmail(newEmail)
         .then(() => {
-          alert("Email berhasil diubah!");
-          document.getElementById("email-input-wrapper").style.display = "none";
+          // Kirim link verifikasi ke email baru
+          userC.sendEmailVerification()
+            .then(() => {
+              alert("Email berhasil diubah! Link verifikasi telah dikirim ke email baru.");
+              document.getElementById("email-input-wrapper").style.display = "none";
+            })
+            .catch((error) => {
+              console.error("Error mengirim email verifikasi:", error);
+              alert("Gagal mengirim email verifikasi: " + error.message);
+            });
         })
         .catch((error) => {
-          console.error(error);
+          console.error("Error mengubah email:", error);
           alert("Gagal mengubah email: " + error.message);
         });
     })
     .catch((error) => {
-      console.error(error);
+      console.error("Error reauthenticate:", error);
       alert("Gagal reauthenticate: " + error.message);
     });
 };
@@ -710,11 +718,18 @@ document.getElementById("batal-kirim").addEventListener("click", () => {
 });
 
 document.getElementById("kirim-email").addEventListener("click", () => {
-  const newEmail = document.getElementById("email-baru").value;
-  const password = document.getElementById("password").value;
+  const newEmail = document.getElementById("email-baru").value.trim();
+  const password = document.getElementById("password").value.trim();
 
   if (!newEmail || !password) {
     alert("Silakan masukkan email baru dan password!");
+    return;
+  }
+
+  // Validasi format email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(newEmail)) {
+    alert("Masukkan email yang valid!");
     return;
   }
 
