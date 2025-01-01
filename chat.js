@@ -672,70 +672,46 @@ firebase.auth().getRedirectResult().then((result) => {
 });
 
 // UBAH EMAIL
-const ubahEmailBtn = document.getElementById('ubah-email');
+const kirimEmailBtn = document.getElementById('kirim-email');
 const emailBaruInput = document.getElementById('email-baru');
 const passwordInput = document.getElementById('password');
-const emailInputWrapper = document.getElementById('email-input-wrapper');
-const batalKirimBtn = document.getElementById('batal-kirim');
-const kirimEmailBtn = document.getElementById('kirim-email');
 
-// Menampilkan form ubah email
-ubahEmailBtn.addEventListener('click', () => {
-  emailInputWrapper.style.display = 'flex';
+kirimEmailBtn.addEventListener('click', async () => {
+    const emailBaru = emailBaruInput.value;
+    const password = passwordInput.value;
+
+    if (!emailBaru || !password) {
+        alert('Email baru dan password harus diisi');
+        return;
+    }
+
+    try {
+        const message = await updateEmail(emailBaru, password);
+        if (message === "Success") {
+            alert('Email berhasil diperbarui');
+        } else {
+            alert('Gagal memperbarui email');
+        }
+    } catch (error) {
+        console.error("Error updating email:", error);
+        alert("Terjadi kesalahan saat memperbarui email");
+    }
 });
 
-// Membatalkan perubahan email
-batalKirimBtn.addEventListener('click', () => {
-  emailInputWrapper.style.display = 'none';
-});
-
-// Kirim permintaan perubahan email
-kirimEmailBtn.addEventListener('click', () => {
-  const emailBaru = emailBaruInput.value;
-  const password = passwordInput.value;
-
-  const currentUser = firebase.auth().currentUser;  // Ganti 'user' menjadi 'currentUser'
-
-  // Validasi input email dan password
-  if (!emailBaru || !password) {
-    alert('Email baru dan password harus diisi');
-    return;
-  }
-
-  // Cek apakah email baru sama dengan yang lama
-  if (emailBaru === currentUser.email) {
-    alert('Email baru tidak boleh sama dengan email saat ini');
-    return;
-  }
-
-  const authCredential = firebase.auth.EmailAuthProvider.credential(currentUser.email, password);  // Ganti 'credential' menjadi 'authCredential'
-
-  // Re-authenticate user
-  currentUser.reauthenticateWithCredential(authCredential)
-    .then(() => {
-      currentUser.updateEmail(emailBaru)
-        .then(() => {
-          alert('Email berhasil diperbarui');
-          emailInputWrapper.style.display = 'none';
-
-          currentUser.sendEmailVerification()
-            .then(() => {
-              alert('Email verifikasi telah dikirim');
-            })
-            .catch((error) => {
-              console.error('Gagal mengirim verifikasi email:', error);
-            });
-        })
-        .catch((error) => {
-          console.error('Gagal memperbarui email:', error);
-          alert('Gagal memperbarui email. Periksa kembali inputan.');
-        });
-    })
-    .catch((error) => {
-      console.error('Password salah atau kesalahan lainnya:', error);
-      alert('Password salah atau terjadi kesalahan.');
-    });
-});
+// Fungsi updateEmail dari Dart (diintegrasikan dengan Firebase)
+async function updateEmail(email, password) {
+    var message = "error";
+    try {
+        const userCredential = await firebase.auth()
+            .signInWithEmailAndPassword(firebase.auth().currentUser.email, password);
+        const user = userCredential.user;
+        await user.updateEmail(email);
+        message = "Success";
+    } catch (e) {
+        console.error("Error:", e);
+    }
+    return message;
+}
 
 // REQUEST RATE
 // Elemen yang diperlukan
