@@ -672,64 +672,61 @@ firebase.auth().getRedirectResult().then((result) => {
 });
 
 // UBAH EMAIL
-// Ambil elemen
-const btnUbahEmail = document.getElementById('ubah-email');
-const wrapperEmailInput = document.getElementById('email-input-wrapper');
-const btnBatalKirim = document.getElementById('batal-kirim');
-const btnKirimEmail = document.getElementById('kirim-email');
+const ubahEmailBtn = document.getElementById('ubah-email');
+const emailInputWrapper = document.getElementById('email-input-wrapper');
+const kirimEmailBtn = document.getElementById('kirim-email');
+const batalKirimBtn = document.getElementById('batal-kirim');
+const emailBaruInput = document.getElementById('email-baru');
+const passwordInput = document.getElementById('password');
 
-// Event klik untuk membuka form ubah email
-btnUbahEmail.addEventListener('click', () => {
-  wrapperEmailInput.style.display = 'flex'; // Tampilkan form
+// Fungsi untuk menampilkan form ubah email
+ubahEmailBtn.addEventListener('click', () => {
+  emailInputWrapper.style.display = 'flex';
 });
 
-// Event klik untuk tombol batal
-btnBatalKirim.addEventListener('click', () => {
-  wrapperEmailInput.style.display = 'none'; // Sembunyikan form
+// Fungsi untuk membatalkan form ubah email
+batalKirimBtn.addEventListener('click', () => {
+  emailInputWrapper.style.display = 'none';
 });
 
-// Event klik untuk tombol kirim
-btnKirimEmail.addEventListener('click', async () => {
-  const newEmail = document.getElementById('email-baru').value.trim();
-  const currentPassword = document.getElementById('password').value.trim();
+// Fungsi untuk mengirimkan permintaan perubahan email
+kirimEmailBtn.addEventListener('click', () => {
+  const emailBaru = emailBaruInput.value;
+  const password = passwordInput.value;
+  
+  const user = firebase.auth().currentUser;
 
-  if (!newEmail || !currentPassword) {
-    alert('Harap isi semua field!');
+  if (!emailBaru || !password) {
+    alert('Email dan password harus diisi');
     return;
   }
 
-  try {
-    const firebaseUser = firebase.auth().currentUser;
-    const credential = firebase.auth.EmailAuthProvider.credential(
-      firebaseUser.email, // Ambil email langsung dari Firebase
-      currentPassword
-    );
-
-    // Re-authenticate user
-    await firebaseUser.reauthenticateWithCredential(credential);
-
-    // Validasi email baru (tidak boleh sama dengan email sekarang)
-    if (newEmail === firebaseUser.email) {
-      alert('Email baru tidak boleh sama dengan email saat ini!');
-      return;
-    }
-
-    // Update email
-    await firebaseUser.updateEmail(newEmail);
-
-    // Kirim email verifikasi
-    await firebaseUser.sendEmailVerification();
-
-    alert('Email berhasil diperbarui! Silakan cek email baru untuk verifikasi.');
-    wrapperEmailInput.style.display = 'none'; // Sembunyikan form setelah berhasil
-  } catch (error) {
-    console.error('Terjadi kesalahan:', error);
-    if (error.code === 'auth/wrong-password') {
-      alert('Password yang Anda masukkan salah.');
-    } else {
-      alert('Gagal memperbarui email. Silakan coba lagi.');
-    }
+  if (emailBaru === user.email) {
+    alert('Email baru tidak boleh sama dengan email saat ini');
+    return;
   }
+
+  // Re-authenticate untuk memverifikasi password
+  const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
+  
+  user.reauthenticateWithCredential(credential)
+    .then(() => {
+      // Setelah re-authentication berhasil, update email
+      user.updateEmail(emailBaru)
+        .then(() => {
+          alert('Email berhasil diperbarui');
+          // Menutup form setelah berhasil update
+          emailInputWrapper.style.display = 'none';
+        })
+        .catch((error) => {
+          console.error('Gagal memperbarui email:', error);
+          alert('Gagal memperbarui email. Periksa kembali inputan.');
+        });
+    })
+    .catch((error) => {
+      console.error('Password salah atau error re-authentication:', error);
+      alert('Password salah atau terjadi kesalahan. Silakan coba lagi.');
+    });
 });
 
 // REQUEST RATE
