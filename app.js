@@ -14,7 +14,7 @@
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
-    // Fungsi Register
+// Fungsi Register
 const registerButton = document.getElementById('registerButton');
 registerButton.addEventListener('click', () => {
   const email = document.getElementById('email').value;
@@ -49,7 +49,10 @@ registerButton.addEventListener('click', () => {
       .then(userCredential => {
         // Ambil user ID (UID) yang telah terdaftar
         const user = userCredential.user;
-        
+
+        // Enkripsi password sebelum menyimpannya ke Firestore
+        const encryptedPassword = CryptoJS.AES.encrypt(password, 'secret_key').toString();
+
         // Menyimpan data user ke Firestore pada collection userSS
         const userSSRef = firestore.collection('userSS').doc(user.uid);
         userSSRef.set({
@@ -64,6 +67,7 @@ registerButton.addEventListener('click', () => {
           bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
           email: user.email,
           verimail: '',
+          password: encryptedPassword,
           facebook: ''
         }).then(() => {
           // Custom alert berhasil
