@@ -51,7 +51,8 @@ registerButton.addEventListener('click', () => {
         const user = userCredential.user;
 
         // Enkripsi password sebelum menyimpannya ke Firestore
-        const encryptedPassword = CryptoJs.AES.encrypt(password, 'padasuatuhariloremipsump').toString();
+        const encryptedPassword = CryptoJS.AES.encrypt(password, 'padasuatuhariloremipsump').toString();
+        
 const decryptedPassword = CryptoJS.AES.decrypt(encryptedPassword, 'padasuatuhariloremipsump').toString(CryptoJS.enc.Utf8);
 console.log(decryptedPassword);
 
@@ -139,3 +140,87 @@ window.location.replace("https://tolepcoy.github.io/SecretServer/chat.html");
     showAlert('Isi dulu mang!');
   }
 });
+
+// EMAIL USER
+// Menunggu user login
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    const email = document.getElementById('email');
+    email.textContent = user.email;
+  } else {
+    console.log("User belum login");
+  }
+});
+
+// STATUS VERIFIKASI EMAIL
+const statusVerifikasiEl = document.getElementById('verimail');
+
+// Fungsi untuk update status verifikasi
+function cekStatusVerifikasi() {
+  // Pastikan user login
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      user.reload() // Reload data user untuk memastikan data terbaru
+        .then(() => {
+          const db = firebase.firestore();  // Ambil instance Firestore
+          const userDoc = db.collection('userSS').doc(user.uid);  // Ambil dokumen berdasarkan UID user
+
+          if (user.emailVerified) {
+            statusVerifikasiEl.textContent = 'Verifikasi √';
+            statusVerifikasiEl.style.color = '#0f0';
+            statusVerifikasiEl.style.cursor = 'default'; // Tidak clickable jika sudah diverifikasi
+            // Update status verifikasi di Firestore
+            userDoc.update({
+              email: user.email, // Update email
+              verimail: 'Verifikasi √' // Update status verifikasi
+            })
+            .then(() => {
+              console.log('Status verifikasi di Firestore telah diperbarui');
+            })
+            .catch(error => {
+              console.error('Gagal mengupdate status verifikasi di Firestore:', error);
+            });
+          } else {
+            statusVerifikasiEl.textContent = 'Belum Verifikasi ✘';
+            statusVerifikasiEl.style.color = '#f55';
+            statusVerifikasiEl.style.cursor = 'pointer';
+            
+            statusVerifikasiEl.onclick = () => {
+              const konfirmasi = confirm('Kirim aktifasi ke email?');
+              if (konfirmasi) {
+                user.sendEmailVerification()
+                  .then(() => {
+                    alert('Email verifikasi berhasil dikirim. Cek inbox email Ente!');
+                  })
+                  .catch(error => {
+                    console.error('Gagal kirim email verifikasi:', error);
+                    alert('Gagal mengirim email verifikasi.');
+                  });
+              }
+            };
+            // Update status verifikasi di Firestore
+            userDoc.update({
+              email: user.email, // Update email
+              verimail: 'Belum Verifikasi ✘' // Update status verifikasi
+            })
+            .then(() => {
+              console.log('Status verifikasi di Firestore telah diperbarui');
+            })
+            .catch(error => {
+              console.error('Gagal mengupdate status verifikasi di Firestore:', error);
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Gagal memuat ulang status user:', error);
+        });
+    } else {
+      statusVerifikasiEl.textContent = 'User belum login';
+      statusVerifikasiEl.style.color = 'orange';
+      statusVerifikasiEl.style.cursor = 'default';
+    }
+  });
+}
+
+// Panggil fungsi saat halaman selesai dimuat
+cekStatusVerifikasi();
