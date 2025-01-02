@@ -61,7 +61,7 @@ console.log(decryptedPassword);
         userSSRef.set({
           nama: 'userSS',
           OLstate: '',
-          avatar: 'https://tolepcoy.github.io/SecretServer/icon/default-avatar.jpg',
+          avatar: 'https://tolepcoy.github.io/SecretServer/icon/default-avatar.png',
           status: '&#9733;',
           detail: 'Bio',
           lokasi: 'Palembang',

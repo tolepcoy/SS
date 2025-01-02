@@ -28,14 +28,38 @@ function closePanel(panelId) {
   document.getElementById(panelId).style.transform = "translateX(-100%)";
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Event listeners untuk sidebar icons
-  document.getElementById('userProfile').addEventListener('click', () => openPanel('profile'));
-  document.getElementById('settings').addEventListener('click', () => openPanel('settingsPanel'));
-  document.getElementById('secretSide').addEventListener('click', () => openPanel('secretSidePanel'));
+// Fungsi untuk membuka side panel
+function openPanel(panelId) {
+  document.getElementById(panelId).style.transform = "translateX(0%)";
+}
 
-// Logout User dengan Custom Dialog
-document.getElementById('logout').addEventListener('click', () => {
+// Fungsi untuk reset class 'ahuy'
+function resetAhuy() {
+  document.querySelectorAll('.icon').forEach(icon => {
+    icon.classList.remove('ahuy');
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById('userProfile').addEventListener('click', () => {
+    resetAhuy();
+    openPanel('profile');
+    document.getElementById('userProfile').classList.add('ahuy');
+  });
+  
+  document.getElementById('settings').addEventListener('click', () => {
+    resetAhuy();
+    openPanel('settingsPanel');
+    document.getElementById('settings').classList.add('ahuy');
+  });
+
+  document.getElementById('secretSide').addEventListener('click', () => {
+    resetAhuy();
+    openPanel('secretSidePanel');
+    document.getElementById('secretSide').classList.add('ahuy');
+  });
+
+  document.getElementById('logout').addEventListener('click', () => {
   const dialog = document.getElementById('custom-logout-dialog');
   dialog.style.display = 'flex';
 
