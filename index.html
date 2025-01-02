@@ -2,12 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
   <title>Secret Server</title>
   <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="font/tolepfonts.css">
 </head>
 <body>
+<div id="loading">
+<div id="loading-circle"></div>
+</div>
+
   <div id="loginForm">
     <h1>Login to Secret Server</h1>
     <form id="login-form">
@@ -33,5 +37,25 @@
   <script src='tolepjquery364.js'></script>
   <script src="tolepcrypto.js"></script>
   <script src="app.js"></script>
+  
+<script> <!-- loading circle -->
+  const loadingParent = document.getElementById('loading');
+  loadingParent.style.display = 'flex';
+  const loadingCircle = document.getElementById('loading-circle');
+  loadingCircle.style.display = 'block';
+
+  // Fungsi cek user login
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      // User sudah login
+      window.location.replace('https://tolepcoy.github.io/SecretServer/chat.html');
+    } else {
+      // User belum login, sembunyikan loading circle
+      loadingParent.style.display = 'none';
+      loadingCircle.style.display = 'none';
+      loadingCircle.style.animation = 'none';
+    }
+  });
+</script>
 </body>
 </html>

@@ -112,6 +112,7 @@ body {
 #detail {
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 70%;
@@ -158,6 +159,13 @@ body {
 #edit-detail {
   right: 15%;
   top: 20%;
+}
+
+#lokasi, #umur, #gender {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #Bgrate {
@@ -389,6 +397,7 @@ body {
   height: 30px;
   border-radius: 50%;
   background: #333;
+  border: none;
   color: #fbb;
   font-weight: bold;
   font-size: 18px;
@@ -397,7 +406,7 @@ body {
 /* online state */
 #OLstate {
   position: absolute;
-  top: 10px;
+  top: 7px;
   left: 10px;
   pointer-events: none;
   z-index: 800;

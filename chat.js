@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Event listeners untuk sidebar icons
   document.getElementById('userProfile').addEventListener('click', () => openPanel('profile'));
   document.getElementById('settings').addEventListener('click', () => openPanel('settingsPanel'));
-  document.getElementById('aboutApp').addEventListener('click', () => openPanel('aboutPanel'));
+  document.getElementById('secretSide').addEventListener('click', () => openPanel('secretSidePanel'));
 
 // Logout User dengan Custom Dialog
 document.getElementById('logout').addEventListener('click', () => {
@@ -59,7 +59,7 @@ document.getElementById('logout').addEventListener('click', () => {
 
 // Fungsi untuk membuka side panel
 function openPanel(panelId) {
-  const panels = ['profile', 'settingsPanel', 'aboutPanel'];
+  const panels = ['profile', 'settingsPanel', 'secretSidePanel'];
   panels.forEach(panel => {
     document.getElementById(panel).style.transform = panel === panelId ? "translateX(0)" : "translateX(-100%)";
   });
