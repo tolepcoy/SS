@@ -60,6 +60,7 @@ console.log(decryptedPassword);
         const userSSRef = firestore.collection('userSS').doc(user.uid);
         userSSRef.set({
           nama: 'userSS',
+          OLstate: '',
           avatar: 'https://tolepcoy.github.io/SecretServer/icon/default-avatar.jpg',
           status: '&#9733;',
           detail: 'Bio',

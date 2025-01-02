@@ -864,13 +864,13 @@ requestRateBtnEl.addEventListener('click', () => {
       requestRate: requestRateValue,
     })
     .then(() => {
-      alert('Request Rate berhasil disimpan ke Firestore!');
+      alert('Request berhasil dikirim!');
       // Hapus class .active
       r2ButtonEl.classList.remove('active');
       reqRateDivEl.classList.remove('active');
     })
     .catch((error) => {
-      console.error('Terjadi kesalahan saat menyimpan Request Rate:', error);
+      console.error('Terjadi kesalahan saat Request Rate:', error);
     });
   } else {
     alert('User tidak terautentikasi.');
@@ -893,11 +893,11 @@ closeReq.onclick = () => {
     const userRefOL = firestore.collection('userSS').doc(user.uid);
     const statusOl = document.getElementById('OLstate');
 
-    userRefOL.set({
+    userRefOL.update({
       OLstate: 'Online &#bull;'
     }, { merge: true })
       .then(() => {
-        statusOl.innerHTML = 'Online &#bull;';
+        statusOl.innerHTML = 'Online <b style="font-size:20px;">&bull;</b>';
         statusOl.style.color = '#0f0';
       })
       .catch((error) => {
@@ -933,7 +933,7 @@ closeReq.onclick = () => {
       stopOnlineInterval();
 
       // Hapus status di elemen HTML
-      const statusOl2 = document.getElementById('OLstates');
+      const statusOl2 = document.getElementById('OLstate');
       statusOl2.innerHTML = '';
       statusOl2.style.color = '';
     }
