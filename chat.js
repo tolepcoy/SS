@@ -343,6 +343,7 @@ const editLokasiBtn = document.getElementById('edit-lokasi');
 // Fungsi untuk handle klik tombol edit lokasi
 editLokasiBtn.addEventListener('click', () => {
   editLokasiBtn.style.display = 'none';
+
   // Menunggu user login terlebih dahulu
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -350,14 +351,40 @@ editLokasiBtn.addEventListener('click', () => {
       const lokasiSelect = document.createElement('select');
       lokasiSelect.id = 'lokasi-select';
 
-      // Daftar pilihan lokasi
-      const lokasiOptions = ['Boom Baru', 'Jakabaring', 'Kalidoni', 'Kenten', 'Kertapati', 'Lemabang', 'Perum', 'Plaju', 'Pusri', 'Skojo'];
+      // Daftar pilihan lokasi utama
+      const lokasiOptions = [
+        'Alang-Alang Lebar', 'Bukit Kecil', 'Gandus', 'Ilir Barat I', 
+        'Ilir Barat II', 'Ilir Timur I', 'Ilir Timur II', 'Ilir Timur III', 
+        'Jakabaring', 'Kalidoni', 'Kemuning', 'Kertapati', 'Plaju', 'Sako', 
+        'Seberang Ulu I', 'Seberang Ulu II', 'Sematang Borang', 'Sukarami'
+      ];
 
+      // Daftar pilihan lokasi spesifik
+      const lokasiSpesifik = [
+        'Boom Baru', 'Jakabaring', 'Kalidoni', 'Kenten', 
+        'Kertapati', 'Lemabang', 'Perum', 'Plaju', 'Pusri', 'Skojo'
+      ];
+
+      // Tambahkan opsi lokasi utama
       lokasiOptions.forEach(location => {
-        const option = document.createElement('option');
-        option.value = location;
-        option.textContent = location;
-        lokasiSelect.appendChild(option);
+        const lokasiOption = document.createElement('option');
+        lokasiOption.value = location;
+        lokasiOption.textContent = location;
+        lokasiSelect.appendChild(lokasiOption);
+      });
+
+      // Tambahkan garis horizontal (sebagai separator)
+      const separator = document.createElement('option');
+      separator.disabled = true;
+      separator.textContent = '-------------------';
+      lokasiSelect.appendChild(separator);
+
+      // Tambahkan opsi lokasi spesifik
+      lokasiSpesifik.forEach(location => {
+        const spesifikOption = document.createElement('option');
+        spesifikOption.value = location;
+        spesifikOption.textContent = location;
+        lokasiSelect.appendChild(spesifikOption);
       });
 
       const saveLokasiBtn = document.createElement('button');
