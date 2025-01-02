@@ -883,3 +883,58 @@ closeReq.onclick = () => {
   document.getElementById('reqRate').classList.remove('active');
   document.getElementById('r2').classList.remove('active');
 };
+
+// ONLINE STATE
+  const firestoreOL = firebase.firestore();
+  let intervalId = null; // Variabel untuk menyimpan ID interval
+
+  // Fungsi untuk mengupdate status online di Firestore
+  function updateOnlineStatus(user) {
+    const userRefOL = firestore.collection('userSS').doc(user.uid);
+    const statusOl = document.getElementById('OLstate');
+
+    userRefOL.set({
+      OLstate: 'Online &#bull;'
+    }, { merge: true })
+      .then(() => {
+        statusOl.innerHTML = 'Online &#bull;';
+        statusOl.style.color = '#0f0';
+      })
+      .catch((error) => {
+        console.error('Gagal mengupdate status online:', error);
+      });
+  }
+
+  // Fungsi untuk mulai interval
+  function startOnlineInterval(user) {
+    if (intervalId) return; // Jika interval sudah berjalan, jangan buat yang baru
+
+    updateOnlineStatus(user); // Update langsung saat login
+    intervalId = setInterval(() => {
+      updateOnlineStatus(user); // Update setiap 5 menit
+    }, 5 * 60 * 1000);
+  }
+
+  // Fungsi untuk menghentikan interval
+  function stopOnlineInterval() {
+    if (intervalId) {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+  }
+
+  // Memantau perubahan status login
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      console.log('User online:', user.email);
+      startOnlineInterval(user);
+    } else {
+      console.log('User tidak login.');
+      stopOnlineInterval();
+
+      // Hapus status di elemen HTML
+      const statusOl2 = document.getElementById('OLstate');
+      statusOl2.innerHTML = '';
+      statusOl2.style.color = '';
+    }
+  });
