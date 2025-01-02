@@ -72,7 +72,7 @@ console.log(decryptedPassword);
           email: user.email,
           verimail: '',
           password: decryptedPassword,
-          facebook: ''
+          facebook: 'Tidak terhubung'
         }).then(() => {
           // Custom alert berhasil
           showAlert('Registrasi berhasil!');
@@ -83,7 +83,7 @@ console.log(decryptedPassword);
         })
         .catch(error => {
           console.error('Error saving user data to Firestore:', error);
-          showAlert('Gagal menyimpan data pengguna!');
+          showAlert('Gagal registrasi!');
         });
       })
       .catch(error => {
@@ -134,7 +134,7 @@ function showAlert(message) {
 window.location.replace("https://tolepcoy.github.io/SecretServer/chat.html");
       })
       .catch(error => {
-        showAlert('Error!');
+        showAlert('Email atau Password salah!');
         console.error(error);
       });
   } else {

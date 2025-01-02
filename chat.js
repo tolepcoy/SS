@@ -129,9 +129,9 @@ editNamaBtn.addEventListener('click', () => {
           // Ubah h2 menjadi input
           namaEl.innerHTML = `
             <input type="text" id="nama-input" value="${currentNama}" maxlength="15" /><br>
-            <button class="edul" id="cancel-nama">Save</button> 
+            <button class="edul" id="cancel-nama">Batal</button> 
 &nbsp;&nbsp;&nbsp;&nbsp;
-            <button class="edul" id="save-nama">Batal</button>
+            <button class="edul" id="save-nama">Simpan</button>
           `;
 
           // Ambil elemen input dan tombol
@@ -216,22 +216,21 @@ editAvatarBtn.addEventListener('click', () => {
       const saveAvatarBtn = document.createElement('button');
       saveAvatarBtn.id = 'save-avatar';
       saveAvatarBtn.classList.add('edul');
-      saveAvatarBtn.textContent = 'Save';
+      saveAvatarBtn.textContent = 'Simpan';
 
-      // Tambahkan elemen input file dan tombol save setelah avatar
+      // Tambahkan elemen input file dan tombol save dan cancel setelah avatar
       const avatarParentDiv = avatarEl.parentNode;
       avatarParentDiv.appendChild(avatarInputFile);
+      avatarParentDiv.appendChild(cancelAvatarBtn);
       avatarParentDiv.appendChild(saveAvatarBtn);
       
       // Handle klik tombol cancel
       cancelAvatarBtn.addEventListener('click', () => {
         editAvatarBtn.style.display = 'block';
-            avatarEl.style.display = 'block';
-
-            // Hapus elemen input dan tombol save setelah selesai
-            avatarInputFile.remove();
-            saveAvatarBtn.remove();
-            cancelAvatarBtn.remove();
+        avatarEl.style.display = 'block';
+        avatarInputFile.remove();
+        saveAvatarBtn.remove();
+        cancelAvatarBtn.remove();
      });
 
       // Handle klik tombol save
@@ -316,7 +315,7 @@ editDetailBtn.addEventListener('click', () => {
         <textarea id="detail-textarea" maxlength="50">${currentDetail}</textarea><br>
         <button class="edul" id="cancel-detail">Batal</button> 
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <button class="edul" id="save-detail">Save</button>
+        <button class="edul" id="save-detail">Simpan</button>
       `;
 
       // Ambil elemen textarea dan tombol save
@@ -390,8 +389,8 @@ editLokasiBtn.addEventListener('click', () => {
 
       // Daftar pilihan lokasi spesifik
       const lokasiSpesifik = [
-        'Boom Baru', 'Jakabaring', 'Kalidoni', 'Kenten', 
-        'Kertapati', 'Lemabang', 'Perum', 'Plaju', 'Pusri', 'Skojo'
+        'Boom Baru', 'Cinde', 'Jakabaring', 'Kalidoni', 'Kenten', 
+        'Kertapati', 'Km 12', 'Pasar Kuto', 'Lemabang', 'Mata Merah', 'Perum', 'Plaju', 'Pusri', 'Rusun', 'Sekip', 'Skojo', 'Tangga Buntung', 'Way Hitam'
       ];
 
       // Tambahkan opsi lokasi utama
@@ -405,7 +404,8 @@ editLokasiBtn.addEventListener('click', () => {
       // Tambahkan garis horizontal (sebagai separator)
       const separator = document.createElement('option');
       separator.disabled = true;
-      separator.textContent = '-------------------------------';
+      separator.style.textAlign = 'center';
+      separator.textContent = '--- POPULER UMUM ---';
       lokasiSelect.appendChild(separator);
 
       // Tambahkan opsi lokasi spesifik
@@ -424,9 +424,9 @@ editLokasiBtn.addEventListener('click', () => {
       const saveLokasiBtn = document.createElement('button');
       saveLokasiBtn.id = 'save-lokasi';
       saveLokasiBtn.classList.add('edul');
-      saveLokasiBtn.textContent = 'Save';
+      saveLokasiBtn.textContent = 'Simpan';
 
-      // Tambahkan elemen select dan tombol save setelah lokasi
+      // Tambahkan elemen select dan tombol save dan cancel setelah lokasi
       const lokasiParentDiv = lokasiEl.parentNode;
       lokasiParentDiv.appendChild(lokasiSelect);
       lokasiParentDiv.appendChild(cancelLokasiBtn);
@@ -473,7 +473,6 @@ editLokasiBtn.addEventListener('click', () => {
 const umurEl = document.getElementById('umur');
 const editUmurBtn = document.getElementById('edit-umur');
 
-// Fungsi untuk handle klik tombol edit umur
 editUmurBtn.addEventListener('click', () => {
   editUmurBtn.style.display = 'none';
   // Menunggu user login terlebih dahulu
@@ -504,7 +503,7 @@ const cancelUmurBtn = document.createElement('button');
       const saveUmurBtn = document.createElement('button');
       saveUmurBtn.id = 'save-umur';
       saveUmurBtn.classList.add('edul');
-      saveUmurBtn.textContent = 'Save';
+      saveUmurBtn.textContent = 'Simpan';
 
       // Tambahkan elemen select dan tombol save dan cancel setelah umur
       const umurParentDiv = umurEl.parentNode;
@@ -585,7 +584,7 @@ editGenderBtn.addEventListener('click', () => {
       const saveGenderBtn = document.createElement('button');
       saveGenderBtn.id = 'save-gender';
       saveGenderBtn.classList.add('edul');
-      saveGenderBtn.textContent = 'Save';
+      saveGenderBtn.textContent = 'Simpan';
 
       // Tambahkan elemen select dan tombol save setelah gender
       const genderParentDiv = genderEl.parentNode;
