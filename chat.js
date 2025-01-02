@@ -75,6 +75,7 @@ firebase.auth().onAuthStateChanged(user => {
         // Update elemen HTML dengan data user yang diambil dari Firestore
         document.getElementById('nama').innerText = data.nama;
         document.getElementById('avatar').src = data.avatar;
+        document.getElementById('OLstate').innerHTML = data.OLstate;
         document.getElementById('status').innerHTML = data.status;
         document.getElementById('detail').innerText = data.detail;
         document.getElementById('lokasi').innerText = data.lokasi;
@@ -127,7 +128,7 @@ editNamaBtn.addEventListener('click', () => {
 
           // Ubah h2 menjadi input
           namaEl.innerHTML = `
-            <input type="text" id="nama-input" value="${currentNama}" maxlength="15" />
+            <input type="text" id="nama-input" value="${currentNama}" maxlength="15" /><br>
             <button class="edul" id="save-nama">Save</button>
             <button class="edul" id="cancel-nama">Batal</button>
           `;
