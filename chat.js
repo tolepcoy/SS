@@ -933,7 +933,7 @@ closeReq.onclick = () => {
       stopOnlineInterval();
 
       // Hapus status di elemen HTML
-      const statusOl2 = document.getElementById('OLstate');
+      const statusOl2 = document.getElementById('OLstates');
       statusOl2.innerHTML = '';
       statusOl2.style.color = '';
     }
