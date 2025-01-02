@@ -129,8 +129,9 @@ editNamaBtn.addEventListener('click', () => {
           // Ubah h2 menjadi input
           namaEl.innerHTML = `
             <input type="text" id="nama-input" value="${currentNama}" maxlength="15" /><br>
-            <button class="edul" id="save-nama">Save</button>
-            <button class="edul" id="cancel-nama">Batal</button>
+            <button class="edul" id="cancel-nama">Save</button> 
+&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="edul" id="save-nama">Batal</button>
           `;
 
           // Ambil elemen input dan tombol
@@ -207,6 +208,11 @@ editAvatarBtn.addEventListener('click', () => {
       avatarInputFile.id = 'avatar-input';
       avatarInputFile.accept = 'image/jpeg';
 
+      const cancelAvatarBtn = document.createElement('button');
+      cancelAvatarBtn.id = 'cancel-avatar';
+      cancelAvatarBtn.classList.add('edul');
+      cancelAvatarBtn.textContent = 'Batal';
+
       const saveAvatarBtn = document.createElement('button');
       saveAvatarBtn.id = 'save-avatar';
       saveAvatarBtn.classList.add('edul');
@@ -216,6 +222,17 @@ editAvatarBtn.addEventListener('click', () => {
       const avatarParentDiv = avatarEl.parentNode;
       avatarParentDiv.appendChild(avatarInputFile);
       avatarParentDiv.appendChild(saveAvatarBtn);
+      
+      // Handle klik tombol cancel
+      cancelAvatarBtn.addEventListener('click', () => {
+        editAvatarBtn.style.display = 'block';
+            avatarEl.style.display = 'block';
+
+            // Hapus elemen input dan tombol save setelah selesai
+            avatarInputFile.remove();
+            saveAvatarBtn.remove();
+            cancelAvatarBtn.remove();
+     });
 
       // Handle klik tombol save
       saveAvatarBtn.addEventListener('click', async () => {
@@ -264,6 +281,7 @@ editAvatarBtn.addEventListener('click', () => {
             // Hapus elemen input dan tombol save setelah selesai
             avatarInputFile.remove();
             saveAvatarBtn.remove();
+            cancelAvatarBtn.remove();
           } else {
             alert("Gagal upload gambar, coba lagi.");
           }
@@ -295,16 +313,26 @@ editDetailBtn.addEventListener('click', () => {
 
       // Ubah div menjadi textarea dan tambahkan tombol save
       detailEl.innerHTML = `
-        <textarea id="detail-textarea" maxlength="50">${currentDetail}</textarea>
+        <textarea id="detail-textarea" maxlength="50">${currentDetail}</textarea><br>
+        <button class="edul" id="cancel-detail">Batal</button> 
+        &nbsp;&nbsp;&nbsp;&nbsp;
         <button class="edul" id="save-detail">Save</button>
       `;
 
       // Ambil elemen textarea dan tombol save
       const detailTextarea = document.getElementById('detail-textarea');
+      const cancelDetailBtn = document.getElementById('cancel-detail');
       const saveDetailBtn = document.getElementById('save-detail');
 
       // Fokuskan textarea
       detailTextarea.focus();
+
+      // Handle klik tombol cancel
+      cancelDetailBtn.addEventListener('click', () => {
+    // Kembalikan tampilan awal
+   detailEl.textContent = currentDetail;
+   editDetailBtn.style.display = 'block';
+   });
 
       // Handle klik tombol save
       saveDetailBtn.addEventListener('click', async () => {
@@ -348,7 +376,7 @@ editLokasiBtn.addEventListener('click', () => {
   // Menunggu user login terlebih dahulu
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
-      // Buat elemen select dan tombol save secara dinamis
+      // Buat elemen select dan tombol save dan cancel secara dinamis
       const lokasiSelect = document.createElement('select');
       lokasiSelect.id = 'lokasi-select';
 
@@ -377,7 +405,7 @@ editLokasiBtn.addEventListener('click', () => {
       // Tambahkan garis horizontal (sebagai separator)
       const separator = document.createElement('option');
       separator.disabled = true;
-      separator.textContent = '-------------------';
+      separator.textContent = '-------------------------------';
       lokasiSelect.appendChild(separator);
 
       // Tambahkan opsi lokasi spesifik
@@ -388,6 +416,11 @@ editLokasiBtn.addEventListener('click', () => {
         lokasiSelect.appendChild(spesifikOption);
       });
 
+     const cancelLokasiBtn = document.createElement('button');
+     cancelLokasiBtn.id = 'cancel-lokasi';
+     cancelLokasiBtn.classList.add('edul');
+     cancelLokasiBtn.textContent = 'Batal';
+
       const saveLokasiBtn = document.createElement('button');
       saveLokasiBtn.id = 'save-lokasi';
       saveLokasiBtn.classList.add('edul');
@@ -396,11 +429,20 @@ editLokasiBtn.addEventListener('click', () => {
       // Tambahkan elemen select dan tombol save setelah lokasi
       const lokasiParentDiv = lokasiEl.parentNode;
       lokasiParentDiv.appendChild(lokasiSelect);
+      lokasiParentDiv.appendChild(cancelLokasiBtn);
       lokasiParentDiv.appendChild(saveLokasiBtn);
+      
+      // Handle klik tombol cancel
+      cancelLokasiBtn.addEventListener('click', () => {
+    editLokasiBtn.style.display = 'block';
+    lokasiSelect.remove();
+    cancelLokasiBtn.remove();
+    saveLokasiBtn.remove();
+  });
 
       // Handle klik tombol save
       saveLokasiBtn.addEventListener('click', async () => {
-        const selectedLokasi = lokasiSelect.value; // Ambil nilai lokasi yang dipilih
+        const selectedLokasi = lokasiSelect.value;
 
         // Update lokasi di Firestore
         try {
@@ -414,6 +456,7 @@ editLokasiBtn.addEventListener('click', () => {
 
           // Hapus elemen select dan tombol save setelah selesai
           lokasiSelect.remove();
+          cancelLokasiBtn.remove();
           saveLokasiBtn.remove();
         } catch (error) {
           console.error("Gagal update lokasi:", error);
@@ -436,7 +479,7 @@ editUmurBtn.addEventListener('click', () => {
   // Menunggu user login terlebih dahulu
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
-      // Buat elemen select dan tombol save secara dinamis
+      // Buat elemen select dan tombol save dan cancel secara dinamis
       const umurSelect = document.createElement('select');
       umurSelect.id = 'umur-select';
 
@@ -453,19 +496,33 @@ editUmurBtn.addEventListener('click', () => {
         umurSelect.appendChild(option);
       });
 
+const cancelUmurBtn = document.createElement('button');
+      cancelUmurBtn.id = 'cancel-umur';
+      cancelUmurBtn.classList.add('edul');
+      cancelUmurBtn.textContent = 'Batal';
+
       const saveUmurBtn = document.createElement('button');
       saveUmurBtn.id = 'save-umur';
       saveUmurBtn.classList.add('edul');
       saveUmurBtn.textContent = 'Save';
 
-      // Tambahkan elemen select dan tombol save setelah umur
+      // Tambahkan elemen select dan tombol save dan cancel setelah umur
       const umurParentDiv = umurEl.parentNode;
       umurParentDiv.appendChild(umurSelect);
+      umurParentDiv.appendChild(cancelUmurBtn);
       umurParentDiv.appendChild(saveUmurBtn);
+      
+      // Handle klik tombol cancel
+      cancelUmurBtn.addEventListener('click', () => {
+    editUmurBtn.style.display = 'block';
+    umurSelect.remove();
+    cancelUmurBtn.remove();
+    saveUmurBtn.remove();
+ });
 
       // Handle klik tombol save
       saveUmurBtn.addEventListener('click', async () => {
-        const selectedUmur = umurSelect.value; // Ambil nilai umur yang dipilih
+        const selectedUmur = umurSelect.value;
 
         // Update umur di Firestore
         try {
@@ -479,6 +536,7 @@ editUmurBtn.addEventListener('click', () => {
 
           // Hapus elemen select dan tombol save setelah selesai
           umurSelect.remove();
+          cancelUmurBtn.remove();
           saveUmurBtn.remove();
         } catch (error) {
           console.error("Gagal update umur:", error);
@@ -502,7 +560,7 @@ editGenderBtn.addEventListener('click', () => {
   // Menunggu user login terlebih dahulu
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
-      // Buat elemen select dan tombol save secara dinamis
+      // Buat elemen select dan tombol save dan cancel secara dinamis
       const genderSelect = document.createElement('select');
       genderSelect.id = 'gender-select';
 
@@ -518,6 +576,11 @@ editGenderBtn.addEventListener('click', () => {
         genderOption.textContent = gender.text;
         genderSelect.appendChild(genderOption);
       });
+      
+      const cancelGenderBtn = document.createElement('button');
+      cancelGenderBtn.id = 'cancel-gender';
+      cancelGenderBtn.classList.add('edul');
+      cancelGenderBtn.textContent = 'Batal';
 
       const saveGenderBtn = document.createElement('button');
       saveGenderBtn.id = 'save-gender';
@@ -527,7 +590,16 @@ editGenderBtn.addEventListener('click', () => {
       // Tambahkan elemen select dan tombol save setelah gender
       const genderParentDiv = genderEl.parentNode;
       genderParentDiv.appendChild(genderSelect);
+      genderParentDiv.appendChild(cancelGenderBtn);
       genderParentDiv.appendChild(saveGenderBtn);
+      
+  // Handle klik tombol cancel
+      cancelGenderBtn.addEventListener('click', () => {
+   editGenderBtn.style.display = 'block';
+   genderSelect.remove();
+   cancelGenderBtn.remove();
+   saveGenderBtn.remove();
+ });
 
       // Handle klik tombol save
       saveGenderBtn.addEventListener('click', async () => {
@@ -546,6 +618,7 @@ editGenderBtn.addEventListener('click', () => {
 
           // Hapus elemen select dan tombol save setelah selesai
           genderSelect.remove();
+          cancelGenderBtn.remove();
           saveGenderBtn.remove();
         } catch (error) {
           console.error("Gagal update gender:", error);
