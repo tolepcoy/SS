@@ -195,6 +195,7 @@ const editAvatarBtn = document.getElementById('edit-avatar');
 editAvatarBtn.addEventListener('click', () => {
   // Sembunyikan tombol edit avatar
   editAvatarBtn.style.display = 'none';
+  avatarEl.style.display = 'none';
 
   // Menunggu user login terlebih dahulu
   firebase.auth().onAuthStateChanged(user => {
@@ -238,7 +239,7 @@ editAvatarBtn.addEventListener('click', () => {
           const avatarResponse = await fetch('https://api.imgur.com/3/image', {
             method: 'POST',
             headers: {
-              'Authorization': 'Bearer 6e72b748a0d7becd6751810b6c1557de073ccb0e' // Ganti dengan token Imgur milikmu
+              'Authorization': 'Bearer 6e72b748a0d7becd6751810b6c1557de073ccb0e' // Imgur
             },
             body: avatarFormData
           });
@@ -257,6 +258,7 @@ editAvatarBtn.addEventListener('click', () => {
 
             // Tampilkan kembali tombol edit avatar
             editAvatarBtn.style.display = 'block';
+            avatarEl.style.display = 'block';
 
             // Hapus elemen input dan tombol save setelah selesai
             avatarInputFile.remove();
@@ -349,7 +351,7 @@ editLokasiBtn.addEventListener('click', () => {
       lokasiSelect.id = 'lokasi-select';
 
       // Daftar pilihan lokasi
-      const lokasiOptions = ['Perum', 'Skojo', 'Kertapati', 'Boom Baru', 'Plaju', 'Jakabaring'];
+      const lokasiOptions = ['Boom Baru', 'Jakabaring', 'Kalidoni', 'Kenten', 'Kertapati', 'Lemabang', 'Perum', 'Plaju', 'Pusri', 'Skojo'];
 
       lokasiOptions.forEach(location => {
         const option = document.createElement('option');
@@ -535,7 +537,6 @@ document.getElementById('avatar').addEventListener('click', function() {
 
 /*! PANEL SETTING */
 // UNIQUE ID
-// Menunggu user login
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     // Ambil UID dan tampilkan di #uniqueID
@@ -580,7 +581,7 @@ function cekStatusVerifikasi() {
               verimail: 'Verifikasi √' // Update status verifikasi
             })
             .then(() => {
-              console.log('Status verifikasi di Firestore telah diperbarui');
+              console.log('Email di verifikasi');
             })
             .catch(error => {
               console.error('Gagal mengupdate status verifikasi di Firestore:', error);
@@ -595,7 +596,7 @@ function cekStatusVerifikasi() {
               if (konfirmasi) {
                 user.sendEmailVerification()
                   .then(() => {
-                    alert('Email verifikasi berhasil dikirim. Cek inbox email Ente!');
+                    alert('Email verifikasi berhasil dikirim. Cek inbox email!');
                   })
                   .catch(error => {
                     console.error('Gagal kirim email verifikasi:', error);
@@ -644,7 +645,7 @@ function cekStatusFacebook() {
     // Cek jika akun sudah terhubung dengan Facebook
     if (user.providerData.some((provider) => provider.providerId === 'facebook.com')) {
       facebookEl.textContent = 'Terhubung √';
-      facebookEl.style.color = 'green';
+      facebookEl.style.color = '#0f0';
       facebookEl.style.pointerEvents = 'none'; // Menonaktifkan klik
       // Kirim status ke Firestore
       firebase.firestore().collection('userSS').doc(user.uid).update({
@@ -677,7 +678,7 @@ firebase.auth().getRedirectResult().then((result) => {
   if (result.user) {
     // Facebook berhasil terhubung, perbarui tampilan elemen
     facebookEl.textContent = 'Terhubung √';
-    facebookEl.style.color = 'green';
+    facebookEl.style.color = '#0f0';
     facebookEl.style.pointerEvents = 'none';
     
     // Kirim status ke Firestore
@@ -858,7 +859,7 @@ requestRateBtnEl.addEventListener('click', () => {
   const requestRateValue = `${minValue} - ${maxValue}`;
 
   // Kirim ke Firestore
-  const currentUser = firebase.auth().currentUser; // Ganti const user ke currentUser
+  const currentUser = firebase.auth().currentUser;
   if (currentUser) {
     firebase.firestore().collection('userSS').doc(currentUser.uid).update({
       requestRate: requestRateValue,

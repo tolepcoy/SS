@@ -214,6 +214,10 @@ body {
   height: 100%;
 }
 
+#avatar-input {
+  display: block;
+}
+
 .saveProfileBtn {
   position: absolute;
   bottom: 20px;
