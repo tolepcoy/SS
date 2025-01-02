@@ -52,6 +52,10 @@ registerButton.addEventListener('click', () => {
 
         // Enkripsi password sebelum menyimpannya ke Firestore
         const encryptedPassword = CryptoJS.AES.decrypt(password, 'padasuatuhariloremipsump').toString();
+        
+        const encryptedPassword = snapshot.data().password;
+const decryptedPassword = CryptoJS.AES.decrypt(encryptedPassword, 'padasuatuhariloremipsump').toString(CryptoJS.enc.Utf8);
+console.log(decryptedPassword);
 
         // Menyimpan data user ke Firestore pada collection userSS
         const userSSRef = firestore.collection('userSS').doc(user.uid);

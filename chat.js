@@ -550,9 +550,8 @@ firebase.auth().onAuthStateChanged(user => {
 // Menunggu user login
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
-    // Ambil Email dan tampilkan di #email
     const email = document.getElementById('email');
-    email.textContent = user.email; // Menampilkan Email
+    email.textContent = user.email;
   } else {
     console.log("User belum login");
   }
@@ -568,15 +567,29 @@ function cekStatusVerifikasi() {
     if (user) {
       user.reload() // Reload data user untuk memastikan data terbaru
         .then(() => {
+          const db = firebase.firestore();  // Ambil instance Firestore
+          const userDoc = db.collection('userSS').doc(user.uid);  // Ambil dokumen berdasarkan UID user
+
           if (user.emailVerified) {
             statusVerifikasiEl.textContent = 'Verifikasi √';
-            statusVerifikasiEl.style.color = 'green';
+            statusVerifikasiEl.style.color = '#0f0';
             statusVerifikasiEl.style.cursor = 'default'; // Tidak clickable jika sudah diverifikasi
+            // Update status verifikasi di Firestore
+            userDoc.update({
+              email: user.email, // Update email
+              verimail: 'Verifikasi √' // Update status verifikasi
+            })
+            .then(() => {
+              console.log('Status verifikasi di Firestore telah diperbarui');
+            })
+            .catch(error => {
+              console.error('Gagal mengupdate status verifikasi di Firestore:', error);
+            });
           } else {
             statusVerifikasiEl.textContent = 'Belum Verifikasi ✘';
-            statusVerifikasiEl.style.color = 'red';
-            statusVerifikasiEl.style.cursor = 'pointer'; // Jadikan clickable
-            // Tambahkan event listener untuk klik
+            statusVerifikasiEl.style.color = '#f55';
+            statusVerifikasiEl.style.cursor = 'pointer';
+            
             statusVerifikasiEl.onclick = () => {
               const konfirmasi = confirm('Kirim aktifasi ke email?');
               if (konfirmasi) {
@@ -590,6 +603,17 @@ function cekStatusVerifikasi() {
                   });
               }
             };
+            // Update status verifikasi di Firestore
+            userDoc.update({
+              email: user.email, // Update email
+              verimail: 'Belum Verifikasi ✘' // Update status verifikasi
+            })
+            .then(() => {
+              console.log('Status verifikasi di Firestore telah diperbarui');
+            })
+            .catch(error => {
+              console.error('Gagal mengupdate status verifikasi di Firestore:', error);
+            });
           }
         })
         .catch(error => {
@@ -605,7 +629,6 @@ function cekStatusVerifikasi() {
 
 // Panggil fungsi saat halaman selesai dimuat
 cekStatusVerifikasi();
-// end verifikasi
 
 // FACEBOOK SYNC
 // Mendapatkan elemen Facebook
