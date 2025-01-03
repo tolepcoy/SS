@@ -773,12 +773,15 @@ function cekStatusFacebook() {
       facebookEl.style.pointerEvents = 'none'; // Menonaktifkan klik
       // Kirim status ke Firestore
       firebase.firestore().collection('userSS').doc(user.uid).update({
-        facebook: 'Terhubung √',
+        facebook: '<span style="color:#0f0;">Terhubung √</span>',
       });
     } else {
       facebookEl.textContent = 'Hubungkan';
       facebookEl.style.color = 'blue';
-      facebookEl.style.pointerEvents = 'auto'; // Mengaktifkan klik
+      facebookEl.style.pointerEvents = 'auto';
+      firebase.firestore().collection('userSS').doc(user.uid).update({
+        facebook: '<span style="color:#00f;">Hubungkan</span>',
+      });
     }
   }
 }
@@ -1019,7 +1022,7 @@ closeReq.onclick = () => {
     const statusOl = document.getElementById('OLstate');
 
     userRefOL.update({
-      OLstate: 'Online &#bull;'
+      OLstate: 'Online &bull;'
     }, { merge: true })
       .then(() => {
         statusOl.innerHTML = 'Online <b style="font-size:30px; vertical-align:middle;">&bull;</b>';
