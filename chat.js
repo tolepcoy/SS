@@ -1073,18 +1073,37 @@ const chatboxRef = firestore.collection('chatbox');
 const chatBox = document.getElementById('chatBox'); // Pastikan ID chatBox benar
 
 // Fungsi untuk render pesan
-function renderMessage(data) {
+function renderMessage(data, docId) {
   const messageDiv = document.createElement('div');
   const sender = document.createElement('span');
   const messageText = document.createElement('p');
+  const timestamp = document.createElement('small'); // Untuk waktu
 
   sender.textContent = `${data.sender.nama}:`;
   sender.style.fontWeight = 'bold';
   messageText.textContent = data.message;
 
+  // Format waktu
+  const date = data.timestamp.toDate();
+  timestamp.textContent = `(${date.getHours()}:${date.getMinutes()}:${date.getSeconds()})`;
+
   messageDiv.appendChild(sender);
   messageDiv.appendChild(messageText);
+  messageDiv.appendChild(timestamp); // Menambahkan waktu
   chatBox.appendChild(messageDiv);
+
+  // Cek waktu pesan, jika lebih dari 24 jam, hapus
+  const now = new Date();
+  const messageTime = data.timestamp.toDate();
+  const timeDiff = now - messageTime;
+  const hoursDiff = timeDiff / (1000 * 3600); // Convert to hours
+
+  if (hoursDiff > 24) {
+    // Hapus pesan yang lebih dari 24 jam
+    firestore.collection('chatbox').doc(docId).delete()
+      .then(() => console.log(`Pesan ID ${docId} sudah lebih dari 24 jam dan dihapus`))
+      .catch(error => console.error("Gagal hapus pesan: ", error));
+  }
 
   // Scroll ke pesan terbaru
   chatBox.scrollTop = chatBox.scrollHeight;
