@@ -1022,7 +1022,7 @@ closeReq.onclick = () => {
       OLstate: 'Online &#bull;'
     }, { merge: true })
       .then(() => {
-        statusOl.innerHTML = 'Online <b style="font-size:20px;">&bull;</b>';
+        statusOl.innerHTML = 'Online <b style="font-size:30px; vertical-align:middle;">&bull;</b>';
         statusOl.style.color = '#0f0';
       })
       .catch((error) => {

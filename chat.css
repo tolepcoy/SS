@@ -167,7 +167,7 @@ body {
   transform: translateY(-50%) scaleX(-1);
   font-size: 13px;
   cursor: pointer;
-  color: #666;
+  color: #777;
 }
 
 .icon-pencil:hover {
@@ -175,8 +175,8 @@ body {
 }
 
 #edit-detail {
-  right: 15%;
-  top: 20%;
+  right: 10%;
+  top: 15%;
 }
 
 #lokasi, #umur, #gender {
@@ -280,7 +280,7 @@ body {
   font-weight: bold;
 }
 
-#verimail {
+#verimail, #facebook {
   font-size: 10px;
   font-style: italic;
 }
