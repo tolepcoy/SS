@@ -1068,13 +1068,8 @@ closeReq.onclick = () => {
   });
   
 // CHAT BOX GLOBAL CHAT
-// Elemen HTML
-const chatBox = document.getElementById('chatBox');
-const messageForm = document.getElementById('messageForm');
-const messageInput = document.getElementById('messageInput');
-
-// Referensi ke koleksi messages
-const messagesRef = firestore.collection('messages');
+// Referensi ke koleksi chatbox
+const chatboxRef = firestore.collection('chatbox');
 
 // Fungsi untuk render pesan
 function renderMessage(data) {
@@ -1095,7 +1090,7 @@ function renderMessage(data) {
 }
 
 // Mendengarkan pesan baru secara real-time
-messagesRef.orderBy('timestamp').onSnapshot(snapshot => {
+chatboxRef.orderBy('timestamp').onSnapshot(snapshot => {
   chatBox.innerHTML = ''; // Bersihkan chat box
   snapshot.forEach(doc => renderMessage(doc.data()));
 });
@@ -1108,7 +1103,7 @@ messageForm.addEventListener('submit', async (e) => {
   if (userChat) {
     const message = messageInput.value.trim();
     if (message) {
-      await messagesRef.add({
+      await chatboxRef.add({
         sender: userChat.displayName || "Anonymous",
         message,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
