@@ -1066,3 +1066,57 @@ closeReq.onclick = () => {
       statusOl2.style.color = '';
     }
   });
+  
+// CHAT BOX GLOBAL CHAT
+// Elemen HTML
+const chatBox = document.getElementById('chatBox');
+const messageForm = document.getElementById('messageForm');
+const messageInput = document.getElementById('messageInput');
+
+// Referensi ke koleksi messages
+const messagesRef = firestore.collection('messages');
+
+// Fungsi untuk render pesan
+function renderMessage(data) {
+  const messageDiv = document.createElement('div');
+  const sender = document.createElement('span');
+  const messageText = document.createElement('p');
+  
+  sender.textContent = `${data.sender}:`;
+  sender.style.fontWeight = 'bold';
+  messageText.textContent = data.message;
+
+  messageDiv.appendChild(sender);
+  messageDiv.appendChild(messageText);
+  chatBox.appendChild(messageDiv);
+  
+  // Scroll ke pesan terbaru
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Mendengarkan pesan baru secara real-time
+messagesRef.orderBy('timestamp').onSnapshot(snapshot => {
+  chatBox.innerHTML = ''; // Bersihkan chat box
+  snapshot.forEach(doc => renderMessage(doc.data()));
+});
+
+// Kirim pesan
+messageForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const userChat = firebase.auth().currentUser;
+  if (userChat) {
+    const message = messageInput.value.trim();
+    if (message) {
+      await messagesRef.add({
+        sender: userChat.displayName || "Anonymous",
+        message,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      messageInput.value = ''; // Bersihkan input
+    }
+  } else {
+    alert('Login dulu untuk kirim pesan!');
+  }
+});
