@@ -1120,12 +1120,17 @@ sender.addEventListener('click', async () => {
       document.getElementById('bergabung-lain').innerText = userData.bergabung || 'Tanggal tidak diketahui';
       document.getElementById('OLstate-lain').innerText = userData.OLstate || 'Status offline';
     } else {
-      console.error("Data user tidak ditemukan.");
+      console.log("Data user tidak ditemukan.");
       alert("Data user tidak ditemukan.");
     }
   } catch (error) {
     console.error("Gagal mengambil data user: ", error);
-    alert("Gagal mengambil data user.");
+    // Cek error message untuk lebih spesifik
+    if (error.message.includes('permission')) {
+      alert("Gagal mengambil data user karena masalah izin.");
+    } else {
+      alert("Gagal mengambil data user.");
+    }
   }
 });
 
