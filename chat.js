@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Fungsi untuk membuka side panel
 function openPanel(panelId) {
-  const panels = ['profile', 'settingsPanel', 'secretSidePanel'];
+  const panels = ['profile', 'settingsPanel', 'profil-lain', 'secretSidePanel'];
   panels.forEach(panel => {
     document.getElementById(panel).style.transform = panel === panelId ? "translateX(0)" : "translateX(-100%)";
   });
@@ -1071,6 +1071,7 @@ closeReq.onclick = () => {
 // Referensi ke koleksi chatbox
 const chatboxRef = firestore.collection('chatbox');
 const chatBox = document.getElementById('chatBox'); // Pastikan ID chatBox benar
+const profilLain = document.getElementById('profil-lain'); // Elemen profil lainnya
 
 // Fungsi untuk render pesan
 function renderMessage(data, docId) {
@@ -1093,6 +1094,14 @@ function renderMessage(data, docId) {
   // Sender Name
   sender.innerHTML = `${data.sender.nama}`;
   sender.classList.add("sender");
+  sender.style.cursor = "pointer";
+
+  // Event Listener untuk klik nama
+  sender.addEventListener('click', () => {
+    profilLain.style.transform = "translateX(0%)";
+    profilLain.dataset.userId = docId; // Simpan ID user untuk digunakan nanti
+    console.log(`Nama user ${data.sender.nama} diklik.`);
+  });
 
   // Level
   level.src = data.sender.level;
@@ -1164,7 +1173,7 @@ messageForm.addEventListener('submit', async (e) => {
         const senderData = {
           nama: userData.nama || "Anonymous",
           avatar: userData.avatar || "icon/default_avatar.png",
-          level: userData.level || "&#9733;",
+          level: userData.level || "level/b1.png",
           gender: userData.gender || "Unknown"
         };
 
