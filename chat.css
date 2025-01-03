@@ -610,6 +610,8 @@ body {
 
 .ic-level {
   margin-right: 10px;
+  width: 15px;
+  height: 15px;
 }
 
 .ic-gender {
