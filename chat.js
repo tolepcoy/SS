@@ -1076,16 +1076,22 @@ const chatBox = document.getElementById('chatBox'); // Pastikan ID chatBox benar
 function renderMessage(data, docId) {
   const messageDiv = document.createElement('div');
   const sender = document.createElement('span');
-  const messageText = document.createElement('p');
-  const timestamp = document.createElement('small'); // Untuk waktu
+  const messageText = document.createElement('span');
+  const timestamp = document.createElement('span');
+  
+  messageDiv.classList.add("chatWrapper");
 
-  sender.textContent = `${data.sender.nama}:`;
-  sender.style.fontWeight = 'bold';
+  sender.innerHTML = `${data.sender.nama}<br>`;
+  sender.classList.add("sender");
+  
   messageText.textContent = data.message;
+  messageText.classList.add("text-chat");
+  
+  timestamp.id = "waktukirimchat";
 
   // Format waktu
   const date = data.timestamp.toDate();
-  timestamp.textContent = `(${date.getHours()}:${date.getMinutes()}:${date.getSeconds()})`;
+  timestamp.textContent = `(${date.getHours()}:${date.getMinutes()})`;
 
   messageDiv.appendChild(sender);
   messageDiv.appendChild(messageText);

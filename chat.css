@@ -541,6 +541,7 @@ body {
   flex-grow: 1;
   padding: 20px;
   margin-right: 15%;
+  overflow: hidden;
 }
 
 #chatBox {
@@ -549,7 +550,7 @@ body {
   border: 1px solid #ddd;
   padding: 10px;
   margin-bottom: 15px;
-  background-color: #f9f9f9;
+  background: #f9f9f9;
   border-radius: 6px;
 }
 
@@ -578,4 +579,32 @@ body {
 
 #sendButton:hover {
   background: #090;
+}
+
+.chatWrapper {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 5px 15px;
+  border-radius: 6px 25px 6px 25px;
+  background: rgba(0, 255, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.sender {
+  font-family: "Tolep Default";
+  font-weight: bold;
+}
+
+.text-chat {
+  font-family: Arial;
+  display: block;
+}
+
+#waktukirimchat {
+  position: relative;
+  top: -25px;
+  left: 90%;
+  color: #444;
+  font-size: 10px;
+  font-style: italic;
 }
