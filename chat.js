@@ -1103,13 +1103,30 @@ messageForm.addEventListener('submit', async (e) => {
   if (userChat) {
     const message = messageInput.value.trim();
     if (message) {
-      await chatboxRef.add({
-        sender: userChat.displayName || "Anonymous",
-        message,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      const userUid = userChat.uid;
 
-      messageInput.value = ''; // Bersihkan input
+      // Ambil data user dari koleksi userSS
+      const userDoc = await firestore.collection('userSS').doc(userUid).get();
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        const senderData = {
+          nama: userData.nama || "Anonymous",
+          avatar: userData.avatar || "icon/default_avatar.png",
+          gender: userData.gender || "Unknown",
+          status: userData.status || "&#9733;"
+        };
+
+        // Simpan pesan ke koleksi chatbox
+        await firestore.collection('chatbox').add({
+          sender: senderData,
+          message,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        messageInput.value = ''; // Bersihkan input
+      } else {
+        alert("Data user tidak ditemukan.");
+      }
     }
   } else {
     alert('Login dulu untuk kirim pesan!');
