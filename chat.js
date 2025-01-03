@@ -1066,7 +1066,7 @@ closeReq.onclick = () => {
       statusOl2.style.color = '';
     }
   });
-  
+
 // CHAT BOX GLOBAL CHAT
 // Referensi ke koleksi chatbox
 const chatboxRef = firestore.collection('chatbox');
@@ -1075,27 +1075,50 @@ const chatBox = document.getElementById('chatBox'); // Pastikan ID chatBox benar
 // Fungsi untuk render pesan
 function renderMessage(data, docId) {
   const messageDiv = document.createElement('div');
+  const senderWrapper = document.createElement('div'); // Wrapper untuk sender
+  const avatar = document.createElement('img');
   const sender = document.createElement('span');
-  const messageText = document.createElement('span');
+  const status = document.createElement('span');
+  const gender = document.createElement('img');
   const timestamp = document.createElement('span');
+  const messageText = document.createElement('span');
   
   messageDiv.classList.add("chatWrapper");
+  senderWrapper.classList.add("senderWrapper");
 
-  sender.innerHTML = `${data.sender.nama}<br>`;
+  // Avatar
+  avatar.src = data.sender.avatar;
+  avatar.classList.add("ic-avatar");
+
+  // Sender Name
+  sender.innerHTML = `${data.sender.nama}`;
   sender.classList.add("sender");
-  
+
+  // Status
+  status.innerHTML = `${data.sender.status}`;
+  status.classList.add("ic-status");
+
+  // Gender
+  gender.src = data.sender.gender;
+  gender.classList.add("ic-gender");
+
+  // Timestamp
+  timestamp.id = "waktukirimchat";
+  const date = data.timestamp.toDate();
+  timestamp.innerHTML = `(${date.getHours()}:${date.getMinutes()})<br>`;
+
+  // Message Text
   messageText.textContent = data.message;
   messageText.classList.add("text-chat");
-  
-  timestamp.id = "waktukirimchat";
 
-  // Format waktu
-  const date = data.timestamp.toDate();
-  timestamp.textContent = `(${date.getHours()}:${date.getMinutes()})`;
-
-  messageDiv.appendChild(sender);
+  // Append all elements
+  senderWrapper.appendChild(avatar);
+  senderWrapper.appendChild(sender);
+  senderWrapper.appendChild(status);
+  senderWrapper.appendChild(gender);
+  messageDiv.appendChild(senderWrapper);
+  messageDiv.appendChild(timestamp);
   messageDiv.appendChild(messageText);
-  messageDiv.appendChild(timestamp); // Menambahkan waktu
   chatBox.appendChild(messageDiv);
 
   // Cek waktu pesan, jika lebih dari 24 jam, hapus
@@ -1118,7 +1141,7 @@ function renderMessage(data, docId) {
 // Mendengarkan pesan baru secara real-time
 chatboxRef.orderBy('timestamp').onSnapshot(snapshot => {
   chatBox.innerHTML = ''; // Bersihkan chat box setiap kali ada update
-  snapshot.forEach(doc => renderMessage(doc.data())); // Render setiap pesan
+  snapshot.forEach(doc => renderMessage(doc.data(), doc.id)); // Render setiap pesan
 });
 
 // Kirim pesan
@@ -1141,8 +1164,8 @@ messageForm.addEventListener('submit', async (e) => {
         const senderData = {
           nama: userData.nama || "Anonymous",
           avatar: userData.avatar || "icon/default_avatar.png",
-          gender: userData.gender || "Unknown",
-          status: userData.status || "&#9733;"
+          status: userData.status || "&#9733;",
+          gender: userData.gender || "Unknown"
         };
 
         // Simpan pesan ke koleksi chatbox

@@ -584,25 +584,51 @@ body {
 .chatWrapper {
   margin-top: 10px;
   margin-bottom: 10px;
-  padding: 5px 15px;
-  border-radius: 6px 25px 6px 25px;
+  padding: 5px 15px 5px 5px;
+  border-radius: 20px 6px 25px 6px;
   background: rgba(0, 255, 0, 0.2);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.senderWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.ic-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 8px;
 }
 
 .sender {
   font-family: "Tolep Default";
   font-weight: bold;
+  margin-right: 10px;
+}
+
+.ic-status {
+  margin-right: 10px;
+}
+
+.ic-gender {
+  width: 10px;
+  height: 10px;
 }
 
 .text-chat {
   font-family: Arial;
+  font-size: 15px;
   display: block;
+  margin-top: -10px;
+  margin-left: 14%;
+  line-height: 0.9;
 }
 
 #waktukirimchat {
   position: relative;
-  top: -25px;
+  top: -20px;
   left: 90%;
   color: #444;
   font-size: 10px;
