@@ -1097,7 +1097,10 @@ chatboxRef.orderBy('timestamp').onSnapshot(snapshot => {
 
 // Kirim pesan
 messageForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
+  e.preventDefault(); // Mencegah refresh page
+
+  const sendButton = document.getElementById('sendButton');
+  sendButton.disabled = true; // Nonaktifkan tombol sementara
 
   const userChat = firebase.auth().currentUser;
   if (userChat) {
@@ -1105,30 +1108,39 @@ messageForm.addEventListener('submit', async (e) => {
     if (message) {
       const userUid = userChat.uid;
 
-      // Ambil data user dari koleksi userSS
-      const userDoc = await firestore.collection('userSS').doc(userUid).get();
-      if (userDoc.exists) {
-        const userData = userDoc.data();
-        const senderData = {
-          nama: userData.nama || "Anonymous",
-          avatar: userData.avatar || "icon/default_avatar.png",
-          gender: userData.gender || "Unknown",
-          status: userData.status || "&#9733;"
-        };
+      try {
+        // Ambil data user dari koleksi userSS
+        const userDoc = await firestore.collection('userSS').doc(userUid).get();
+        if (userDoc.exists) {
+          const userData = userDoc.data();
+          const senderData = {
+            nama: userData.nama || "Anonymous",
+            avatar: userData.avatar || "icon/default_avatar.png",
+            gender: userData.gender || "Unknown",
+            status: userData.status || "&#9733;"
+          };
 
-        // Simpan pesan ke koleksi chatbox
-        await firestore.collection('chatbox').add({
-          sender: senderData,
-          message,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
+          // Simpan pesan ke koleksi chatbox
+          await firestore.collection('chatbox').add({
+            sender: senderData,
+            message,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
 
-        messageInput.value = ''; // Bersihkan input
-      } else {
-        alert("Data user tidak ditemukan.");
+          messageInput.value = ''; // Bersihkan input
+        } else {
+          alert("Data user tidak ditemukan.");
+        }
+      } catch (error) {
+        console.error("Error saat mengirim pesan:", error);
+        alert("Terjadi kesalahan saat mengirim pesan.");
       }
+    } else {
+      alert("Pesan tidak boleh kosong!");
     }
   } else {
     alert('Login dulu untuk kirim pesan!');
   }
+
+  sendButton.disabled = false; // Aktifkan kembali tombol
 });
