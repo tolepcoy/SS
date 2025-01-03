@@ -1120,17 +1120,14 @@ sender.addEventListener('click', async () => {
       document.getElementById('bergabung-lain').innerText = userData.bergabung || 'Tanggal tidak diketahui';
       document.getElementById('OLstate-lain').innerText = userData.OLstate || 'Status offline';
     } else {
-      console.log("Data user tidak ditemukan.");
+      console.error("Data user tidak ditemukan.");
+      // Hanya tampilkan alert jika data user tidak ditemukan
       alert("Data user tidak ditemukan.");
     }
   } catch (error) {
     console.error("Gagal mengambil data user: ", error);
-    // Cek error message untuk lebih spesifik
-    if (error.message.includes('permission')) {
-      alert("Gagal mengambil data user karena masalah izin.");
-    } else {
-      alert("Gagal mengambil data user.");
-    }
+    // Tampilkan alert hanya jika ada error dalam proses pengambilan data
+    alert("Gagal mengambil data user karena masalah teknis.");
   }
 });
 
@@ -1210,13 +1207,6 @@ messageForm.addEventListener('submit', async (e) => {
 
 // Simpan pesan ke koleksi chatbox
 await firestore.collection('chatbox').add({
-  sender: {
-    nama: userData.nama || "Anonymous",
-    avatar: userData.avatar || "icon/default_avatar.png",
-    level: userData.level || "level/b1.png",
-    gender: userData.gender || "Unknown",
-    uid: userUid // Simpan UID user untuk referensi ke userSS
-  },
   message,
   timestamp: firebase.firestore.FieldValue.serverTimestamp()
 });
