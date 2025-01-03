@@ -1193,3 +1193,38 @@ messageForm.addEventListener('submit', async (e) => {
     alert('Login dulu untuk kirim pesan!');
   }
 });
+
+// klik nama user
+document.addEventListener("DOMContentLoaded", () => {
+  // Event delegation untuk klik nama sender
+  document.getElementById('chatBox').addEventListener('click', async (e) => {
+    if (e.target.classList.contains('sender')) { // Pastikan klik di nama user
+      const senderName = e.target.innerHTML.trim(); // Ambil nama sender dari chatbox
+
+      // Ambil data sender dari Firestore
+      const senderQuery = await firestore.collection('userSS').where('nama', '==', senderName).get();
+
+      if (!senderQuery.empty) {
+        const senderData = senderQuery.docs[0].data(); // Ambil data pertama (sesuai nama)
+        
+        // Isi elemen di #profil-lain dengan data sender
+        document.getElementById('nama-lain').innerText = senderData.nama || 'Tidak diketahui';
+        document.getElementById('avatar-lain').src = senderData.avatar || 'icon/default_avatar.png';
+        document.getElementById('level-lain').src = senderData.level || 'level/b1.png';
+        document.getElementById('detail-lain').innerText = senderData.detail || 'Bio';
+        document.getElementById('lokasi-lain').innerText = senderData.lokasi || 'Lokasi tidak diketahui';
+        document.getElementById('umur-lain').innerText = senderData.umur || 'Umur tidak diketahui';
+        document.getElementById('gender-lain').src = senderData.gender || 'icon/defaultgender.png';
+        document.getElementById('rate-lain').innerText = senderData.rate || 'N/A';
+        document.getElementById('bergabung-lain').innerText = senderData.bergabung || 'Tanggal tidak diketahui';
+        document.getElementById('OLstate-lain').innerText = senderData.OLstate || 'Status';
+
+        // Buka panel profil lain
+        resetAhuy();
+        openPanel('profil-lain');
+      } else {
+        alert('Data user tidak ditemukan.');
+      }
+    }
+  });
+});
