@@ -1096,12 +1096,38 @@ function renderMessage(data, docId) {
   sender.classList.add("sender");
   sender.style.cursor = "pointer";
 
-  // Event Listener untuk klik nama
-  sender.addEventListener('click', () => {
-    profilLain.style.transform = "translateX(0%)";
-    profilLain.dataset.userId = docId; // Simpan ID user untuk digunakan nanti
-    console.log(`Nama user ${data.sender.nama} diklik.`);
-  });
+// Event Listener untuk klik nama
+sender.addEventListener('click', async () => {
+  profilLain.style.transform = "translateX(0%)"; // Buka panel profil
+  profilLain.dataset.userId = docId;
+  console.log(`Nama user ${data.sender.nama} diklik.`);
+
+  try {
+    const userDoc = await firestore.collection('userSS').doc(docId).get();
+
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+
+      // Isi elemen di #profil-lain dengan data user
+      document.getElementById('nama-lain').innerText = userData.nama || 'Tidak diketahui';
+      document.getElementById('avatar-lain').src = userData.avatar || 'icon/default_avatar.png';
+      document.getElementById('level-lain').src = userData.level || 'level/b1.png';
+      document.getElementById('detail-lain').innerText = userData.detail || 'Tidak ada detail';
+      document.getElementById('lokasi-lain').innerText = userData.lokasi || 'Lokasi tidak diketahui';
+      document.getElementById('umur-lain').innerText = userData.umur || 'Umur tidak diketahui';
+      document.getElementById('gender-lain').src = userData.gender || 'https://tolepcoy.github.io/SecretServer/icon/defaultgender.png';
+      document.getElementById('rate-lain').innerText = userData.rate || 'Tidak ada rating';
+      document.getElementById('bergabung-lain').innerText = userData.bergabung || 'Tanggal tidak diketahui';
+      document.getElementById('OLstate-lain').innerText = userData.OLstate || 'Status offline';
+    } else {
+      console.error("Data user tidak ditemukan.");
+      alert("Data user tidak ditemukan.");
+    }
+  } catch (error) {
+    console.error("Gagal mengambil data user: ", error);
+    alert("Gagal mengambil data user.");
+  }
+});
 
   // Level
   level.src = data.sender.level;
@@ -1177,12 +1203,18 @@ messageForm.addEventListener('submit', async (e) => {
           gender: userData.gender || "Unknown"
         };
 
-        // Simpan pesan ke koleksi chatbox
-        await firestore.collection('chatbox').add({
-          sender: senderData,
-          message,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
+// Simpan pesan ke koleksi chatbox
+await firestore.collection('chatbox').add({
+  sender: {
+    nama: userData.nama || "Anonymous",
+    avatar: userData.avatar || "icon/default_avatar.png",
+    level: userData.level || "level/b1.png",
+    gender: userData.gender || "Unknown",
+    uid: userUid // Simpan UID user untuk referensi ke userSS
+  },
+  message,
+  timestamp: firebase.firestore.FieldValue.serverTimestamp()
+});
 
         messageInput.value = ''; // Bersihkan input setelah pesan terkirim
       } else {
@@ -1194,7 +1226,7 @@ messageForm.addEventListener('submit', async (e) => {
   }
 });
 
-// klik nama user
+/* klik nama user */
 document.addEventListener("DOMContentLoaded", () => {
   // Event delegation untuk klik nama sender
   document.getElementById('chatBox').addEventListener('click', async (e) => {
