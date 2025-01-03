@@ -62,7 +62,7 @@ console.log(decryptedPassword);
           nama: 'userSS',
           OLstate: '',
           avatar: 'https://tolepcoy.github.io/SecretServer/icon/default-avatar.png',
-          status: '&#9733;',
+          level: '&#9733;',
           detail: 'Bio',
           lokasi: 'Palembang',
           umur: '-',

@@ -100,7 +100,7 @@ firebase.auth().onAuthStateChanged(user => {
         document.getElementById('nama').innerText = data.nama;
         document.getElementById('avatar').src = data.avatar;
         document.getElementById('OLstate').innerHTML = data.OLstate;
-        document.getElementById('status').innerHTML = data.status;
+        document.getElementById('level').src = data.level;
         document.getElementById('detail').innerText = data.detail;
         document.getElementById('lokasi').innerText = data.lokasi;
         document.getElementById('umur').innerText = data.umur;
@@ -1078,7 +1078,7 @@ function renderMessage(data, docId) {
   const senderWrapper = document.createElement('div'); // Wrapper untuk sender
   const avatar = document.createElement('img');
   const sender = document.createElement('span');
-  const status = document.createElement('span');
+  const level = document.createElement('img');
   const gender = document.createElement('img');
   const timestamp = document.createElement('span');
   const messageText = document.createElement('span');
@@ -1094,9 +1094,9 @@ function renderMessage(data, docId) {
   sender.innerHTML = `${data.sender.nama}`;
   sender.classList.add("sender");
 
-  // Status
-  status.innerHTML = `${data.sender.status}`;
-  status.classList.add("ic-status");
+  // Level
+  level.src = data.sender.level;
+  level.classList.add("ic-level");
 
   // Gender
   gender.src = data.sender.gender;
@@ -1114,7 +1114,7 @@ function renderMessage(data, docId) {
   // Append all elements
   senderWrapper.appendChild(avatar);
   senderWrapper.appendChild(sender);
-  senderWrapper.appendChild(status);
+  senderWrapper.appendChild(level);
   senderWrapper.appendChild(gender);
   messageDiv.appendChild(senderWrapper);
   messageDiv.appendChild(timestamp);
@@ -1164,7 +1164,7 @@ messageForm.addEventListener('submit', async (e) => {
         const senderData = {
           nama: userData.nama || "Anonymous",
           avatar: userData.avatar || "icon/default_avatar.png",
-          status: userData.status || "&#9733;",
+          level: userData.level || "&#9733;",
           gender: userData.gender || "Unknown"
         };
 
