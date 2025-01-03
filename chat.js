@@ -1070,37 +1070,38 @@ closeReq.onclick = () => {
 // CHAT BOX GLOBAL CHAT
 // Referensi ke koleksi chatbox
 const chatboxRef = firestore.collection('chatbox');
+const chatBox = document.getElementById('chatBox'); // Pastikan ID chatBox benar
 
 // Fungsi untuk render pesan
 function renderMessage(data) {
   const messageDiv = document.createElement('div');
   const sender = document.createElement('span');
   const messageText = document.createElement('p');
-  
-  sender.textContent = `${data.sender}:`;
+
+  sender.textContent = `${data.sender.nama}:`;
   sender.style.fontWeight = 'bold';
   messageText.textContent = data.message;
 
   messageDiv.appendChild(sender);
   messageDiv.appendChild(messageText);
   chatBox.appendChild(messageDiv);
-  
+
   // Scroll ke pesan terbaru
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 // Mendengarkan pesan baru secara real-time
 chatboxRef.orderBy('timestamp').onSnapshot(snapshot => {
-  chatBox.innerHTML = ''; // Bersihkan chat box
-  snapshot.forEach(doc => renderMessage(doc.data()));
+  chatBox.innerHTML = ''; // Bersihkan chat box setiap kali ada update
+  snapshot.forEach(doc => renderMessage(doc.data())); // Render setiap pesan
 });
 
 // Kirim pesan
-messageForm.addEventListener('submit', async (e) => {
-  e.preventDefault(); // Mencegah refresh page
+const messageForm = document.getElementById('messageForm');
+const messageInput = document.getElementById('messageInput');
 
-  const sendButton = document.getElementById('sendButton');
-  sendButton.disabled = true; // Nonaktifkan tombol sementara
+messageForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
   const userChat = firebase.auth().currentUser;
   if (userChat) {
@@ -1108,39 +1109,30 @@ messageForm.addEventListener('submit', async (e) => {
     if (message) {
       const userUid = userChat.uid;
 
-      try {
-        // Ambil data user dari koleksi userSS
-        const userDoc = await firestore.collection('userSS').doc(userUid).get();
-        if (userDoc.exists) {
-          const userData = userDoc.data();
-          const senderData = {
-            nama: userData.nama || "Anonymous",
-            avatar: userData.avatar || "icon/default_avatar.png",
-            gender: userData.gender || "Unknown",
-            status: userData.status || "&#9733;"
-          };
+      // Ambil data user dari koleksi userSS
+      const userDoc = await firestore.collection('userSS').doc(userUid).get();
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        const senderData = {
+          nama: userData.nama || "Anonymous",
+          avatar: userData.avatar || "icon/default_avatar.png",
+          gender: userData.gender || "Unknown",
+          status: userData.status || "&#9733;"
+        };
 
-          // Simpan pesan ke koleksi chatbox
-          await firestore.collection('chatbox').add({
-            sender: senderData,
-            message,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-          });
+        // Simpan pesan ke koleksi chatbox
+        await firestore.collection('chatbox').add({
+          sender: senderData,
+          message,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
 
-          messageInput.value = ''; // Bersihkan input
-        } else {
-          alert("Data user tidak ditemukan.");
-        }
-      } catch (error) {
-        console.error("Error saat mengirim pesan:", error);
-        alert("Terjadi kesalahan saat mengirim pesan.");
+        messageInput.value = ''; // Bersihkan input setelah pesan terkirim
+      } else {
+        alert("Data user tidak ditemukan.");
       }
-    } else {
-      alert("Pesan tidak boleh kosong!");
     }
   } else {
     alert('Login dulu untuk kirim pesan!');
   }
-
-  sendButton.disabled = false; // Aktifkan kembali tombol
 });
