@@ -1203,12 +1203,18 @@ messageForm.addEventListener('submit', async (e) => {
           gender: userData.gender || "Unknown"
         };
 
-        // Simpan pesan ke koleksi chatbox
-        await firestore.collection('chatbox').add({
-          sender: senderData,
-          message,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
+// Simpan pesan ke koleksi chatbox
+await firestore.collection('chatbox').add({
+  sender: {
+    nama: userData.nama || "Anonymous",
+    avatar: userData.avatar || "icon/default_avatar.png",
+    level: userData.level || "level/b1.png",
+    gender: userData.gender || "Unknown",
+    uid: userUid // Simpan UID user untuk referensi ke userSS
+  },
+  message,
+  timestamp: firebase.firestore.FieldValue.serverTimestamp()
+});
 
         messageInput.value = ''; // Bersihkan input setelah pesan terkirim
       } else {
