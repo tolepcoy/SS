@@ -1120,17 +1120,12 @@ sender.addEventListener('click', async () => {
       document.getElementById('bergabung-lain').innerText = userData.bergabung || 'Tanggal tidak diketahui';
       document.getElementById('OLstate-lain').innerText = userData.OLstate || 'Status offline';
     } else {
-      console.log("Data user tidak ditemukan.");
+      console.error("Data user tidak ditemukan.");
       alert("Data user tidak ditemukan.");
     }
   } catch (error) {
     console.error("Gagal mengambil data user: ", error);
-    // Cek error message untuk lebih spesifik
-    if (error.message.includes('permission')) {
-      alert("Gagal mengambil data user karena masalah izin.");
-    } else {
-      alert("Gagal mengambil data user.");
-    }
+    alert("Gagal mengambil data user.");
   }
 });
 
@@ -1208,18 +1203,12 @@ messageForm.addEventListener('submit', async (e) => {
           gender: userData.gender || "Unknown"
         };
 
-// Simpan pesan ke koleksi chatbox
-await firestore.collection('chatbox').add({
-  sender: {
-    nama: userData.nama || "Anonymous",
-    avatar: userData.avatar || "icon/default_avatar.png",
-    level: userData.level || "level/b1.png",
-    gender: userData.gender || "Unknown",
-    uid: userUid // Simpan UID user untuk referensi ke userSS
-  },
-  message,
-  timestamp: firebase.firestore.FieldValue.serverTimestamp()
-});
+        // Simpan pesan ke koleksi chatbox
+        await firestore.collection('chatbox').add({
+          sender: senderData,
+          message,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
 
         messageInput.value = ''; // Bersihkan input setelah pesan terkirim
       } else {
@@ -1229,39 +1218,4 @@ await firestore.collection('chatbox').add({
   } else {
     alert('Login dulu untuk kirim pesan!');
   }
-});
-
-/* klik nama user */
-document.addEventListener("DOMContentLoaded", () => {
-  // Event delegation untuk klik nama sender
-  document.getElementById('chatBox').addEventListener('click', async (e) => {
-    if (e.target.classList.contains('sender')) { // Pastikan klik di nama user
-      const senderName = e.target.innerHTML.trim(); // Ambil nama sender dari chatbox
-
-      // Ambil data sender dari Firestore
-      const senderQuery = await firestore.collection('userSS').where('nama', '==', senderName).get();
-
-      if (!senderQuery.empty) {
-        const senderData = senderQuery.docs[0].data(); // Ambil data pertama (sesuai nama)
-        
-        // Isi elemen di #profil-lain dengan data sender
-        document.getElementById('nama-lain').innerText = senderData.nama || 'Tidak diketahui';
-        document.getElementById('avatar-lain').src = senderData.avatar || 'icon/default_avatar.png';
-        document.getElementById('level-lain').src = senderData.level || 'level/b1.png';
-        document.getElementById('detail-lain').innerText = senderData.detail || 'Bio';
-        document.getElementById('lokasi-lain').innerText = senderData.lokasi || 'Lokasi tidak diketahui';
-        document.getElementById('umur-lain').innerText = senderData.umur || 'Umur tidak diketahui';
-        document.getElementById('gender-lain').src = senderData.gender || 'icon/defaultgender.png';
-        document.getElementById('rate-lain').innerText = senderData.rate || 'N/A';
-        document.getElementById('bergabung-lain').innerText = senderData.bergabung || 'Tanggal tidak diketahui';
-        document.getElementById('OLstate-lain').innerText = senderData.OLstate || 'Status';
-
-        // Buka panel profil lain
-        resetAhuy();
-        openPanel('profil-lain');
-      } else {
-        alert('Data user tidak ditemukan.');
-      }
-    }
-  });
 });
