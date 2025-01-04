@@ -34,14 +34,13 @@ firebase.auth().onAuthStateChanged((user) => {
 // Fungsi untuk membersihkan chat lama
 function bersihkanChatboxLama() {
   const now = new Date();
-/*!  const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 jam lalu */
   
   const cutoff = new Date(now.getTime() - 5 * 60 * 1000); // 5 menit lalu
   
   const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
 
   firestore.collection("chatbox")
-    .where("createdAt", "<", cutoffTimestamp)
+    .where("timestamp", "<", cutoffTimestamp)
     .get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
@@ -1116,51 +1115,13 @@ function renderMessage(data, docId) {
   senderWrapper.classList.add("senderWrapper");
 
   // Avatar
-  const avatarSrc = data.sender.avatar || 'icon/default_avatar.png'; 
-  avatar.src = avatarSrc;
+  avatar.src = data.sender.avatar; 
   avatar.classList.add("ic-avatar");
 
   // Sender Name
   sender.innerHTML = `${data.sender.nama}`;
   sender.classList.add("sender");
   sender.style.cursor = "pointer";
-  
-  // Event Listener untuk klik nama
-  sender.addEventListener('click', async () => {
-    profilLain.style.transform = "translateX(0%)";
-    profilLain.dataset.userId = docId;
-    console.log(`Nama user ${data.sender.nama} diklik.`);
-
-    try {
-      const userDocPL = await firestore.collection('userSS').doc(docId).get();
-
-      if (userDocPL.exists) {
-        const userDataPL = userDocPL.data();
-
- // Isi data user di #profil-lain
-        document.getElementById('nama-lain').innerText = userDataPL.nama || 'user SS';
-        document.getElementById('avatar-lain').src = userDataPL.avatar || 'icon/default_avatar.png';
-        document.getElementById('level-lain').src = userDataPL.level || 'level/b1.png';
-        document.getElementById('detail-lain').innerText = userDataPL.detail || 'Bio';
-        document.getElementById('lokasi-lain').innerText = userDataPL.lokasi || 'Lokasi tidak diketahui';
-        document.getElementById('umur-lain').innerText = userDataPL.umur || 'Umur tidak diketahui';
-        document.getElementById('gender-lain').src = userDataPL.gender || 'icon/defaultgender.png';
-        document.getElementById('rate-lain').innerText = userDataPL.rate || 'Tidak ada rating';
-        document.getElementById('bergabung-lain').innerText = userDataPL.bergabung || 'Tanggal tidak diketahui';
-        document.getElementById('OLstate-lain').innerText = userDataPL.OLstate || '-';
-      } else {
-        console.error("Data user tidak ditemukan.");
-        alert("Data user tidak ditemukan.");
-      }
-    } catch (error) {
-      console.error("Gagal mengambil data user: ", error);
-      alert("Gagal mengambil data user.");
-    }
-  });
-  
-  
-  
-  
 
   // Level
   level.src = data.sender.level;
@@ -1206,10 +1167,10 @@ function renderMessage(data, docId) {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Mendengarkan pesan baru secara real-time
+// Mendengarkan secara real-time
 chatboxRef.orderBy('timestamp').onSnapshot(snapshot => {
-  chatBox.innerHTML = ''; // Bersihkan chat box setiap kali ada update
-  snapshot.forEach(doc => renderMessage(doc.data(), doc.id)); // Render setiap pesan
+  chatBox.innerHTML = '';
+  snapshot.forEach(doc => renderMessage(doc.data(), doc.id));
 });
 
 // Kirim pesan
@@ -1228,8 +1189,8 @@ messageForm.addEventListener('submit', async (e) => {
       // Ambil data user dari koleksi userSS
       const userDocRef = await firestore.collection('userSS').doc(userUid).get();
       if (userDocRef.exists) {
-        const userData = userDocRef.data();
-        const senderData = {
+      const userData = userDocRef.data();
+      const senderData = {
           nama: userData.nama || "Anonymous",
           avatar: userData.avatar || "icon/default_avatar.png",
           level: userData.level || "level/b1.png",
