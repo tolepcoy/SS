@@ -74,7 +74,7 @@ console.log(decryptedPassword);
           password: encryptedPassword,
           facebook: 'Tidak terhubung'
         }).then(() => {
-          // Custom alert berhasil
+ 
           showAlert('Registrasi berhasil!');
           console.log('Registered with:', userCredential.user);
 
