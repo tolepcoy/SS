@@ -34,13 +34,14 @@ firebase.auth().onAuthStateChanged((user) => {
 // Fungsi untuk membersihkan chat lama
 function bersihkanChatboxLama() {
   const now = new Date();
+/*!  const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 jam lalu */
   
-  const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const cutoff = new Date(now.getTime() - 5 * 60 * 1000); // 5 menit lalu
   
   const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
 
   firestore.collection("chatbox")
-    .where("timestamp", "<", cutoffTimestamp)
+    .where("createdAt", "<", cutoffTimestamp)
     .get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
@@ -1097,12 +1098,13 @@ closeReq.onclick = () => {
 
 // CHAT BOX GLOBAL CHAT
 const chatboxRef = firestore.collection('chatbox');
-const chatBox = document.getElementById('chatBox');
-const profilLain = document.getElementById('profil-lain');
+const chatBox = document.getElementById('chatBox'); // Pastikan ID chatBox benar
+const profilLain = document.getElementById('profil-lain'); // Elemen profil lainnya
 
+// Fungsi untuk render pesan
 function renderMessage(data, docId) {
   const messageDiv = document.createElement('div');
-  const senderWrapper = document.createElement('div');
+  const senderWrapper = document.createElement('div'); // Wrapper untuk sender
   const avatar = document.createElement('img');
   const sender = document.createElement('span');
   const level = document.createElement('img');
@@ -1113,14 +1115,48 @@ function renderMessage(data, docId) {
   messageDiv.classList.add("chatWrapper");
   senderWrapper.classList.add("senderWrapper");
 
-  // Avatar
-  avatar.src = data.sender.avatar; 
+  // Avatar - Pastikan menggunakan gambar default jika avatar tidak ada
+  const avatarSrc = data.sender.avatar || 'icon/default_avatar.png'; // Gambar default kalau tidak ada avatar
+  avatar.src = avatarSrc;
   avatar.classList.add("ic-avatar");
 
-  // Sender Nama
+  // Sender Name
   sender.innerHTML = `${data.sender.nama}`;
   sender.classList.add("sender");
   sender.style.cursor = "pointer";
+
+  // Event Listener untuk klik nama
+  sender.addEventListener('click', async () => {
+    profilLain.style.transform = "translateX(0%)"; // Buka panel profil
+    profilLain.dataset.userId = docId;
+    console.log(`Nama user ${data.sender.nama} diklik.`);
+
+    try {
+      const userDoc = await firestore.collection('userSS').doc(docId).get();
+
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+
+        // Isi elemen di #profil-lain dengan data user
+        document.getElementById('nama-lain').innerText = userData.nama || 'user SS';
+        document.getElementById('avatar-lain').src = userData.avatar || 'icon/default_avatar.png';
+        document.getElementById('level-lain').src = userData.level || 'level/b1.png';
+        document.getElementById('detail-lain').innerText = userData.detail || 'Bio';
+        document.getElementById('lokasi-lain').innerText = userData.lokasi || 'Lokasi tidak diketahui';
+        document.getElementById('umur-lain').innerText = userData.umur || 'Umur tidak diketahui';
+        document.getElementById('gender-lain').src = userData.gender || 'icon/defaultgender.png';
+        document.getElementById('rate-lain').innerText = userData.rate || 'Tidak ada rating';
+        document.getElementById('bergabung-lain').innerText = userData.bergabung || 'Tanggal tidak diketahui';
+        document.getElementById('OLstate-lain').innerText = userData.OLstate || '-';
+      } else {
+        console.error("Data user tidak ditemukan.");
+        alert("Data user tidak ditemukan.");
+      }
+    } catch (error) {
+      console.error("Gagal mengambil data user: ", error);
+      alert("Gagal mengambil data user.");
+    }
+  });
 
   // Level
   level.src = data.sender.level;
@@ -1166,10 +1202,10 @@ function renderMessage(data, docId) {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Mendengarkan secara real-time
+// Mendengarkan pesan baru secara real-time
 chatboxRef.orderBy('timestamp').onSnapshot(snapshot => {
-  chatBox.innerHTML = '';
-  snapshot.forEach(doc => renderMessage(doc.data(), doc.id));
+  chatBox.innerHTML = ''; // Bersihkan chat box setiap kali ada update
+  snapshot.forEach(doc => renderMessage(doc.data(), doc.id)); // Render setiap pesan
 });
 
 // Kirim pesan
@@ -1186,10 +1222,10 @@ messageForm.addEventListener('submit', async (e) => {
       const userUid = userChat.uid;
 
       // Ambil data user dari koleksi userSS
-      const userDocRef = await firestore.collection('userSS').doc(userUid).get();
-      if (userDocRef.exists) {
-      const userData = userDocRef.data();
-      const senderData = {
+      const userDoc = await firestore.collection('userSS').doc(userUid).get();
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        const senderData = {
           nama: userData.nama || "Anonymous",
           avatar: userData.avatar || "icon/default_avatar.png",
           level: userData.level || "level/b1.png",
@@ -1200,16 +1236,16 @@ messageForm.addEventListener('submit', async (e) => {
 await firestore.collection('chatbox').add({
   sender: {
     nama: userData.nama || "Anonymous",
-    avatar: userData.avatar || "icon/default_avatar.png",
+    avatar: userData.avatar || "icon/default_avatar.png", // Gambar default jika tidak ada avatar
     level: userData.level || "level/b1.png",
     gender: userData.gender || "Unknown",
-    uid: userUid
+    uid: userUid // Simpan UID user untuk referensi ke userSS
   },
   message,
   timestamp: firebase.firestore.FieldValue.serverTimestamp()
 });
 
-        messageInput.value = '';
+        messageInput.value = ''; // Bersihkan input setelah pesan terkirim
       } else {
         alert("Data user tidak ditemukan.");
       }
