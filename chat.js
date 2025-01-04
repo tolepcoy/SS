@@ -14,14 +14,40 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
+// Cek status login dan verifikasi email
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     // Cek jika email belum diverifikasi
     if (!user.emailVerified) {
       alert('Anda belum memverifikasi email!');
     }
+
+    // Cek jika user adalah admin
+    firestore.collection("userSS").doc(user.uid).get().then((doc) => {
+      if (doc.exists && doc.data().isAdmin) {
+        bersihkanChatboxLama();
+      }
+    });
   }
 });
+
+// Fungsi untuk membersihkan chat lama
+function bersihkanChatboxLama() {
+  const now = new Date();
+  const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 jam lalu
+  const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
+
+  firestore.collection("chatbox")
+    .where("createdAt", "<", cutoffTimestamp)
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        doc.ref.delete().catch((error) => console.error("Error deleting document:", error));
+      });
+      console.log("Dokumen lama berhasil dihapus.");
+    })
+    .catch((error) => console.error("Error fetching documents:", error));
+}
 
 // Fungsi untuk menutup side panel
 function closePanel(panelId) {
