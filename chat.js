@@ -1115,8 +1115,8 @@ function renderMessage(data, docId) {
   messageDiv.classList.add("chatWrapper");
   senderWrapper.classList.add("senderWrapper");
 
-  // Avatar - Pastikan menggunakan gambar default jika avatar tidak ada
-  const avatarSrc = data.sender.avatar || 'icon/default_avatar.png'; // Gambar default kalau tidak ada avatar
+  // Avatar
+  const avatarSrc = data.sender.avatar || 'icon/default_avatar.png'; 
   avatar.src = avatarSrc;
   avatar.classList.add("ic-avatar");
 
@@ -1124,30 +1124,30 @@ function renderMessage(data, docId) {
   sender.innerHTML = `${data.sender.nama}`;
   sender.classList.add("sender");
   sender.style.cursor = "pointer";
-
+  
   // Event Listener untuk klik nama
   sender.addEventListener('click', async () => {
-    profilLain.style.transform = "translateX(0%)"; // Buka panel profil
+    profilLain.style.transform = "translateX(0%)";
     profilLain.dataset.userId = docId;
     console.log(`Nama user ${data.sender.nama} diklik.`);
 
     try {
-      const userDoc = await firestore.collection('userSS').doc(docId).get();
+      const userDocPL = await firestore.collection('userSS').doc(docId).get();
 
-      if (userDoc.exists) {
-        const userData = userDoc.data();
+      if (userDocPL.exists) {
+        const userDataPL = userDocPL.data();
 
-        // Isi elemen di #profil-lain dengan data user
-        document.getElementById('nama-lain').innerText = userData.nama || 'user SS';
-        document.getElementById('avatar-lain').src = userData.avatar || 'icon/default_avatar.png';
-        document.getElementById('level-lain').src = userData.level || 'level/b1.png';
-        document.getElementById('detail-lain').innerText = userData.detail || 'Bio';
-        document.getElementById('lokasi-lain').innerText = userData.lokasi || 'Lokasi tidak diketahui';
-        document.getElementById('umur-lain').innerText = userData.umur || 'Umur tidak diketahui';
-        document.getElementById('gender-lain').src = userData.gender || 'icon/defaultgender.png';
-        document.getElementById('rate-lain').innerText = userData.rate || 'Tidak ada rating';
-        document.getElementById('bergabung-lain').innerText = userData.bergabung || 'Tanggal tidak diketahui';
-        document.getElementById('OLstate-lain').innerText = userData.OLstate || '-';
+ // Isi data user di #profil-lain
+        document.getElementById('nama-lain').innerText = userDataPL.nama || 'user SS';
+        document.getElementById('avatar-lain').src = userDataPL.avatar || 'icon/default_avatar.png';
+        document.getElementById('level-lain').src = userDataPL.level || 'level/b1.png';
+        document.getElementById('detail-lain').innerText = userDataPL.detail || 'Bio';
+        document.getElementById('lokasi-lain').innerText = userDataPL.lokasi || 'Lokasi tidak diketahui';
+        document.getElementById('umur-lain').innerText = userDataPL.umur || 'Umur tidak diketahui';
+        document.getElementById('gender-lain').src = userDataPL.gender || 'icon/defaultgender.png';
+        document.getElementById('rate-lain').innerText = userDataPL.rate || 'Tidak ada rating';
+        document.getElementById('bergabung-lain').innerText = userDataPL.bergabung || 'Tanggal tidak diketahui';
+        document.getElementById('OLstate-lain').innerText = userDataPL.OLstate || '-';
       } else {
         console.error("Data user tidak ditemukan.");
         alert("Data user tidak ditemukan.");
@@ -1157,6 +1157,10 @@ function renderMessage(data, docId) {
       alert("Gagal mengambil data user.");
     }
   });
+  
+  
+  
+  
 
   // Level
   level.src = data.sender.level;
@@ -1222,9 +1226,9 @@ messageForm.addEventListener('submit', async (e) => {
       const userUid = userChat.uid;
 
       // Ambil data user dari koleksi userSS
-      const userDoc = await firestore.collection('userSS').doc(userUid).get();
-      if (userDoc.exists) {
-        const userData = userDoc.data();
+      const userDocRef = await firestore.collection('userSS').doc(userUid).get();
+      if (userDocRef.exists) {
+        const userData = userDocRef.data();
         const senderData = {
           nama: userData.nama || "Anonymous",
           avatar: userData.avatar || "icon/default_avatar.png",
@@ -1236,16 +1240,16 @@ messageForm.addEventListener('submit', async (e) => {
 await firestore.collection('chatbox').add({
   sender: {
     nama: userData.nama || "Anonymous",
-    avatar: userData.avatar || "icon/default_avatar.png", // Gambar default jika tidak ada avatar
+    avatar: userData.avatar || "icon/default_avatar.png",
     level: userData.level || "level/b1.png",
     gender: userData.gender || "Unknown",
-    uid: userUid // Simpan UID user untuk referensi ke userSS
+    uid: userUid
   },
   message,
   timestamp: firebase.firestore.FieldValue.serverTimestamp()
 });
 
-        messageInput.value = ''; // Bersihkan input setelah pesan terkirim
+        messageInput.value = '';
       } else {
         alert("Data user tidak ditemukan.");
       }
@@ -1254,3 +1258,4 @@ await firestore.collection('chatbox').add({
     alert('Login dulu untuk kirim pesan!');
   }
 });
+
