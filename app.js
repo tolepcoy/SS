@@ -50,37 +50,6 @@ function bersihkanChatboxLama() {
     .catch((error) => console.error("Error fetching documents:", error));
 }
 
-// hapus
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    const userSSRef = firestore.collection('userSS').doc(user.uid); // Referensi userSS
-    const targetSSRef = firestore.collection('SS').doc(user.uid);   // Referensi SS
-
-    // Ambil data dari userSS
-    userSSRef.get().then(doc => {
-      if (doc.exists) {
-        const data = doc.data();
-
-        // Simpan data ke koleksi SS
-        targetSSRef.set(data)
-          .then(() => {
-            console.log('Data berhasil dipindahkan ke koleksi SS.');
-          })
-          .catch(error => {
-            console.error('Gagal menyimpan data ke koleksi SS:', error);
-          });
-      } else {
-        console.log('Dokumen tidak ditemukan di koleksi userSS.');
-      }
-    }).catch(error => {
-      console.error('Error membaca dokumen dari koleksi userSS:', error);
-    });
-  } else {
-    console.log('User tidak login.');
-  }
-});
-//hapus
-
 /*! ===== BODY ELEMENT ===== */
 // Fungsi untuk menutup side panel
 function closePanel(panelId) {
@@ -150,33 +119,17 @@ function openPanel(panelId) {
 // Fungsi untuk menampilkan profil user setelah login
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
-    // Referensi koleksi admin dan user biasa
-    const adminRef = firestore.collection('userSS').doc(user.uid); // Koleksi admin
-    const userRef = firestore.collection('SS').doc(user.uid);     // Koleksi user biasa
+    const userRef = firestore.collection('SS').doc(user.uid); // Referensi koleksi SS
 
-    // Cek data admin
-    adminRef.get().then(adminDoc => {
-      if (adminDoc.exists) {
-        // Pasang snapshot listener untuk admin
-        adminRef.onSnapshot(doc => {
-          const data = doc.data();
-          updateProfile(data, 'Admin'); // Fungsi untuk update UI
-        });
+    // Pasang snapshot listener untuk data user
+    userRef.onSnapshot(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+        updateProfile(data, 'User'); // Fungsi untuk update UI
       } else {
-        // Jika bukan admin, cek data user biasa
-        userRef.get().then(userDoc => {
-          if (userDoc.exists) {
-            // Pasang snapshot listener untuk user biasa
-            userRef.onSnapshot(doc => {
-              const data = doc.data();
-              updateProfile(data, 'User'); // Fungsi untuk update UI
-            });
-          } else {
-            console.log("Data user tidak ditemukan di kedua koleksi.");
-          }
-        }).catch(error => console.error("Error fetching user data:", error));
+        console.log("Data user tidak ditemukan di koleksi SS.");
       }
-    }).catch(error => console.error("Error fetching admin data:", error));
+    }, error => console.error("Error listening to user data:", error));
   } else {
     console.log("User not logged in");
   }
@@ -184,19 +137,19 @@ firebase.auth().onAuthStateChanged(user => {
 
 // Fungsi untuk memperbarui UI profil
 function updateProfile(data, kategori) {
-  document.getElementById('nama').innerText = data.nama || 'Tidak ada nama';
+  document.getElementById('nama').innerText = data.nama || 'userSS';
   document.getElementById('avatar').src = data.avatar || 'icon/default_avatar.png';
   document.getElementById('OLstate').innerHTML = data.OLstate || 'Offline';
-  document.getElementById('level').src = data.level || 'level/default.png';
-  document.getElementById('detail').innerText = data.detail || 'Tidak ada detail';
-  document.getElementById('lokasi').innerText = data.lokasi || 'Lokasi tidak tersedia';
+  document.getElementById('level').src = data.level || 'level/b1.png';
+  document.getElementById('detail').innerText = data.detail || 'Bio';
+  document.getElementById('lokasi').innerText = data.lokasi || 'Palembang';
   document.getElementById('umur').innerText = data.umur || 'Umur tidak tersedia';
   document.getElementById('gender').src = data.gender || 'icon/defaultgender.png';
-  document.getElementById('rate').innerHTML = data.rate || 'Tidak ada rate';
+  document.getElementById('rate').innerHTML = data.rate || 'No Rating';
   document.getElementById('bergabung').innerHTML = data.bergabung || 'Tidak diketahui';
   document.getElementById('email').innerHTML = data.email || 'Tidak ada email';
-  document.getElementById('verimail').innerHTML = data.verimail || 'Belum diverifikasi';
-  document.getElementById('facebook').innerHTML = data.facebook || 'Tidak terhubung';
+  document.getElementById('verimail').innerHTML = data.verimail || 'Belum Verifikasi ✘';
+  document.getElementById('facebook').innerHTML = data.facebook || 'Tidak Terhubung ✘';
   
   console.log(`Profil berhasil diperbarui untuk ${kategori}`);
 }
@@ -205,6 +158,22 @@ function updateProfile(data, kategori) {
 // EDIT NAMA
 const namaEl = document.getElementById('nama');
 const editNamaBtn = document.getElementById('edit-nama');
+// CUSTOM ALERT
+function showAlert(message) {
+  const alertBox2 = document.createElement('div');
+  alertBox2.classList.add('custom-alert');
+  alertBox2.innerHTML = `
+<div class="alert-box">
+<span class="alert-message">${message}</span>
+<button class="alert-ok">OK</button>
+</div>`;
+    document.body.appendChild(alertBox);
+    alertBox.style.display = 'flex';
+    alertBox.querySelector('.alert-ok').addEventListener('click', () => {
+      alertBox.style.display = 'none';
+      document.body.removeChild(alertBox);
+});}
+// END CUSTOM ALERT
 
 // Fungsi untuk handle klik tombol edit
 editNamaBtn.addEventListener('click', () => {
@@ -224,7 +193,7 @@ editNamaBtn.addEventListener('click', () => {
 
           if (lastUpdate && (now - lastUpdate) / (1000 * 60 * 60 * 24) < 30) {
             const remainingDays = 30 - Math.floor((now - lastUpdate) / (1000 * 60 * 60 * 24));
-            alert(`Anda hanya bisa mengubah nama setiap 30 hari. Sisa waktu: ${remainingDays} hari.`);
+            showAlert(`Anda hanya bisa mengubah nama setiap 30 hari. Sisa waktu: ${remainingDays} hari.`);
             editNamaBtn.style.display = 'block';
             return;
           }
@@ -260,7 +229,7 @@ editNamaBtn.addEventListener('click', () => {
 
             // Validasi nama
             if (!/^[a-zA-Z\s]{3,15}$/.test(newNama)) {
-              alert("Nama hanya boleh huruf dan spasi, 3 - 15 karakter.");
+              showAlert("Nama hanya boleh huruf dan spasi, 3 - 15 karakter.");
               return;
             }
 
@@ -276,17 +245,17 @@ editNamaBtn.addEventListener('click', () => {
               editNamaBtn.style.display = 'block';
             } catch (error) {
               console.error("Gagal update nama:", error);
-              alert("Gagal menyimpan nama baru, coba lagi.");
+              showAlert("Gagal menyimpan nama baru, coba lagi.");
             }
           });
         } else {
           console.error("Dokumen user tidak ditemukan.");
-          alert("Terjadi kesalahan, coba lagi.");
+          showAlert("Terjadi kesalahan, coba lagi.");
           editNamaBtn.style.display = 'block';
         }
       }).catch(error => {
         console.error("Gagal mengambil data user:", error);
-        alert("Terjadi kesalahan, coba lagi.");
+        showAlert("Terjadi kesalahan, coba lagi.");
         editNamaBtn.style.display = 'block';
       });
     } else {
