@@ -34,7 +34,10 @@ firebase.auth().onAuthStateChanged((user) => {
 // Fungsi untuk membersihkan chat lama
 function bersihkanChatboxLama() {
   const now = new Date();
-  const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 jam lalu
+/*!  const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 jam lalu */
+  
+  const cutoff = new Date(now.getTime() - 5 * 60 * 1000); // 5 menit lalu
+  
   const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
 
   firestore.collection("chatbox")
