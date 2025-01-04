@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('confirm-logout').addEventListener('click', () => {
       auth.signOut()
         .then(() => {
-          window.location.replace("https://tolepcoy.github.io/SS/index.html");
+          window.location.replace("https://tolepcoy.github.io/SS/login-form.html");
         })
         .catch(error => {
           console.error("Error saat logout:", error);
