@@ -684,3 +684,411 @@ editGenderBtn.addEventListener('click', () => {
 document.getElementById('avatar').addEventListener('click', function() {
   this.classList.toggle('zoom');
 });
+
+/*! PANEL SETTING */
+// UNIQUE ID
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+
+    const uniqueIDEl = document.getElementById('uniqueID');
+    uniqueIDEl.textContent = user.uid;
+  } else {
+    console.log("User belum login");
+  }
+});
+
+// EMAIL USER
+// Menunggu user login
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    const email = document.getElementById('email');
+    email.textContent = user.email;
+  } else {
+    console.log("User belum login");
+  }
+});
+
+// STATUS VERIFIKASI EMAIL
+const statusVerifikasiEl = document.getElementById('verimail');
+
+// Fungsi untuk update status verifikasi
+function cekStatusVerifikasi() {
+  // Pastikan user login
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      user.reload() // Reload data user untuk memastikan data terbaru
+        .then(() => {
+          const db = firebase.firestore();  // Ambil instance Firestore
+          const userDoc = db.collection('SS').doc(user.uid);  // Ambil dokumen berdasarkan UID user
+
+          if (user.emailVerified) {
+            statusVerifikasiEl.textContent = 'Verifikasi √';
+            statusVerifikasiEl.style.color = '#0f0';
+            statusVerifikasiEl.style.cursor = 'default'; // Tidak clickable jika sudah diverifikasi
+            // Update status verifikasi di Firestore
+            userDoc.update({
+              email: user.email, // Update email
+              verimail: 'Verifikasi √' // Update status verifikasi
+            })
+            .then(() => {
+              console.log('Email di verifikasi');
+            })
+            .catch(error => {
+              console.error('Gagal mengupdate status verifikasi di Firestore:', error);
+            });
+          } else {
+            statusVerifikasiEl.textContent = 'Belum Verifikasi ✘';
+            statusVerifikasiEl.style.color = '#f55';
+            statusVerifikasiEl.style.cursor = 'pointer';
+            
+            statusVerifikasiEl.onclick = () => {
+              const konfirmasi = confirm('Kirim aktifasi ke email?');
+              if (konfirmasi) {
+                user.sendEmailVerification()
+                  .then(() => {
+                    alert('Email verifikasi berhasil dikirim. Cek inbox email!');
+                  })
+                  .catch(error => {
+                    console.error('Gagal kirim email verifikasi:', error);
+                    alert('Gagal mengirim email verifikasi.');
+                  });
+              }
+            };
+            // Update status verifikasi di Firestore
+            userDoc.update({
+              email: user.email, // Update email
+              verimail: 'Belum Verifikasi ✘' // Update status verifikasi
+            })
+            .then(() => {
+              console.log('Status verifikasi di Firestore telah diperbarui');
+            })
+            .catch(error => {
+              console.error('Gagal mengupdate status verifikasi di Firestore:', error);
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Gagal memuat ulang status user:', error);
+        });
+    } else {
+      statusVerifikasiEl.textContent = 'User belum login';
+      statusVerifikasiEl.style.color = 'orange';
+      statusVerifikasiEl.style.cursor = 'default';
+    }
+  });
+}
+
+// Panggil fungsi saat halaman selesai dimuat
+cekStatusVerifikasi();
+
+// FACEBOOK SYNC
+// Mendapatkan elemen Facebook
+const facebookEl = document.getElementById('facebook');
+
+// Firebase Facebook Auth Provider
+const provider = new firebase.auth.FacebookAuthProvider();
+
+// Fungsi untuk mengecek status Facebook terhubung
+function cekStatusFacebook() {
+  const fbUser = firebase.auth().currentUser;  // Ganti jadi fbUser
+  if (fbUser) {
+    // Cek jika akun sudah terhubung dengan Facebook
+    if (fbUser.providerData.some((provider) => provider.providerId === 'facebook.com')) {
+      facebookEl.textContent = 'Terhubung √';
+      facebookEl.style.color = '#0f0';
+      facebookEl.style.pointerEvents = 'none'; 
+      firebase.firestore().collection('SS').doc(fbUser.uid).update({
+        facebook: '<span style="color:#0f0;">Terhubung √</span>',
+      });
+    } else {
+      facebookEl.textContent = 'Hubungkan';
+      facebookEl.style.color = 'blue';
+      facebookEl.style.pointerEvents = 'auto';
+      firebase.firestore().collection('SS').doc(fbUser.uid).update({
+        facebook: '<span style="color:#00f;">Hubungkan</span>',
+      });
+    }
+  }
+}
+
+// Panggil fungsi cek status saat halaman selesai dimuat
+cekStatusFacebook();
+
+// Event listener untuk klik hubungkan Facebook
+facebookEl.addEventListener('click', () => {
+  const fbUserForRedirect = firebase.auth().currentUser;  // Ganti jadi fbUserForRedirect
+  if (fbUserForRedirect) {
+    // Jika user sudah login, lakukan autentikasi Facebook dengan redirect
+    firebase.auth().signInWithRedirect(provider);
+  } else {
+    console.log('User tidak terautentikasi');
+  }
+});
+
+// Menangani hasil redirect setelah login berhasil
+firebase.auth().getRedirectResult().then((result) => {
+  const redirectedFbUser = result.user;  // Ganti jadi redirectedFbUser
+  if (redirectedFbUser) {
+    // Facebook berhasil terhubung, perbarui tampilan elemen
+    facebookEl.textContent = 'Terhubung √';
+    facebookEl.style.color = '#0f0';
+    facebookEl.style.pointerEvents = 'none';
+    
+    // Kirim status ke Firestore
+    firebase.firestore().collection('SS').doc(redirectedFbUser.uid).update({
+      facebook: 'Terhubung √',
+    });
+
+    // Redirect ke halaman chat setelah terhubung
+    window.location.replace('chat.html');
+  }
+}).catch((error) => {
+  console.error('Terjadi kesalahan saat menghubungkan Facebook:', error);
+});
+
+// UBAH EMAIL
+// Fungsi untuk reauthenticate user
+const reauthenticate = (currentPassword) => {
+  const userAuth = firebase.auth().currentUser;
+  const credAuth = firebase.auth.EmailAuthProvider.credential(userAuth.email, currentPassword);
+  return userAuth.reauthenticateWithCredential(credAuth);
+};
+
+// Fungsi untuk mengirim link verifikasi ke email baru
+const sendVerificationLink = (currentPassword, newEmail) => {
+  reauthenticate(currentPassword)
+    .then(() => {
+      const userUpdate = firebase.auth().currentUser;
+      // Kirim link verifikasi ke email baru
+      userUpdate.verifyBeforeUpdateEmail(newEmail)
+        .then(() => {
+          alert("Link verifikasi telah dikirim ke email baru. Silakan cek email Anda.");
+          document.getElementById("email-input-wrapper").style.display = "none";
+
+          // Update email baru di Firestore
+          const userRefz = firebase.firestore().collection("SS").doc(userUpdate.uid);
+          userRefz.update({
+            email: newEmail
+          }).then(() => {
+            console.log("Email berhasil diperbarui di Firestore");
+          }).catch((error) => {
+            console.error("Gagal memperbarui email di Firestore: ", error);
+          });
+        })
+        .catch((error) => {
+          console.error("Error mengirim email verifikasi:", error);
+          alert("Gagal mengirim email verifikasi: " + error.message);
+        });
+    })
+    .catch((error) => {
+      console.error("Error reauthenticate:", error);
+      alert("Gagal reauthenticate: " + error.message);
+    });
+};
+
+// Menambahkan event listener
+document.getElementById("ubah-email").addEventListener("click", () => {
+  document.getElementById("email-input-wrapper").style.display = "flex";
+});
+
+document.getElementById("batal-kirim").addEventListener("click", () => {
+  document.getElementById("email-input-wrapper").style.display = "none";
+});
+
+document.getElementById("kirim-email").addEventListener("click", () => {
+  const emailBaru = document.getElementById("email-baru").value.trim();
+  const passUser = document.getElementById("password").value.trim();
+
+  if (!emailBaru || !passUser) {
+    alert("Silakan masukkan email baru dan password!");
+    return;
+  }
+
+  // Validasi format email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(emailBaru)) {
+    alert("Masukkan email yang valid!");
+    return;
+  }
+
+  sendVerificationLink(passUser, emailBaru);
+});
+
+// UBAH PASSWORD
+// Fungsi untuk reauthenticate user
+const reauthenticatePassword = (currentPassword) => {
+  const userPas2 = firebase.auth().currentUser;
+  const credPas2 = firebase.auth.EmailAuthProvider.credential(userPas2.email, currentPassword);
+  return userPas2.reauthenticateWithCredential(credPas2);
+};
+
+// Fungsi untuk mengubah password ke yang baru
+const updatePassword = (currentPassword, newPassword) => {
+  reauthenticatePassword(currentPassword)
+    .then(() => {
+      const userUpdateP = firebase.auth().currentUser;
+      // Update password di Firebase Authentication
+      userUpdateP.updatePassword(newPassword)
+        .then(() => {
+          alert("Password berhasil diperbarui.");
+          document.getElementById("password-input-wrapper").style.display = "none";
+
+          // Update password di Firestore
+          const userRefP = firebase.firestore().collection("SS").doc(userUpdateP.uid);
+          userRefP.update({
+            password: newPassword
+          }).then(() => {
+            console.log("Password berhasil diperbarui di Firestore");
+          }).catch((error) => {
+            console.error("Gagal memperbarui password di Firestore: ", error);
+          });
+        })
+        .catch((error) => {
+          console.error("Error mengubah password:", error);
+          alert("Gagal mengubah password: " + error.message);
+        });
+    })
+    .catch((error) => {
+      console.error("Error reauthenticate:", error);
+      alert("Gagal reauthenticate: " + error.message);
+    });
+};
+
+// Event listener untuk tombol 'Ubah Password'
+document.getElementById("ubah-password").addEventListener("click", () => {
+  document.getElementById("password-input-wrapper").style.display = "flex";
+});
+
+// Event listener untuk tombol 'Batal'
+document.getElementById("batalkan").addEventListener("click", () => {
+  document.getElementById("password-input-wrapper").style.display = "none";
+});
+
+// Event listener untuk tombol 'Ubah' pada form password
+document.getElementById("ubah").addEventListener("click", () => {
+  const passwordLama = document.getElementById("password-lama").value.trim();
+  const passwordBaru = document.getElementById("password-baru").value.trim();
+
+  if (!passwordLama || !passwordBaru) {
+    alert("Silakan masukkan password lama dan password baru!");
+    return;
+  }
+
+  updatePassword(passwordLama, passwordBaru);
+});
+
+// REQUEST RATE
+// Elemen yang diperlukan
+const r2ButtonEl = document.getElementById('r2');
+const reqRateDivEl = document.getElementById('reqRate');
+const requestRateBtnEl = document.getElementById('request-rate');
+const minInputEl = document.getElementById('minInput');
+const maxInputEl = document.getElementById('maxInput');
+
+// Menambahkan class .active ke #r2 dan #reqRate
+r2ButtonEl.addEventListener('click', () => {
+  r2ButtonEl.classList.add('active');
+  reqRateDivEl.classList.add('active');
+});
+
+// Validasi input angka
+function isValidInput(value) {
+  const number = parseInt(value);
+  return /^\d{3,8}$/.test(value) && !isNaN(number);
+}
+
+// Event klik pada #request-rate
+requestRateBtnEl.addEventListener('click', () => {
+  const minValue = minInputEl.value.trim();
+  const maxValue = maxInputEl.value.trim();
+
+  // Validasi input
+  if (!isValidInput(minValue) || !isValidInput(maxValue)) {
+    alert('Input harus berupa angka dengan panjang minimal 3 dan maksimal 8 digit.');
+    return;
+  }
+
+  // Format value menjadi "min - max"
+  const requestRateValue = `${minValue} - ${maxValue}`;
+
+  // Kirim ke Firestores
+  const currentUser = firebase.auth().currentUser;
+  if (currentUser) {
+    firebase.firestore().collection('SS').doc(currentUser.uid).update({
+      requestRate: requestRateValue,
+    })
+    .then(() => {
+      alert('Request berhasil dikirim!');
+      // Hapus class .active
+      r2ButtonEl.classList.remove('active');
+      reqRateDivEl.classList.remove('active');
+    })
+    .catch((error) => {
+      console.error('Terjadi kesalahan saat Request Rate:', error);
+    });
+  } else {
+    alert('User tidak terautentikasi.');
+  }
+});
+
+// CloseReq button / cancel
+const closeReq = document.getElementById('closeReq');
+closeReq.onclick = () => {
+  document.getElementById('reqRate').classList.remove('active');
+  document.getElementById('r2').classList.remove('active');
+};
+
+// ONLINE STATE
+  const firestoreOL = firebase.firestore();
+  let intervalId = null; // Variabel untuk menyimpan ID interval
+
+  // Fungsi untuk mengupdate status online di Firestore
+  function updateOnlineStatus(user) {
+    const userRefOL = firestore.collection('SS').doc(user.uid);
+    const statusOl = document.getElementById('OLstate');
+
+    userRefOL.update({
+      OLstate: 'Online &bull;'
+    }, { merge: true })
+      .then(() => {
+        statusOl.innerHTML = 'Online <b style="font-size:30px; vertical-align:middle;">&bull;</b>';
+        statusOl.style.color = '#0f0';
+      })
+      .catch((error) => {
+        console.error('Gagal mengupdate status online:', error);
+      });
+  }
+
+  // Fungsi untuk mulai interval
+  function startOnlineInterval(user) {
+    if (intervalId) return; // Jika interval sudah berjalan, jangan buat yang baru
+
+    updateOnlineStatus(user); // Update langsung saat login
+    intervalId = setInterval(() => {
+      updateOnlineStatus(user); // Update setiap 5 menit
+    }, 5 * 60 * 1000);
+  }
+
+  // Fungsi untuk menghentikan interval
+  function stopOnlineInterval() {
+    if (intervalId) {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+  }
+
+  // Memantau perubahan status login
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      console.log('User online:', user.email);
+      startOnlineInterval(user);
+    } else {
+      console.log('User tidak login.');
+      stopOnlineInterval();
+
+      // Hapus status di elemen HTML
+      const statusOl2 = document.getElementById('OLstate');
+      statusOl2.innerHTML = '';
+      statusOl2.style.color = '';
+    }
+  });
