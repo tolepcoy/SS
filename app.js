@@ -31,7 +31,7 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 });
 
-// Fungsi untuk membersihkan chat lama
+/* Fungsi membersihkan chat lama
 function bersihkanChatboxLama() {
   const now = new Date();
   const cutoff = new Date(now.getTime() - 24 * 60 * 1000); // 5mmt
@@ -48,7 +48,7 @@ function bersihkanChatboxLama() {
       console.log("Dokumen lama berhasil dihapus.");
     })
     .catch((error) => console.error("Error fetching documents:", error));
-}
+} */
 
 /*! ===== BODY ELEMENT ===== */
 // Fungsi untuk menutup side panel
@@ -167,11 +167,11 @@ function showAlert(message) {
 <span class="alert-message">${message}</span>
 <button class="alert-ok">OK</button>
 </div>`;
-    document.body.appendChild(alertBox);
-    alertBox.style.display = 'flex';
-    alertBox.querySelector('.alert-ok').addEventListener('click', () => {
+    document.body.appendChild(alertBox2);
+    alertBox2.style.display = 'flex';
+    alertBox2.querySelector('.alert-ok').addEventListener('click', () => {
       alertBox.style.display = 'none';
-      document.body.removeChild(alertBox);
+      document.body.removeChild(alertBox2);
 });}
 // END CUSTOM ALERT
 
