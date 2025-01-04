@@ -76,7 +76,7 @@ registerButton.addEventListener('click', () => {
               showAlert('Registrasi berhasil!');
               console.log('User berhasil didaftarkan dan data disimpan ke Firestore.');
 
-              window.location.replace("index.html");
+              window.location.replace("https://tolepcoy.github.io/SS/index.html");
             }).catch(error => {
               console.error('Error saving user data to Firestore:', error);
               showAlert('Gagal registrasi!');
