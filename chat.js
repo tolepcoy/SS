@@ -1014,7 +1014,7 @@ requestRateBtnEl.addEventListener('click', () => {
   // Format value menjadi "min - max"
   const requestRateValue = `${minValue} - ${maxValue}`;
 
-  // Kirim ke Firestore
+  // Kirim ke Firestores
   const currentUser = firebase.auth().currentUser;
   if (currentUser) {
     firebase.firestore().collection('userSS').doc(currentUser.uid).update({
