@@ -61,7 +61,7 @@ console.log(decryptedPassword);
         userSSRef.set({
           nama: 'userSS',
           OLstate: 'Offline',
-          avatar: 'icon/default-avatar.png',
+          avatar: 'icon/default_avatar.png',
           level: 'level/b1.png',
           detail: 'Bio',
           lokasi: 'Palembang',
