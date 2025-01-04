@@ -35,7 +35,7 @@ firebase.auth().onAuthStateChanged((user) => {
 function bersihkanChatboxLama() {
   const now = new Date();
   
-  const cutoff = new Date(now.getTime() - 60 * 60 * 60 * 1000); // sehari lalu
+  const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000);
   
   const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
 
