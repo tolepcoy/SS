@@ -35,7 +35,7 @@ firebase.auth().onAuthStateChanged((user) => {
 function bersihkanChatboxLama() {
   const now = new Date();
   
-  const cutoff = new Date(now.getTime() - 5 * 60 * 1000); // 5 menit lalu
+  const cutoff = new Date(now.getTime() - 60 * 60 * 60 * 1000); // sehari lalu
   
   const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
 
@@ -1097,13 +1097,12 @@ closeReq.onclick = () => {
 
 // CHAT BOX GLOBAL CHAT
 const chatboxRef = firestore.collection('chatbox');
-const chatBox = document.getElementById('chatBox'); // Pastikan ID chatBox benar
-const profilLain = document.getElementById('profil-lain'); // Elemen profil lainnya
+const chatBox = document.getElementById('chatBox');
+const profilLain = document.getElementById('profil-lain');
 
-// Fungsi untuk render pesan
 function renderMessage(data, docId) {
   const messageDiv = document.createElement('div');
-  const senderWrapper = document.createElement('div'); // Wrapper untuk sender
+  const senderWrapper = document.createElement('div');
   const avatar = document.createElement('img');
   const sender = document.createElement('span');
   const level = document.createElement('img');
@@ -1118,7 +1117,7 @@ function renderMessage(data, docId) {
   avatar.src = data.sender.avatar; 
   avatar.classList.add("ic-avatar");
 
-  // Sender Name
+  // Sender Nama
   sender.innerHTML = `${data.sender.nama}`;
   sender.classList.add("sender");
   sender.style.cursor = "pointer";
@@ -1219,4 +1218,3 @@ await firestore.collection('chatbox').add({
     alert('Login dulu untuk kirim pesan!');
   }
 });
-
