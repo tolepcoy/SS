@@ -118,36 +118,50 @@ function openPanel(panelId) {
 // Fungsi untuk menampilkan profil user setelah login
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
-    const userRef = firestore.collection('SS').doc(user.uid);
+    // Referensi koleksi admin dan user biasa
+    const adminRef = firestore.collection('userSS').doc(user.uid); // Koleksi admin
+    const userRef = firestore.collection('SS').doc(user.uid);     // Koleksi user biasa
 
-    // Gunakan onSnapshot untuk mendengarkan perubahan data di Firestore
-    userRef.onSnapshot(doc => {
-      if (doc.exists) {
-        const data = doc.data();
-        
-        // Update elemen HTML dengan data user yang diambil dari Firestore
-        document.getElementById('nama').innerText = data.nama;
-        document.getElementById('avatar').src = data.avatar;
-        document.getElementById('OLstate').innerHTML = data.OLstate;
-        document.getElementById('level').src = data.level;
-        document.getElementById('detail').innerText = data.detail;
-        document.getElementById('lokasi').innerText = data.lokasi;
-        document.getElementById('umur').innerText = data.umur;
-        document.getElementById('gender').src = data.gender;
-        document.getElementById('rate').innerHTML = data.rate; // Menampilkan rate
-        document.getElementById('bergabung').innerHTML = data.bergabung;
-        document.getElementById('email').innerHTML = data.email;
-        document.getElementById('verimail').innerHTML = data.verimail;
-        document.getElementById('facebook').innerHTML = data.facebook;
+    // Snapshot listener untuk admin
+    adminRef.onSnapshot(adminDoc => {
+      if (adminDoc.exists) {
+        const data = adminDoc.data();
+        updateProfile(data, 'Admin'); // Fungsi untuk update UI
       } else {
-        console.log("User data not found in Firestore");
+        // Snapshot listener untuk user biasa jika bukan admin
+        userRef.onSnapshot(userDoc => {
+          if (userDoc.exists) {
+            const data = userDoc.data();
+            updateProfile(data, 'User'); // Fungsi untuk update UI
+          } else {
+            console.log("Data user tidak ditemukan di kedua koleksi.");
+          }
+        });
       }
-    });
-
+    }, error => console.error("Error fetching admin data:", error));
   } else {
     console.log("User not logged in");
   }
 });
+
+// Fungsi untuk memperbarui UI profil
+function updateProfile(data, kategori) {
+  document.getElementById('nama').innerText = data.nama || 'userSS';
+  document.getElementById('avatar').src = data.avatar || 'icon/default_avatar.png';
+  document.getElementById('OLstate').innerHTML = data.OLstate || 'Offline';
+  document.getElementById('level').src = data.level || 'level/b1.png';
+  document.getElementById('detail').innerText = data.detail || 'Tidak ada detail';
+  document.getElementById('lokasi').innerText = data.lokasi || 'Palembang';
+  document.getElementById('umur').innerText = data.umur || 'Belum diatur';
+  document.getElementById('gender').src = data.gender || 'icon/defaultgender.png';
+  document.getElementById('rate').innerHTML = data.rate || 'No Rating';
+  document.getElementById('bergabung').innerHTML = data.bergabung || 'Tidak diketahui';
+  document.getElementById('email').innerHTML = data.email || 'Tidak ada email';
+  document.getElementById('verimail').innerHTML = data.verimail || 'Belum diverifikasi';
+  document.getElementById('facebook').innerHTML = data.facebook || 'Tidak terhubung';
+  
+  console.log(`Profil berhasil diperbarui untuk ${kategori}`);
+}
 });
 
 // EDIT NAMA
