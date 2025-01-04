@@ -60,18 +60,18 @@ console.log(decryptedPassword);
         const userSSRef = firestore.collection('userSS').doc(user.uid);
         userSSRef.set({
           nama: 'userSS',
-          OLstate: '',
-          avatar: 'https://tolepcoy.github.io/SecretServer/icon/default-avatar.png',
+          OLstate: 'Offline',
+          avatar: 'icon/default-avatar.png',
           level: 'level/b1.png',
           detail: 'Bio',
           lokasi: 'Palembang',
           umur: '-',
-          gender: 'https://tolepcoy.github.io/SecretServer/icon/defaultgender.png',
+          gender: 'icon/defaultgender.png',
           rate: 'N/A',
           bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
           email: user.email,
-          verimail: '',
-          password: decryptedPassword,
+          verimail: '-',
+          password: encryptedPassword,
           facebook: 'Tidak terhubung'
         }).then(() => {
           // Custom alert berhasil

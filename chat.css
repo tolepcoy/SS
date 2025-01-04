@@ -610,7 +610,7 @@ body {
 
 .ic-level {
   margin-right: 10px;
-  width: 15px;
+  width: auto;
   height: 15px;
 }
 

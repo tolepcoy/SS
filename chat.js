@@ -1135,16 +1135,16 @@ function renderMessage(data, docId) {
         const userData = userDoc.data();
 
         // Isi elemen di #profil-lain dengan data user
-        document.getElementById('nama-lain').innerText = userData.nama || 'Tidak diketahui';
-        document.getElementById('avatar-lain').src = userData.avatar || 'icon/default_avatar.png'; // Gambar default jika tidak ada avatar
+        document.getElementById('nama-lain').innerText = userData.nama || 'user SS';
+        document.getElementById('avatar-lain').src = userData.avatar || 'icon/default_avatar.png';
         document.getElementById('level-lain').src = userData.level || 'level/b1.png';
-        document.getElementById('detail-lain').innerText = userData.detail || 'Tidak ada detail';
+        document.getElementById('detail-lain').innerText = userData.detail || 'Bio';
         document.getElementById('lokasi-lain').innerText = userData.lokasi || 'Lokasi tidak diketahui';
         document.getElementById('umur-lain').innerText = userData.umur || 'Umur tidak diketahui';
-        document.getElementById('gender-lain').src = userData.gender || 'https://tolepcoy.github.io/SecretServer/icon/defaultgender.png';
+        document.getElementById('gender-lain').src = userData.gender || 'icon/defaultgender.png';
         document.getElementById('rate-lain').innerText = userData.rate || 'Tidak ada rating';
         document.getElementById('bergabung-lain').innerText = userData.bergabung || 'Tanggal tidak diketahui';
-        document.getElementById('OLstate-lain').innerText = userData.OLstate || 'Status offline';
+        document.getElementById('OLstate-lain').innerText = userData.OLstate || '-';
       } else {
         console.error("Data user tidak ditemukan.");
         alert("Data user tidak ditemukan.");
