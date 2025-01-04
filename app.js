@@ -170,7 +170,7 @@ function showAlert(message) {
     document.body.appendChild(alertBox2);
     alertBox2.style.display = 'flex';
     alertBox2.querySelector('.alert-ok').addEventListener('click', () => {
-      alertBox.style.display = 'none';
+      alertBox2.style.display = 'none';
       document.body.removeChild(alertBox2);
 });}
 // END CUSTOM ALERT
@@ -313,13 +313,13 @@ editAvatarBtn.addEventListener('click', () => {
         const selectedAvatarFile = avatarInputFile.files[0]; // Ambil file yang dipilih
 
         if (!selectedAvatarFile) {
-          alert("Silakan pilih gambar terlebih dahulu.");
+          showAlert("Silakan pilih gambar terlebih dahulu.");
           return;
         }
 
         // Validasi format file
         if (selectedAvatarFile.type !== 'image/jpeg') {
-          alert("Hanya file gambar JPEG yang diperbolehkan.");
+          showAlert("Hanya file gambar JPEG yang diperbolehkan.");
           return;
         }
 
@@ -361,7 +361,7 @@ editAvatarBtn.addEventListener('click', () => {
           }
         } catch (avatarError) {
           console.error("Gagal upload gambar:", avatarError);
-          alert("Terjadi kesalahan, coba lagi.");
+          showAlert("Terjadi kesalahan, coba lagi.");
         }
       });
     } else {
@@ -414,7 +414,7 @@ editDetailBtn.addEventListener('click', () => {
 
         // Validasi isi biodata
         if (newDetail.length > 50) {
-          alert("Biodata maksimal 50 karakter.");
+          showAlert("Biodata maksimal 50 karakter.");
           return;
         }
 
@@ -430,7 +430,7 @@ editDetailBtn.addEventListener('click', () => {
           editDetailBtn.style.display = 'block';
         } catch (error) {
           console.error("Gagal update biodata:", error);
-          alert("Gagal menyimpan biodata baru, coba lagi.");
+          showAlert("Gagal menyimpan biodata baru, coba lagi.");
         }
       });
     } else {
