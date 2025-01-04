@@ -1017,9 +1017,10 @@ requestRateBtnEl.addEventListener('click', () => {
   // Kirim ke Firestore
   const currentUser = firebase.auth().currentUser;
   if (currentUser) {
-    firebase.firestore().collection('userSS').doc(currentUser.uid).set({
-      requestRate: requestRateValue,
-    })
+    firebase.firestore().collection('userSS').doc(currentUser.uid).update(
+      { requestRate: requestRateValue },
+      { merge: true }
+    )
     .then(() => {
       alert('Request berhasil dikirim!');
       // Hapus class .active

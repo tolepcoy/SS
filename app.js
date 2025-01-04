@@ -67,6 +67,7 @@ console.log(decryptedPassword);
           lokasi: 'Palembang',
           umur: '-',
           gender: 'icon/defaultgender.png',
+          requestRate: 'belum request',
           rate: 'N/A',
           bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
           email: user.email,
