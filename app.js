@@ -122,23 +122,29 @@ firebase.auth().onAuthStateChanged(user => {
     const adminRef = firestore.collection('userSS').doc(user.uid); // Koleksi admin
     const userRef = firestore.collection('SS').doc(user.uid);     // Koleksi user biasa
 
-    // Snapshot listener untuk admin
-    adminRef.onSnapshot(adminDoc => {
+    // Cek data admin
+    adminRef.get().then(adminDoc => {
       if (adminDoc.exists) {
-        const data = adminDoc.data();
-        updateProfile(data, 'Admin'); // Fungsi untuk update UI
+        // Pasang snapshot listener untuk admin
+        adminRef.onSnapshot(doc => {
+          const data = doc.data();
+          updateProfile(data, 'Admin'); // Fungsi untuk update UI
+        });
       } else {
-        // Snapshot listener untuk user biasa jika bukan admin
-        userRef.onSnapshot(userDoc => {
+        // Jika bukan admin, cek data user biasa
+        userRef.get().then(userDoc => {
           if (userDoc.exists) {
-            const data = userDoc.data();
-            updateProfile(data, 'User'); // Fungsi untuk update UI
+            // Pasang snapshot listener untuk user biasa
+            userRef.onSnapshot(doc => {
+              const data = doc.data();
+              updateProfile(data, 'User'); // Fungsi untuk update UI
+            });
           } else {
             console.log("Data user tidak ditemukan di kedua koleksi.");
           }
-        });
+        }).catch(error => console.error("Error fetching user data:", error));
       }
-    }, error => console.error("Error fetching admin data:", error));
+    }).catch(error => console.error("Error fetching admin data:", error));
   } else {
     console.log("User not logged in");
   }
@@ -146,15 +152,15 @@ firebase.auth().onAuthStateChanged(user => {
 
 // Fungsi untuk memperbarui UI profil
 function updateProfile(data, kategori) {
-  document.getElementById('nama').innerText = data.nama || 'userSS';
+  document.getElementById('nama').innerText = data.nama || 'Tidak ada nama';
   document.getElementById('avatar').src = data.avatar || 'icon/default_avatar.png';
   document.getElementById('OLstate').innerHTML = data.OLstate || 'Offline';
-  document.getElementById('level').src = data.level || 'level/b1.png';
+  document.getElementById('level').src = data.level || 'level/default.png';
   document.getElementById('detail').innerText = data.detail || 'Tidak ada detail';
-  document.getElementById('lokasi').innerText = data.lokasi || 'Palembang';
-  document.getElementById('umur').innerText = data.umur || 'Belum diatur';
+  document.getElementById('lokasi').innerText = data.lokasi || 'Lokasi tidak tersedia';
+  document.getElementById('umur').innerText = data.umur || 'Umur tidak tersedia';
   document.getElementById('gender').src = data.gender || 'icon/defaultgender.png';
-  document.getElementById('rate').innerHTML = data.rate || 'No Rating';
+  document.getElementById('rate').innerHTML = data.rate || 'Tidak ada rate';
   document.getElementById('bergabung').innerHTML = data.bergabung || 'Tidak diketahui';
   document.getElementById('email').innerHTML = data.email || 'Tidak ada email';
   document.getElementById('verimail').innerHTML = data.verimail || 'Belum diverifikasi';
