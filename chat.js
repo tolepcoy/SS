@@ -1017,7 +1017,7 @@ requestRateBtnEl.addEventListener('click', () => {
   // Kirim ke Firestore
   const currentUser = firebase.auth().currentUser;
   if (currentUser) {
-    firebase.firestore().collection('userSS').doc(currentUser.uid).create({
+    firebase.firestore().collection('userSS').doc(currentUser.uid).set({
       requestRate: requestRateValue,
     })
     .then(() => {
