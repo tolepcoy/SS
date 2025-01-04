@@ -58,7 +58,7 @@ console.log(decryptedPassword);
 
         // Menyimpan data user ke Firestore pada collection userSS
         const userSSRef = firestore.collection('userSS').doc(user.uid);
-        userSSRef.set({
+        userSSRef.cteate({
           nama: 'userSS',
           OLstate: 'Offline',
           avatar: 'icon/default_avatar.png',
