@@ -50,6 +50,58 @@ function bersihkanChatboxLama() {
     .catch((error) => console.error("Error fetching documents:", error));
 }
 
+// hapus
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    // Cek apakah user punya akses admin
+    user.getIdTokenResult().then(tokenResult => {
+      if (tokenResult.claims.admin) {
+        const userSSRef = firestore.collection('userSS').doc(user.uid); // Referensi userSS
+        const targetSSRef = firestore.collection('SS').doc(user.uid);   // Referensi SS
+
+        // Ambil data dari userSS
+        userSSRef.get().then(doc => {
+          if (doc.exists) {
+            const data = doc.data();
+
+            // Simpan data ke koleksi SS
+            targetSSRef.set(data)
+              .then(() => {
+                console.log('Data berhasil dipindahkan ke koleksi SS.');
+              })
+              .catch(error => {
+                console.error('Gagal menyimpan data ke koleksi SS:', error);
+              });
+          } else {
+            console.log('Dokumen tidak ditemukan di koleksi userSS.');
+          }
+        }).catch(error => {
+          console.error('Error membaca dokumen dari koleksi userSS:', error);
+        });
+      } else {
+        console.log('Akses ditolak! Hanya admin yang bisa memindahkan data.');
+      }
+    });
+  } else {
+    console.log('User tidak login.');
+  }
+});
+
+const admin = require('firebase-admin');
+admin.initializeApp();
+
+// Set custom claim admin ke UID tertentu
+admin.auth().setCustomUserClaims('<UID_ADMIN>', { admin: true })
+  .then(() => {
+    console.log('Admin claim berhasil ditambahkan!');
+  })
+  .catch(error => {
+    console.error('Error menambahkan admin claim:', error);
+  });
+  
+//hapus
+
+/*! ===== BODY ELEMENT ===== */
 // Fungsi untuk menutup side panel
 function closePanel(panelId) {
   document.getElementById(panelId).style.transform = "translateX(-100%)";
