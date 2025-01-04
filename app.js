@@ -56,6 +56,8 @@ registerButton.addEventListener('click', () => {
         
         // Simpan data pengguna ke Firestore
         const userSSRef = firestore.collection('userSS').doc(user.uid);
+
+        // Pastikan `set()` digunakan untuk membuat dokumen baru atau mengganti dokumen yang ada
         userSSRef.set({
           nama: 'userSS',
           OLstate: 'Offline',
@@ -220,7 +222,7 @@ function cekStatusVerifikasi() {
           console.error('Gagal memuat ulang status user:', error);
         });
     } else {
-      statusVerifikasiEl.textContent = 'User belum login';
+      statusVerifikasiEl.innerHTML = 'User belum login';
       statusVerifikasiEl.style.color = 'orange';
       statusVerifikasiEl.style.cursor = 'default';
     }
