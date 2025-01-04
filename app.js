@@ -119,9 +119,12 @@ function openPanel(panelId) {
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     const userRef = firestore.collection('SS').doc(user.uid);
-    userRef.get().then(doc => {
+
+    // Gunakan onSnapshot untuk mendengarkan perubahan data di Firestore
+    userRef.onSnapshot(doc => {
       if (doc.exists) {
         const data = doc.data();
+        
         // Update elemen HTML dengan data user yang diambil dari Firestore
         document.getElementById('nama').innerText = data.nama;
         document.getElementById('avatar').src = data.avatar;
@@ -131,7 +134,7 @@ firebase.auth().onAuthStateChanged(user => {
         document.getElementById('lokasi').innerText = data.lokasi;
         document.getElementById('umur').innerText = data.umur;
         document.getElementById('gender').src = data.gender;
-        document.getElementById('rate').innerHTML = data.rate;
+        document.getElementById('rate').innerHTML = data.rate; // Menampilkan rate
         document.getElementById('bergabung').innerHTML = data.bergabung;
         document.getElementById('email').innerHTML = data.email;
         document.getElementById('verimail').innerHTML = data.verimail;
@@ -139,7 +142,8 @@ firebase.auth().onAuthStateChanged(user => {
       } else {
         console.log("User data not found in Firestore");
       }
-    }).catch(error => console.error("Error fetching user data:", error));
+    });
+
   } else {
     console.log("User not logged in");
   }
