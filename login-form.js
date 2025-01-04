@@ -67,7 +67,7 @@ registerButton.addEventListener('click', () => {
               umur: 'Belum di setel',
               gender: 'icon/defaultgender.png',
               requestRate: 'belum request',
-              rate: 'N/A',
+              rate: '',
               bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
               email: user.email,
               verimail: 'Belum Verifikasi',
