@@ -44,19 +44,17 @@ registerButton.addEventListener('click', () => {
     });
   }
 
+  // Validasi input
   if (email && password) {
+    // Buat user menggunakan email dan password
     auth.createUserWithEmailAndPassword(email, password)
       .then(userCredential => {
-        // Ambil user ID (UID) yang telah terdaftar
         const user = userCredential.user;
 
-        // Enkripsi password sebelum menyimpannya ke Firestore
+        // Enkripsi password menggunakan CryptoJS sebelum menyimpannya
         const encryptedPassword = CryptoJS.AES.encrypt(password, 'padasuatuhariloremipsump').toString();
         
-const decryptedPassword = CryptoJS.AES.decrypt(encryptedPassword, 'padasuatuhariloremipsump').toString(CryptoJS.enc.Utf8);
-console.log(decryptedPassword);
-
-        // Menyimpan data user ke Firestore pada collection userSS
+        // Simpan data pengguna ke Firestore
         const userSSRef = firestore.collection('userSS').doc(user.uid);
         userSSRef.set({
           nama: 'userSS',
@@ -72,30 +70,35 @@ console.log(decryptedPassword);
           bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
           email: user.email,
           verimail: '-',
-          password: decryptedPassword,
+          password: encryptedPassword, // Menyimpan password yang terenkripsi
           facebook: 'Tidak terhubung'
-        }).then(() => {
- 
+        })
+        .then(() => {
+          // Tampilkan alert sukses
           showAlert('Registrasi berhasil!');
-          console.log('Registered with:', userCredential.user);
+          console.log('User registered:', userCredential.user);
 
           // Redirect ke chat.html setelah registrasi berhasil
           window.location.replace("https://tolepcoy.github.io/SecretServer/chat.html");
         })
         .catch(error => {
+          // Jika terjadi error saat menyimpan data ke Firestore
           console.error('Error saving user data to Firestore:', error);
           showAlert('Gagal registrasi!');
         });
       })
       .catch(error => {
-        showAlert('Error!');
-        console.error(error);
+        // Menangani error dari proses registrasi
+        console.error('Error during registration:', error);
+        showAlert('Gagal registrasi! Coba lagi.');
       });
   } else {
+    // Menangani jika input email atau password kosong
     showAlert('Isi dulu mang!');
   }
 });
 
+// fungsi login
     loginButton.addEventListener('click', () => {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
@@ -183,7 +186,7 @@ function cekStatusVerifikasi() {
               console.error('Gagal mengupdate status verifikasi di Firestore:', error);
             });
           } else {
-            statusVerifikasiEl.textContent = 'Belum Verifikasi ✘';
+            statusVerifikasiEl.innerHTML = 'Belum Verifikasi ✘';
             statusVerifikasiEl.style.color = '#f55';
             statusVerifikasiEl.style.cursor = 'pointer';
             
