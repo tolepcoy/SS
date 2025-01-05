@@ -159,11 +159,16 @@ body {
 
 #level {
   font-weight: bold;
-  border-bottom: 1px solid #bbb;
 }
 
 #levelIcon {
   height: 20px;
+}
+
+#role {
+  border-top: 1px solid #bbb;
+  border-bottom: 1px solid #bbb;
+  font-size: 10px;
 }
 
 .prof {

@@ -158,11 +158,12 @@ function updateProfile(data, kategori) {
   document.getElementById('avatar').src = data.avatar;
   document.getElementById('OLstate').innerHTML = data.OLstate;
   document.getElementById('level').innerHTML = data.level;
+  document.getElementById('role').innerHTML = data.role;
 document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
   document.getElementById('detail').innerHTML = data.detail;
   document.getElementById('lokasi').innerHTML = data.lokasi;
   document.getElementById('umur').innerHTML = data.umur;
-  document.getElementById('gender').src = data.gender;
+  document.getElementById('gender').src = `icon/${data.gender}.png`;
   document.getElementById('rate').innerHTML = data.rate;
   document.getElementById('bergabung').innerHTML = data.bergabung;
   document.getElementById('email').innerHTML = data.email;
@@ -642,8 +643,8 @@ editGenderBtn.addEventListener('click', () => {
 
       // Daftar pilihan gender dengan URL gambar
       const genderOptions = [
-        { text: 'Laki-laki', value: 'https://tolepcoy.github.io/SS/icon/cowok.png' },
-        { text: 'Perempuan', value: 'https://tolepcoy.github.io/SS/icon/cewek.png' }
+        { text: 'Laki-laki', value: 'icon/cowok.png' },
+        { text: 'Perempuan', value: 'icon/cewek.png' }
       ];
 
       genderOptions.forEach(gender => {
