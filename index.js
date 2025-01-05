@@ -155,7 +155,6 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log(`Profil berhasil diperbarui untuk ${kategori}`);
   }
 });
-});
 
 // EDIT NAMA
 const namaEl = document.getElementById('nama');
@@ -711,6 +710,7 @@ editGenderBtn.addEventListener('click', () => {
 // zoom avatar
 document.getElementById('avatar').addEventListener('click', function() {
   this.classList.toggle('zoom');
+});
 });
 
 /*! PANEL SETTING */
