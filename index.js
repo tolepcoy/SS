@@ -153,8 +153,7 @@ firebase.auth().onAuthStateChanged(user => {
 
 // Fungsi untuk memperbarui UI profil
 function updateProfile(data, kategori) {
-  console.log(data);
-  document.getElementById('nama').innerText = data.nama;
+  document.getElementById('nama').innerHTML = data.nama;
   document.getElementById('avatar').src = data.avatar;
   document.getElementById('OLstate').innerHTML = data.OLstate;
   document.getElementById('level').innerHTML = data.level;
@@ -225,6 +224,12 @@ editNamaBtn.addEventListener('click', () => {
             namaEl.textContent = currentNama;
             editNamaBtn.style.display = 'block';
           });
+          
+// sanitasi start
+function sanitizeInput(input) {
+  const docXSS = new DOMParser().parseFromString(input, 'text/html');
+  return docXSS.body.textContent || "";
+} // sanitasi end
 
           // Handle klik tombol save
           saveBtnNama.addEventListener('click', async () => {
@@ -235,6 +240,10 @@ editNamaBtn.addEventListener('click', () => {
               showAlert("Nama hanya boleh huruf dan spasi, 3 - 15 karakter.");
               return;
             }
+            
+// sanitasi start
+newNama = sanitizeInput(newNama);
+// sanitasi end
 
             // Simpan ke Firestore
             try {
@@ -420,6 +429,10 @@ editDetailBtn.addEventListener('click', () => {
           showAlert("Biodata maksimal 50 karakter.");
           return;
         }
+        
+// sanitasi start filter
+newDetail = sanitizeInput(newDetail);
+// sanitasi end
 
         // Simpan ke Firestore
         try {
@@ -521,6 +534,10 @@ editLokasiBtn.addEventListener('click', () => {
       // Handle klik tombol save
       saveLokasiBtn.addEventListener('click', async () => {
         const selectedLokasi = lokasiSelect.value;
+
+// sanitasi start
+selectedLokasi = sanitizeInput(selectedLokasi);
+// sanitasi end
 
         // Update lokasi di Firestore
         try {
@@ -1120,6 +1137,3 @@ closeReq.onclick = () => {
       statusOl2.style.color = '';
     }
   });
-  
-  console.log(document.getElementById('level'));
-console.log(document.getElementById('levelIcon'));
