@@ -140,7 +140,8 @@ function updateProfile(data, kategori) {
   document.getElementById('nama').innerText = data.nama || 'userSS';
   document.getElementById('avatar').src = data.avatar || 'icon/default_avatar.png';
   document.getElementById('OLstate').innerHTML = data.OLstate || 'Offline';
-  document.getElementById('level').src = data.level || 'level/b1.png';
+  document.getElementById('level').innerText = data.level || 'Lv. 1';
+  document.getElementById('levelIcon').src = data.levelIcon || 'level/b1.png';
   document.getElementById('detail').innerText = data.detail || 'Bio';
   document.getElementById('lokasi').innerText = data.lokasi || 'Palembang';
   document.getElementById('umur').innerText = data.umur || 'Belum diatur';

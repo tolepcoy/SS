@@ -150,6 +150,22 @@ body {
   overflow: hidden;
 }
 
+#levelParent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#level {
+  font-weight: bold;
+  border-bottom: 1px solid #bbb;
+}
+
+#levelIcon {
+  height: 20px;
+}
+
 .prof {
   position: relative;
   width: 90%;
