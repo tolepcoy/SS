@@ -643,8 +643,8 @@ editGenderBtn.addEventListener('click', () => {
 
       // Daftar pilihan gender dengan URL gambar
       const genderOptions = [
-        { text: 'Laki-laki', value: 'icon/cowok.png' },
-        { text: 'Perempuan', value: 'icon/cewek.png' }
+        { text: 'Laki-laki', value: 'cowok' },
+        { text: 'Perempuan', value: 'cewek' }
       ];
 
       genderOptions.forEach(gender => {
