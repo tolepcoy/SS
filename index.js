@@ -117,42 +117,44 @@ function openPanel(panelId) {
 }
 
 // Fungsi untuk menampilkan profil user setelah login
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    const userRef = firestore.collection('SS').doc(user.uid);
+document.addEventListener('DOMContentLoaded', function() {
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      const userRef = firestore.collection('SS').doc(user.uid);
 
-    userRef.onSnapshot(doc => {
-      if (doc.exists) {
-        const data = doc.data();
-        updateProfile(data, 'User'); 
-      } else {
-        console.log("Data user tidak ditemukan di koleksi SS.");
-      }
-    }, error => console.error("Error listening to user data:", error));
-  } else {
-    console.log("User not logged in");
+      userRef.onSnapshot(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          updateProfile(data, 'User');
+        } else {
+          console.log("Data user tidak ditemukan di koleksi SS.");
+        }
+      }, error => console.error("Error listening to user data:", error));
+    } else {
+      console.log("User not logged in");
+    }
+  });
+
+  // Fungsi untuk memperbarui UI profil
+  function updateProfile(data, kategori) {
+    document.getElementById('nama').innerText = data.nama;
+    document.getElementById('avatar').src = data.avatar;
+    document.getElementById('OLstate').innerHTML = data.OLstate;
+    document.getElementById('level').innerText = data.level;
+    document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
+    document.getElementById('detail').innerText = data.detail;
+    document.getElementById('lokasi').innerText = data.lokasi;
+    document.getElementById('umur').innerText = data.umur;
+    document.getElementById('gender').src = data.gender;
+    document.getElementById('rate').innerHTML = data.rate;
+    document.getElementById('bergabung').innerHTML = data.bergabung;
+    document.getElementById('email').innerHTML = data.email;
+    document.getElementById('verimail').innerHTML = data.verimail;
+    document.getElementById('facebook').innerHTML = data.facebook;
+
+    console.log(`Profil berhasil diperbarui untuk ${kategori}`);
   }
 });
-
-// Fungsi untuk memperbarui UI profil
-function updateProfile(data, kategori) {
-  document.getElementById('nama').innerText = data.nama;
-  document.getElementById('avatar').src = data.avatar;
-  document.getElementById('OLstate').innerHTML = data.OLstate;
-  document.getElementById('level').innerText = data.level;
-document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
-  document.getElementById('detail').innerText = data.detail;
-  document.getElementById('lokasi').innerText = data.lokasi;
-  document.getElementById('umur').innerText = data.umur;
-  document.getElementById('gender').src = data.gender;
-  document.getElementById('rate').innerHTML = data.rate;
-  document.getElementById('bergabung').innerHTML = data.bergabung;
-  document.getElementById('email').innerHTML = data.email;
-  document.getElementById('verimail').innerHTML = data.verimail;
-  document.getElementById('facebook').innerHTML = data.facebook;
-  
-  console.log(`Profil berhasil diperbarui untuk ${kategori}`);
-}
 });
 
 // EDIT NAMA
