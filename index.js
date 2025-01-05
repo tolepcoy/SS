@@ -153,6 +153,7 @@ firebase.auth().onAuthStateChanged(user => {
 
 // Fungsi untuk memperbarui UI profil
 function updateProfile(data, kategori) {
+  console.log(data);
   document.getElementById('nama').innerText = data.nama;
   document.getElementById('avatar').src = data.avatar;
   document.getElementById('OLstate').innerHTML = data.OLstate;
@@ -1118,3 +1119,6 @@ closeReq.onclick = () => {
       statusOl2.style.color = '';
     }
   });
+  
+  console.log(document.getElementById('level'));
+console.log(document.getElementById('levelIcon'));
