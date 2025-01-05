@@ -119,13 +119,12 @@ function openPanel(panelId) {
 // Fungsi untuk menampilkan profil user setelah login
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
-    const userRef = firestore.collection('SS').doc(user.uid); // Referensi koleksi SS
+    const userRef = firestore.collection('SS').doc(user.uid);
 
-    // Pasang snapshot listener untuk data user
     userRef.onSnapshot(doc => {
       if (doc.exists) {
         const data = doc.data();
-        updateProfile(data, 'User'); // Fungsi untuk update UI
+        updateProfile(data, 'User'); 
       } else {
         console.log("Data user tidak ditemukan di koleksi SS.");
       }
@@ -137,20 +136,20 @@ firebase.auth().onAuthStateChanged(user => {
 
 // Fungsi untuk memperbarui UI profil
 function updateProfile(data, kategori) {
-  document.getElementById('nama').innerText = data.nama || 'userSS';
-  document.getElementById('avatar').src = data.avatar || 'icon/default_avatar.png';
-  document.getElementById('OLstate').innerHTML = data.OLstate || 'Offline';
-  document.getElementById('level').innerText = data.level || 'Lv. 1';
-  document.getElementById('levelIcon').src = data.levelIcon || 'level/b1.png';
-  document.getElementById('detail').innerText = data.detail || 'Bio';
-  document.getElementById('lokasi').innerText = data.lokasi || 'Palembang';
-  document.getElementById('umur').innerText = data.umur || 'Belum diatur';
-  document.getElementById('gender').src = data.gender || 'icon/defaultgender.png';
-  document.getElementById('rate').innerHTML = data.rate || 'No Rating';
-  document.getElementById('bergabung').innerHTML = data.bergabung || 'Tidak diketahui';
-  document.getElementById('email').innerHTML = data.email || 'Tidak ada email';
-  document.getElementById('verimail').innerHTML = data.verimail || 'Belum Verifikasi ✘';
-  document.getElementById('facebook').innerHTML = data.facebook || 'Tidak Terhubung ✘';
+  document.getElementById('nama').innerText = data.nama;
+  document.getElementById('avatar').src = data.avatar;
+  document.getElementById('OLstate').innerHTML = data.OLstate;
+  document.getElementById('level').innerText = data.level;
+document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
+  document.getElementById('detail').innerText = data.detail;
+  document.getElementById('lokasi').innerText = data.lokasi;
+  document.getElementById('umur').innerText = data.umur;
+  document.getElementById('gender').src = data.gender;
+  document.getElementById('rate').innerHTML = data.rate;
+  document.getElementById('bergabung').innerHTML = data.bergabung;
+  document.getElementById('email').innerHTML = data.email;
+  document.getElementById('verimail').innerHTML = data.verimail;
+  document.getElementById('facebook').innerHTML = data.facebook;
   
   console.log(`Profil berhasil diperbarui untuk ${kategori}`);
 }
