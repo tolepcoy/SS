@@ -143,7 +143,7 @@ function updateProfile(data, kategori) {
   document.getElementById('level').src = data.level || 'level/b1.png';
   document.getElementById('detail').innerText = data.detail || 'Bio';
   document.getElementById('lokasi').innerText = data.lokasi || 'Palembang';
-  document.getElementById('umur').innerText = data.umur || 'Umur tidak tersedia';
+  document.getElementById('umur').innerText = data.umur || 'Belum diatur';
   document.getElementById('gender').src = data.gender || 'icon/defaultgender.png';
   document.getElementById('rate').innerHTML = data.rate || 'No Rating';
   document.getElementById('bergabung').innerHTML = data.bergabung || 'Tidak diketahui';
@@ -862,7 +862,7 @@ firebase.auth().getRedirectResult().then((result) => {
     
     // Kirim status ke Firestore
     firebase.firestore().collection('SS').doc(redirectedFbUser.uid).update({
-      facebook: 'Terhubung √',
+      facebook: '<span style="color:#0f0;">Terhubung √</span>',
     });
 
     // Redirect ke halaman chat setelah terhubung
