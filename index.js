@@ -263,6 +263,7 @@ editNamaBtn.addEventListener('click', () => {
       console.log("User not logged in");
     }
   });
+});
 
 // EDIT AVATAR
 const avatarEl = document.getElementById('avatar');
@@ -703,7 +704,6 @@ editGenderBtn.addEventListener('click', () => {
       console.log("User not logged in");
     }
   });
-});
 });
 
 // zoom avatar
