@@ -158,7 +158,7 @@ function updateProfile(data, kategori) {
   document.getElementById('avatar').src = data.avatar;
   document.getElementById('OLstate').innerHTML = data.OLstate;
   document.getElementById('level').innerHTML = data.level;
-document.getElementById('levelIcon').src = data.levelIcon;
+document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
   document.getElementById('detail').innerHTML = data.detail;
   document.getElementById('lokasi').innerHTML = data.lokasi;
   document.getElementById('umur').innerHTML = data.umur;
