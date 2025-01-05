@@ -14,6 +14,23 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
+// CUSTOM ALERT
+function showAlert(message) {
+  const alertBox2 = document.createElement('div');
+  alertBox2.classList.add('custom-alert');
+  alertBox2.innerHTML = `
+<div class="alert-box">
+<span class="alert-message">${message}</span>
+<button class="alert-ok">OK</button>
+</div>`;
+    document.body.appendChild(alertBox2);
+    alertBox2.style.display = 'flex';
+    alertBox2.querySelector('.alert-ok').addEventListener('click', () => {
+      alertBox2.style.display = 'none';
+      document.body.removeChild(alertBox2);
+});}
+// END CUSTOM ALERT
+
 // Cek status login dan verifikasi email
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
@@ -117,65 +134,47 @@ function openPanel(panelId) {
 }
 
 // Fungsi untuk menampilkan profil user setelah login
-document.addEventListener('DOMContentLoaded', function() {
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      const userRef = firestore.collection('SS').doc(user.uid);
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    const userRef = firestore.collection('SS').doc(user.uid);
 
-      userRef.onSnapshot(doc => {
-        if (doc.exists) {
-          const data = doc.data();
-          updateProfile(data, 'User');
-        } else {
-          console.log("Data user tidak ditemukan di koleksi SS.");
-        }
-      }, error => console.error("Error listening to user data:", error));
-    } else {
-      console.log("User not logged in");
-    }
-  });
-
-  // Fungsi untuk memperbarui UI profil
-  function updateProfile(data, kategori) {
-    document.getElementById('nama').innerText = data.nama;
-    document.getElementById('avatar').src = data.avatar;
-    document.getElementById('OLstate').innerHTML = data.OLstate;
-    document.getElementById('level').innerText = data.level;
-    document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
-    document.getElementById('detail').innerText = data.detail;
-    document.getElementById('lokasi').innerText = data.lokasi;
-    document.getElementById('umur').innerText = data.umur;
-    document.getElementById('gender').src = data.gender;
-    document.getElementById('rate').innerHTML = data.rate;
-    document.getElementById('bergabung').innerHTML = data.bergabung;
-    document.getElementById('email').innerHTML = data.email;
-    document.getElementById('verimail').innerHTML = data.verimail;
-    document.getElementById('facebook').innerHTML = data.facebook;
-
-    console.log(`Profil berhasil diperbarui untuk ${kategori}`);
+    userRef.onSnapshot(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+        updateProfile(data, 'User'); 
+      } else {
+        console.log("Data user tidak ditemukan di koleksi SS.");
+      }
+    }, error => console.error("Error listening to user data:", error));
+  } else {
+    console.log("User not logged in");
   }
+});
+
+// Fungsi untuk memperbarui UI profil
+function updateProfile(data, kategori) {
+  document.getElementById('nama').innerText = data.nama;
+  document.getElementById('avatar').src = data.avatar;
+  document.getElementById('OLstate').innerHTML = data.OLstate;
+  document.getElementById('level').innerText = data.level;
+document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
+  document.getElementById('detail').innerText = data.detail;
+  document.getElementById('lokasi').innerText = data.lokasi;
+  document.getElementById('umur').innerText = data.umur;
+  document.getElementById('gender').src = data.gender;
+  document.getElementById('rate').innerHTML = data.rate;
+  document.getElementById('bergabung').innerHTML = data.bergabung;
+  document.getElementById('email').innerHTML = data.email;
+  document.getElementById('verimail').innerHTML = data.verimail;
+  document.getElementById('facebook').innerHTML = data.facebook;
+  
+  console.log(`Profil berhasil diperbarui untuk ${kategori}`);
+}
 });
 
 // EDIT NAMA
 const namaEl = document.getElementById('nama');
 const editNamaBtn = document.getElementById('edit-nama');
-
-// CUSTOM ALERT
-function showAlert(message) {
-  const alertBox2 = document.createElement('div');
-  alertBox2.classList.add('custom-alert');
-  alertBox2.innerHTML = `
-<div class="alert-box">
-<span class="alert-message">${message}</span>
-<button class="alert-ok">OK</button>
-</div>`;
-    document.body.appendChild(alertBox2);
-    alertBox2.style.display = 'flex';
-    alertBox2.querySelector('.alert-ok').addEventListener('click', () => {
-      alertBox2.style.display = 'none';
-      document.body.removeChild(alertBox2);
-});}
-// END CUSTOM ALERT
 
 // Fungsi untuk handle klik tombol edit
 editNamaBtn.addEventListener('click', () => {
@@ -710,7 +709,6 @@ editGenderBtn.addEventListener('click', () => {
 // zoom avatar
 document.getElementById('avatar').addEventListener('click', function() {
   this.classList.toggle('zoom');
-});
 });
 
 /*! PANEL SETTING */
