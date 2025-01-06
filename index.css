@@ -606,13 +606,21 @@ body {
   box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.4) inset, 5px 5px 10px rgba(0, 0, 0, 0.6) inset;
 }
 
-.headerProf {
-  background: linear-gradient(to right, transparent, rgba(0, 255, 0, 0.3), transparent);
+.headerProfCewek,
+.headerProfCowok {
   position: sticky;
   top: 5px;
   width: 85%;
   margin: 10px 5px 5px;
   padding: 5px;
+}
+
+.headerProfCewek {
+background: linear-gradient(to right, transparent, rgba(255, 172, 185, 0.3), transparent);
+}
+
+.headerProfCowok {
+background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), transparent);
 }
 
 .ic-user {
@@ -623,6 +631,14 @@ body {
   overflow: hidden;
   border-bottom: 2px groove #bbb;
   margin-bottom: 10px;
+}
+
+#potoUserCewek,
+#potoUserCowok {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #bbb;
 }
 
 .icUserWrapper {
@@ -636,8 +652,8 @@ body {
 #namaUserCowok,
 #namaUserCewek {
   font-weight: bold;
-  font-size: 16px;
-  width: 90px;
+  font-size: 14px;
+  width: 95px;
   white-space: nowrap;
   overflow-x: scroll;
   overflow-y: hidden;

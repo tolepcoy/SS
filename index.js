@@ -131,6 +131,9 @@ function openPanel(panelId) {
   panels.forEach(panel => {
     document.getElementById(panel).style.transform = panel === panelId ? "translateX(0)" : "translateX(-100%)";
   });
+  if (panelId === 'secretSidePanel') {
+    loadUserList();
+  }
 }
 
 // Fungsi untuk menampilkan profil user setelah login
@@ -1137,3 +1140,19 @@ closeReq.onclick = () => {
       statusOl2.style.color = '';
     }
   });
+
+// USER LIST
+// Fungsi untuk memuat allUser.html
+function loadUserList() {
+  const cewok = document.getElementById('cewok');
+
+  fetch('allUser.html')
+    .then(response => response.text())
+    .then(data => {
+      cewok.innerHTML = data;
+})
+    .catch(error => {
+      cewok.innerHTML = 'Gagal memuat data pengguna';
+      console.error('Error:', error);
+  });
+}
