@@ -1110,41 +1110,53 @@ function generateUserProfile(user, container) {
   userDiv.id = user.id;
 
   userDiv.innerHTML = `
-    <img id="avatarUser" src="${user.avatar}" alt="Avatar">
+    <img id="avatarUser-${user.id}" src="${user.avatar}" alt="Avatar">
     <div class="icUserWrapper">
-      <span id="namaUser" class="namaUser">${user.nama}</span>
-      <span class="smallest">Lv. &nbsp;<span id="levelUser">${user.level}</span>&nbsp;&nbsp;
-      <img id="levelIconUser" src="level/${user.levelIcon}.png" alt="Level Icon"></span>
+      <span id="namaUser-${user.id}" class="namaUser">${user.nama}</span>
+      <span class="smallest">Lv. &nbsp;<span id="levelUser-${user.id}">${user.level}</span>&nbsp;&nbsp;
+      <img id="levelIconUser-${user.id}" src="level/${user.levelIcon}.png" alt="Level Icon"></span>
     </div>
   `;
 
   container.appendChild(userDiv);
 }
 
-// Ambil data dari Firestore
-firestore.collection('SS').get()
-  .then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-      const userData = doc.data();
-      const userWoy = {
-        id: doc.id,
-        nama: userData.nama,
-        level: userData.level,
-        avatar: userData.avatar,
-        levelIcon: userData.levelIcon,
-        gender: userData.gender,
-      };
+// Fungsi untuk update profile user
+function updateUserProfile(user) {
+  const userDiv = document.getElementById(user.id);
 
-      // Cek kategori berdasarkan gender
-      if (userWoy.gender === "cewek") { 
-        generateUserProfile(userWoy, containerCewek);
-      } else if (userWoy.gender === "cowok") {
-        generateUserProfile(userWoy, containerCowok);
-      } else {
-        console.warn("Gender tidak dikenali untuk user:", userWoy);
-      }
-    });
-  })
-  .catch((error) => {
-    console.error("Error getting documents:", error);
+  // Kalau elemen user belum ada, bikin baru
+  if (!userDiv) {
+    const container = user.gender === "cewek" ? containerCewek : containerCowok;
+    generateUserProfile(user, container);
+    return;
+  }
+
+  // Update data user di elemen yang ada
+  document.getElementById(`avatarUser-${user.id}`).src = user.avatar;
+  document.getElementById(`namaUser-${user.id}`).textContent = user.nama;
+  document.getElementById(`levelUser-${user.id}`).textContent = user.level;
+  document.getElementById(`levelIconUser-${user.id}`).src = `level/${user.levelIcon}.png`;
+}
+
+// Real-time listener dari Firestore
+firestore.collection('SS').onSnapshot((snapshot) => {
+  snapshot.docChanges().forEach((change) => {
+    const userData = change.doc.data();
+    const userWoy = {
+      id: change.doc.id,
+      nama: userData.nama,
+      level: userData.level,
+      avatar: userData.avatar,
+      levelIcon: userData.levelIcon,
+      gender: userData.gender,
+    };
+
+    if (change.type === "added" || change.type === "modified") {
+      updateUserProfile(userWoy);
+    } else if (change.type === "removed") {
+      const userDiv = document.getElementById(userWoy.id);
+      if (userDiv) userDiv.remove();
+    }
   });
+});
