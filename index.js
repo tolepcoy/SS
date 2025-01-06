@@ -14,66 +14,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
-// FUNGSI NOMOR KE TEXT ROLE
-function getUserDetails2(userId) {
-  firestore.collection('SS').doc(userId).get()
-    .then((doc) => {
-      if (doc.exists) {
-   const userDetails2 = doc.data();
-   const roleText = getRoleText(userDetails2.role);
-   const role2 = document.getElementById('role');
-   if (role2) {
-   role2.innerHTML = roleText;
-}
-   const roleLain2 = document.getElementById('role-lain');
-        if (roleLain2) {
-   roleLain2.innerHTML = roleText;
-  }
- }
-})
-    .catch((error) => {
-      console.log("Error getting document:", error);
-    });
-}
-
-// Fungsi untuk mengubah angka role menjadi teks
-function getRoleText(roleNumber) {
-  switch (roleNumber) {
-    case 1:
-      return 'Minion';
-    case 2:
-      return 'Baron';
-    case 3:
-      return 'Knight';
-    case 4:
-      return 'Guardian';
-    case 5:
-      return 'Commander';
-    case 6:
-      return 'Champion';
-    case 7:
-      return 'Lord';
-    case 8:
-      return 'Grand Lord';
-    case 9:
-      return 'Prince';
-    case 10:
-      return 'King';
-    case 11:
-      return 'Absolute King';
-    case 12:
-      return 'Legendary King';
-    case 13:
-      return 'King of Glory';
-    case 14:
-      return 'King Of The Kings';
-    case 15:
-      return 'Immortal Emperor';
-    default:
-      return 'Unknown Role';
-  }
-}
-
 // CUSTOM ALERT
 function showAlert(message) {
   const alertBox2 = document.createElement('div');
@@ -99,12 +39,12 @@ firebase.auth().onAuthStateChanged((user) => {
       showAlert('Anda belum memverifikasi email!');
     }
 
-    // Cek jika user adalah admin
+/*    // Cek jika user adalah admin
     firestore.collection("SS").doc(user.uid).get().then((doc) => {
       if (doc.exists && doc.data().isAdmin) {
         bersihkanChatboxLama();
       }
-    });
+    }); */
   }
 });
 
@@ -1337,3 +1277,65 @@ document.querySelectorAll('.icon').forEach(item => {
     }
   });
 });
+
+
+// FUNGSI NOMOR KE TEXT ROLE
+function getUserDetails2(userId) {
+  firestore.collection('SS').doc(userId).get()
+    .then((doc) => {
+      if (doc.exists) {
+   const userDetails2 = doc.data();
+   console.log(userDetails2); // Tambah log untuk cek data user
+   const roleText = getRoleText(userDetails2.role);
+   const role2 = document.getElementById('role');
+   if (role2) {
+   role2.innerHTML = roleText;
+}
+   const roleLain2 = document.getElementById('role-lain');
+        if (roleLain2) {
+   roleLain2.innerHTML = roleText;
+  }
+ }
+})
+    .catch((error) => {
+      console.log("Error getting document:", error);
+    });
+}
+
+// Fungsi untuk mengubah angka role menjadi teks
+function getRoleText(roleNumber) {
+  switch (roleNumber) {
+    case 1:
+      return 'Minion';
+    case 2:
+      return 'Baron';
+    case 3:
+      return 'Knight';
+    case 4:
+      return 'Guardian';
+    case 5:
+      return 'Commander';
+    case 6:
+      return 'Champion';
+    case 7:
+      return 'Lord';
+    case 8:
+      return 'Grand Lord';
+    case 9:
+      return 'Prince';
+    case 10:
+      return 'King';
+    case 11:
+      return 'Absolute King';
+    case 12:
+      return 'Legendary King';
+    case 13:
+      return 'King of Glory';
+    case 14:
+      return 'King Of The Kings';
+    case 15:
+      return 'Immortal Emperor';
+    default:
+      return 'Unknown Role';
+  }
+}
