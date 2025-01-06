@@ -300,7 +300,7 @@ body {
   font-weight: bold;
 }
 
-#verimail, #facebook {
+#verimail {
   font-size: 10px;
   font-style: italic;
   color: #f77;
@@ -367,7 +367,6 @@ body {
   pointer-events: none;
   transform: translate(200%, 0);
 }
-
 
 #reqRate {
   background: linear-gradient(to bottom right, #555, #999, #444);

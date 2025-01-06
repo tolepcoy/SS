@@ -87,7 +87,6 @@ registerButton.addEventListener('click', () => {
               password: '-',
               isAdmin: 'false',
               verimail: 'Belum Verifikasi ✘',
-              facebook: 'Hubungkan',
             }).then(() => {
               showAlert('Registrasi berhasil!');
               console.log('User privasi berhasil disimpan ke koleksi PRIVASI.');

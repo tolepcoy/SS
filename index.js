@@ -193,8 +193,7 @@ firebase.auth().onAuthStateChanged(user => {
 function updateProfilePrivasi(dataPrivasi, kategori) {
   document.getElementById('email').innerHTML = dataPrivasi.email;
   document.getElementById('verimail').innerHTML = dataPrivasi.verimail;
-  document.getElementById('facebook').innerHTML = dataPrivasi.facebook;
-  
+
   console.log(`Profil berhasil diperbarui untuk ${kategori}`);
 }
 
@@ -852,71 +851,6 @@ function cekStatusVerifikasi() {
 
 // Panggil fungsi saat halaman selesai dimuat
 cekStatusVerifikasi();
-
-// FACEBOOK SYNC
-// Mendapatkan elemen Facebook
-const facebookEl = document.getElementById('facebook');
-
-// Firebase Facebook Auth Provider
-const provider = new firebase.auth.FacebookAuthProvider();
-
-// Fungsi untuk mengecek status Facebook terhubung
-function cekStatusFacebook() {
-  const fbUser = firebase.auth().currentUser;  // Ganti jadi fbUser
-  if (fbUser) {
-    // Cek jika akun sudah terhubung dengan Facebook
-    if (fbUser.providerData.some((provider) => provider.providerId === 'facebook.com')) {
-      facebookEl.innerHTML = '<span style="color:#0f0;">Terhubung √</span>';
-      facebookEl.style.color = '#0f0';
-      facebookEl.style.pointerEvents = 'none'; 
-      firebase.firestore().collection('PRIVASI').doc(fbUser.uid).update({
-        facebook: '<span style="color:#0f0;">Terhubung √</span>',
-      });
-    } else {
-      facebookEl.innerHTML = '<span style="color:#00f;">Hubungkan</span>';
-      facebookEl.style.color = 'blue';
-      facebookEl.style.pointerEvents = 'auto';
-      firebase.firestore().collection('SS').doc(fbUser.uid).update({
-        facebook: '<span style="color:#00f;">Hubungkan</span>',
-      });
-    }
-  }
-}
-
-// Panggil fungsi cek status saat halaman selesai dimuat
-cekStatusFacebook();
-
-// Event listener untuk klik hubungkan Facebook
-facebookEl.addEventListener('click', () => {
-  const fbUserForRedirect = firebase.auth().currentUser;  // Ganti jadi fbUserForRedirect
-  if (fbUserForRedirect) {
-    // Jika user sudah login, lakukan autentikasi Facebook dengan redirect
-    firebase.auth().signInWithRedirect(provider);
-  } else {
-    console.log('User tidak terautentikasi');
-  }
-});
-
-// Menangani hasil redirect setelah login berhasil
-firebase.auth().getRedirectResult().then((result) => {
-  const redirectedFbUser = result.user;  // Ganti jadi redirectedFbUser
-  if (redirectedFbUser) {
-    // Facebook berhasil terhubung, perbarui tampilan elemen
-    facebookEl.innerHTML = '<span style="color:#0f0;">Terhubung √</span>';
-    facebookEl.style.color = '#0f0';
-    facebookEl.style.pointerEvents = 'none';
-    
-    // Kirim status ke Firestore
-    firebase.firestore().collection('PRIVASI').doc(redirectedFbUser.uid).update({
-      facebook: '<span style="color:#0f0;">Terhubung √</span>',
-    });
-
-    // Redirect ke halaman chat setelah terhubung
-    window.location.replace('https://tolepcoy.github.io/SS/index.html');
-  }
-}).catch((error) => {
-  console.error('Terjadi kesalahan saat menghubungkan Facebook:', error);
-});
 
 // UBAH EMAIL
 // Fungsi untuk reauthenticate user
