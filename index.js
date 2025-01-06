@@ -1278,20 +1278,25 @@ document.querySelectorAll('.icon').forEach(item => {
   });
 });
 
-// Fungsi untuk mengambil data user dan update tampilan role
-function getUserDetails(userId) {
+// Fungsi nomor ke text role
+function getUserDetails2(userId) {
   firestore.collection('SS').doc(userId).get()
     .then((doc) => {
       if (doc.exists) {
-        const userDetails = doc.data();
+        const userDetails2 = doc.data();
 
         // Menampilkan role dalam bentuk teks
         const roleText = getRoleText(userDetails.role);
 
         // Update tampilan elemen spesifik di profile-lain
-        const roleLain = document.getElementById('role-lain');
-        if (roleLain) {
-          roleLain.innerHTML = roleText;
+        const role2 = document.getElementById('role');
+        if (role2) {
+          role2.innerHTML = roleText;
+        }
+
+        const roleLain2 = document.getElementById('role-lain');
+        if (roleLain2) {
+          roleLain2.innerHTML = roleText;
         }
       }
     })
@@ -1330,7 +1335,7 @@ function getRoleText(roleNumber) {
     case 13:
       return 'King of Glory';
     case 14:
-      return 'King Of The King';
+      return 'King Of The Kings';
     case 15:
       return 'Immortal Emperor';
     default:
