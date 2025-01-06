@@ -1110,11 +1110,11 @@ function generateUserProfile(user, container) {
   userDiv.id = user.id;
 
   userDiv.innerHTML = `
-    <img id="avatarUser-${user.id}" src="${user.avatar}" alt="Avatar">
+    <img id="avatarUser" src="${user.avatar}" alt="Avatar">
     <div class="icUserWrapper">
-      <span id="namaUser-${user.id}" class="namaUser">${user.nama}</span>
-      <span class="smallest">Lv. &nbsp;<span id="levelUser-${user.id}">${user.level}</span>&nbsp;&nbsp;
-      <img id="levelIconUser-${user.id}" src="level/${user.levelIcon}.png" alt="Level Icon"></span>
+      <span id="namaUser" class="namaUser">${user.nama}</span>
+      <span class="smallest">Lv. &nbsp;<span id="levelUser">${user.level}</span>&nbsp;&nbsp;
+      <img id="levelIconUser" src="level/${user.levelIcon}.png" alt="Level Icon"></span>
     </div>
   `;
 
@@ -1133,10 +1133,10 @@ function updateUserProfile(user) {
   }
 
   // Update data user di elemen yang ada
-  document.getElementById(`avatarUser-${user.id}`).src = user.avatar;
-  document.getElementById(`namaUser-${user.id}`).textContent = user.nama;
-  document.getElementById(`levelUser-${user.id}`).textContent = user.level;
-  document.getElementById(`levelIconUser-${user.id}`).src = `level/${user.levelIcon}.png`;
+  userDiv.querySelector('#avatarUser').src = user.avatar;
+  userDiv.querySelector('#namaUser').textContent = user.nama;
+  userDiv.querySelector('#levelUser').textContent = user.level;
+  userDiv.querySelector('#levelIconUser').src = `level/${user.levelIcon}.png`;
 }
 
 // Real-time listener dari Firestore
