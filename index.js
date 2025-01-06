@@ -138,27 +138,10 @@ firebase.auth().onAuthStateChanged(user => {
   if (user) {
     const userRef = firestore.collection('SS').doc(user.uid);
 
-    // Ambil data dari koleksi SS (data umum user)
     userRef.onSnapshot(doc => {
       if (doc.exists) {
         const data = doc.data();
-        
-        // Update profil user
         updateProfile(data, 'User'); 
-
-        const privasiRef = firestore.collection('PRIVASI').doc(user.uid);
-
-        privasiRef.get().then(privasiDoc => {
-          if (privasiDoc.exists) {
-            const privasiData = privasiDoc.data();
-            updatePrivacy(privasiData); 
-          } else {
-            console.log("Data privasi tidak ditemukan di koleksi PRIVASI.");
-          }
-        }).catch(error => {
-          console.error("Error fetching privasi:", error);
-        });
-
       } else {
         console.log("Data user tidak ditemukan di koleksi SS.");
       }
@@ -182,13 +165,38 @@ document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
   document.getElementById('gender').src = `icon/${data.gender}.png`;
   document.getElementById('rate').innerHTML = data.rate;
   document.getElementById('bergabung').innerHTML = data.bergabung;
-  document.getElementById('email').innerHTML = privasiData.email;
-  document.getElementById('verimail').innerHTML = privasiData.verimail;
-  document.getElementById('facebook').innerHTML = privasiData.facebook;
   
   console.log(`Profil berhasil diperbarui untuk ${kategori}`);
 }
 });
+
+// PRIVASI UPDATE
+// Fungsi untuk menampilkan profil user setelah login privasi
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    const userRefPrivasi = firestore.collection('PRIVASI').doc(user.uid);
+
+    userRefPrivasi.onSnapshot(doc => {
+      if (doc.exists) {
+        const dataPrivasi = doc.data();
+        updateProfilePrivasi(dataPrivasi, 'User'); 
+      } else {
+        console.log("Data user tidak ditemukan di koleksi PRIVASI.");
+      }
+    }, error => console.error("Error listening to user data:", error));
+  } else {
+    console.log("User not logged in");
+  }
+});
+
+// Fungsi untuk memperbarui UI profil
+function updateProfilePrivasi(dataPrivasi, kategori) {
+  document.getElementById('email').innerHTML = dataPrivasi.email;
+  document.getElementById('verimail').innerHTML = dataPrivasi.verimail;
+  document.getElementById('facebook').innerHTML = dataPrivasi.facebook;
+  
+  console.log(`Profil berhasil diperbarui untuk ${kategori}`);
+}
 
 // EDIT NAMA
 const namaEl = document.getElementById('nama');
