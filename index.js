@@ -182,9 +182,9 @@ document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
   document.getElementById('gender').src = `icon/${data.gender}.png`;
   document.getElementById('rate').innerHTML = data.rate;
   document.getElementById('bergabung').innerHTML = data.bergabung;
-  document.getElementById('email').innerHTML = data.email;
-  document.getElementById('verimail').innerHTML = data.verimail;
-  document.getElementById('facebook').innerHTML = data.facebook;
+  document.getElementById('email').innerHTML = privasiData.email;
+  document.getElementById('verimail').innerHTML = privasiData.verimail;
+  document.getElementById('facebook').innerHTML = privasiData.facebook;
   
   console.log(`Profil berhasil diperbarui untuk ${kategori}`);
 }
@@ -1172,7 +1172,7 @@ function generateUserProfile(user, container) {
     <div class="icUserWrapper">
       <span id="namaUser" class="namaUser">${user.nama}</span>
       <span class="smallest">Lv. &nbsp;<span id="levelUser">${user.level}</span>&nbsp;&nbsp;
-      <img id="levelIconUser" src="${user.levelIcon}" alt="Level Icon"></span>
+      <img id="levelIconUser" src="level/${user.levelIcon}.png" alt="Level Icon"></span>
     </div>
   `;
 
