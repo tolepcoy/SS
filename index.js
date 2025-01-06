@@ -158,7 +158,7 @@ function updateProfile(data, kategori) {
   document.getElementById('OLstate').innerHTML = data.OLstate;
   document.getElementById('level').innerHTML = data.level;
  
-/* document.getElementById('role').innerHTML = data.role; */
+  document.getElementById('role').innerHTML = data.role;
 document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
   document.getElementById('detail').innerHTML = data.detail;
   document.getElementById('lokasi').innerHTML = data.lokasi;
@@ -1175,10 +1175,10 @@ if (levelIconLain) {
 levelIconLain.src = `level/${userDetails.levelIcon}.png`;
 }
 
-/* const roleLain = document.getElementById('role-lain');
+ const roleLain = document.getElementById('role-lain');
 if (roleLain) {
 roleLain.innerHTML = userDetails.role;
-} */
+}
 
 const detailLain = document.getElementById('detail-lain');
 if (detailLain) {
@@ -1278,50 +1278,3 @@ document.querySelectorAll('.icon').forEach(item => {
     }
   });
 });
-
-// FUNGSI NOMOR KE TEXT ROLE
-firestore.collection('SS').get()
-  .then((onSnapshot) => {
-    onSnapshot.forEach((doc) => {
-      const userData9 = doc.data();
-      
-      console.log('User Data:', userData9);
-console.log('Role Field:', userData9.role);
-      
-      const roleElement = document.getElementById('role');
-      if (roleElement) {
-        roleElement.innerText = getRoleText(userData9.role);
-      }
-
-      const roleLainElement = document.getElementById('role-lain');
-      if (roleLainElement) {
-        roleLainElement.innerText = getRoleText(userData9.role);
-      }
-    });
-  })
-  .catch((error) => {
-    console.error('Error getting user data:', error);
-  });
-
-// Fungsi untuk mengubah angka role menjadi teks
-function getRoleText(roleNumber) {
-  switch (roleNumber) {
-    case 1: return 'Minion';
-    case 2: return 'Baron';
-    case 3: return 'Knight';
-    case 4: return 'Guardian';
-    case 5: return 'Commander';
-    case 6: return 'Champion';
-    case 7: return 'Lord';
-    case 8: return 'Grand Lord';
-    case 9: return 'Prince';
-    case 10: return 'King';
-    case 11: return 'Absolute King';
-    case 12: return 'Legendary King';
-    case 13: return 'King of Glory';
-    case 14: return 'King Of The Kings';
-    case 15: return 'Immortal Emperor';
-    default: return 'Unknown Role';
-  }
-}
-
