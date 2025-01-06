@@ -392,7 +392,7 @@ editDetailBtn.addEventListener('click', () => {
   editDetailBtn.style.display = 'none';
 
   // Menunggu user login terlebih dahulu
-  firebase.auth().onAuthStateChanged(user => {
+  firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       // Simpan value lama
       const currentDetail = detailEl.textContent.trim();
@@ -415,30 +415,30 @@ editDetailBtn.addEventListener('click', () => {
 
       // Handle klik tombol cancel
       cancelDetailBtn.addEventListener('click', () => {
-    // Kembalikan tampilan awal
-   detailEl.textContent = currentDetail;
-   editDetailBtn.style.display = 'block';
-   });
+        // Kembalikan tampilan awal
+        detailEl.textContent = currentDetail;
+        editDetailBtn.style.display = 'block';
+      });
 
       // Handle klik tombol save
       saveDetailBtn.addEventListener('click', async () => {
-        const newDetail = detailTextarea.value.trim();
+        // Ubah deklarasi dari `const` ke `let` agar dapat diubah
+        let newDetail = detailTextarea.value.trim();
 
-// sanitasi start
-function sinitizeInput(input) {
-  const docZSS = new DOMParser().parseFromString(input, 'text/html');
-  return docZSS.body.textContent || "";
-} // sanitasi end
+        // Fungsi sanitasi
+        function sinitizeInput(input) {
+          const docZSS = new DOMParser().parseFromString(input, 'text/html');
+          return docZSS.body.textContent || "";
+        }
 
         // Validasi isi biodata
         if (newDetail.length > 50) {
           showAlert("Biodata maksimal 50 karakter.");
           return;
         }
-        
-// sanitasi start filter
-newDetail = sinitizeInput(newDetail);
-// sanitasi end
+
+        // Sanitasi input
+        newDetail = sinitizeInput(newDetail);
 
         // Simpan ke Firestore
         try {
