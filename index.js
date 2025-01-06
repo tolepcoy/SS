@@ -1278,25 +1278,25 @@ document.querySelectorAll('.icon').forEach(item => {
   });
 });
 
-
 // FUNGSI NOMOR KE TEXT ROLE
 function getUserDetails2(userId) {
   firestore.collection('SS').doc(userId).get()
     .then((doc) => {
       if (doc.exists) {
-   const userDetails2 = doc.data();
-   console.log(userDetails2); // Tambah log untuk cek data user
-   const roleText = getRoleText(userDetails2.role);
-   const role2 = document.getElementById('role');
-   if (role2) {
-   role2.innerHTML = roleText;
-}
-   const roleLain2 = document.getElementById('role-lain');
+        const userDetails2 = doc.data();
+        const roleNumber = Number(userDetails2.role); // Konversi ke angka
+        const roleText = getRoleText(roleNumber); // Panggil fungsi dengan nilai yang sudah dikonversi
+        console.log(roleText); // Log roleText untuk memastikan
+        const role2 = document.getElementById('role');
+        if (role2) {
+          role2.innerHTML = roleText;
+        }
+        const roleLain2 = document.getElementById('role-lain');
         if (roleLain2) {
-   roleLain2.innerHTML = roleText;
-  }
- }
-})
+          roleLain2.innerHTML = roleText;
+        }
+      }
+    })
     .catch((error) => {
       console.log("Error getting document:", error);
     });
