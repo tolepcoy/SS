@@ -64,7 +64,7 @@ registerButton.addEventListener('click', () => {
               OLstate: 'Offline',
               avatar: 'icon/default_avatar.png',
               level: '1',
-              role: '1',
+              role: 'Minion',
               levelIcon: '1',
               detail: 'Bio',
               lokasi: 'Palembang',

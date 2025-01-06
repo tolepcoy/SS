@@ -32,21 +32,73 @@ function showAlert(message) {
 // END CUSTOM ALERT
 
 // Cek status login dan verifikasi email
-firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
+firebase.auth().onAuthStateChanged((TCUser) => {
+  if (TCUser) {
     // Cek jika email belum diverifikasi
-    if (!user.emailVerified) {
+    if (!TCUser.emailVerified) {
       showAlert('Anda belum memverifikasi email!');
     }
 
-/*    // Cek jika user adalah admin
-    firestore.collection("SS").doc(user.uid).get().then((doc) => {
-      if (doc.exists && doc.data().isAdmin) {
-        bersihkanChatboxLama();
+    // Cek jika user adalah admin
+    firestore.collection("SS").doc(TCUser.uid).get().then((TCDoc) => {
+      if (TCDoc.exists && TCDoc.data().isAdmin) {
+        console.log("Administrator was logged in");
+        
+  /*!   bersihkanChatboxLama();  */
+
+        // Update seluruh data user di koleksi SS
+        TCUpdateAllUsersForAdmin(); // Memanggil fungsi untuk update seluruh user
       }
-    }); */
+    });
   }
 });
+
+// Fungsi untuk update seluruh data user jika admin login
+function TCUpdateAllUsersForAdmin() {
+  firestore.collection('SS').get()
+    .then((TCQuerySnapshot) => {
+      TCQuerySnapshot.forEach((TCDoc) => {
+        const TCUserData = TCDoc.data();
+        const TCUserId = TCDoc.id;
+        const TCRoleText = TCGetRoleText(TCUserData.level);
+        const TCLevelIcon = TCUserData.level;
+
+        firestore.collection('SS').doc(TCUserId).update({
+          role: TCRoleText,
+          levelIcon: TCLevelIcon
+        }).then(() => {
+          console.log(`User ${TCUserId} updated successfully!`);
+        }).catch((TCError) => {
+          console.error("Error updating user: ", TCError);
+        });
+      });
+    })
+    .catch((TCError) => {
+      console.error("Error fetching user data: ", TCError);
+    });
+}
+
+// Fungsi untuk menentukan role berdasarkan level
+function TCGetRoleText(TCLevel) {
+  switch (TCLevel) {
+    case 1: return 'Minion';
+    case 2: return 'Baron';
+    case 3: return 'Knight';
+    case 4: return 'Guardian';
+    case 5: return 'Commander';
+    case 6: return 'Champion';
+    case 7: return 'Lord';
+    case 8: return 'Grand Lord';
+    case 9: return 'Prince';
+    case 10: return 'King';
+    case 11: return 'Absolute King';
+    case 12: return 'Legendary King';
+    case 13: return 'King of Glory';
+    case 14: return 'King Of The Kings';
+    case 15: return 'Immortal Emperor';
+    default: return 'Unknown Role';
+  }
+}
 
 /* Fungsi membersihkan chat lama
 function bersihkanChatboxLama() {
@@ -1063,8 +1115,7 @@ closeReq.onclick = () => {
       OLstate: 'Online &bull;'
     }, { merge: true })
       .then(() => {
-        statusOl.innerHTML = 'Online <b style="font-size:30px; vertical-align:middle;">&bull;</b>';
-        statusOl.style.color = '#0f0';
+        statusOl.innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
       })
       .catch((error) => {
         console.error('Gagal mengupdate status online:', error);
@@ -1100,8 +1151,8 @@ closeReq.onclick = () => {
 
       // Hapus status di elemen HTML
       const statusOl2 = document.getElementById('OLstate');
-      statusOl2.innerHTML = '';
-      statusOl2.style.color = '';
+      statusOl2.innerHTML = 'Offline';
+      statusOl2.style.color = '#999';
     }
   });
 
@@ -1331,7 +1382,6 @@ function getRoleText(level) {
     case 13: return 'King of Glory';
     case 14: return 'King Of The Kings';
     case 15: return 'Immortal Emperor';
-    default: return 'Unknown Role';
   }
 }
 
