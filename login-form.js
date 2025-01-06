@@ -56,6 +56,8 @@ registerButton.addEventListener('click', () => {
         auth.onAuthStateChanged(user => {
           if (user) {
             // Jika sudah login, simpan data ke Firestore
+
+            // Menyimpan data umum ke koleksi SS
             const userSSRef = firestore.collection('SS').doc(user.uid);
             userSSRef.set({
               nama: 'userSS',
@@ -68,19 +70,31 @@ registerButton.addEventListener('click', () => {
               lokasi: 'Palembang',
               umur: 'Belum diatur',
               gender: 'cewok',
+              isAdmin: 'false',
               requestRate: 'belum request',
-              rate: '',
+              rate: 'No Rating',
               bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
+            }).then(() => {
+              console.log('User data berhasil disimpan ke koleksi SS.');
+            }).catch(error => {
+              console.error('Error saving user data to Firestore:', error);
+            });
+
+            // Menyimpan data privasi ke koleksi PRIVASI
+            const privasiRef = firestore.collection('PRIVASI').doc(user.uid);
+            privasiRef.set({
               email: user.email,
-              verimail: 'Belum Verifikasi',
-              facebook: 'Tidak terhubung'
+              password: '-',
+              isAdmin: 'false',
+              verimail: 'Belum Verifikasi ✘',
+              facebook: 'Hubungkan',
             }).then(() => {
               showAlert('Registrasi berhasil!');
-              console.log('User berhasil didaftarkan dan data disimpan ke Firestore.');
+              console.log('User privasi berhasil disimpan ke koleksi PRIVASI.');
 
               window.location.replace("https://tolepcoy.github.io/SS/index.html");
             }).catch(error => {
-              console.error('Error saving user data to Firestore:', error);
+              console.error('Error saving privasi data to Firestore:', error);
               showAlert('Gagal registrasi!');
             });
           } else {
@@ -97,9 +111,10 @@ registerButton.addEventListener('click', () => {
   }
 });
 
+
+//FUNGSI LOGIN
 const loginButton = document.getElementById('loginButton');
 
-// FUNGSI LOGIN
 loginButton.addEventListener('click', () => {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;

@@ -138,10 +138,27 @@ firebase.auth().onAuthStateChanged(user => {
   if (user) {
     const userRef = firestore.collection('SS').doc(user.uid);
 
+    // Ambil data dari koleksi SS (data umum user)
     userRef.onSnapshot(doc => {
       if (doc.exists) {
         const data = doc.data();
+        
+        // Update profil user
         updateProfile(data, 'User'); 
+
+        const privasiRef = firestore.collection('PRIVASI').doc(user.uid);
+
+        privasiRef.get().then(privasiDoc => {
+          if (privasiDoc.exists) {
+            const privasiData = privasiDoc.data();
+            updatePrivacy(privasiData); 
+          } else {
+            console.log("Data privasi tidak ditemukan di koleksi PRIVASI.");
+          }
+        }).catch(error => {
+          console.error("Error fetching privasi:", error);
+        });
+
       } else {
         console.log("Data user tidak ditemukan di koleksi SS.");
       }
@@ -766,7 +783,7 @@ function cekStatusVerifikasi() {
       user.reload() // Reload data user untuk memastikan data terbaru
         .then(() => {
           const db = firebase.firestore();  // Ambil instance Firestore
-          const userDoc = db.collection('SS').doc(user.uid);  // Ambil dokumen berdasarkan UID user
+          const userDoc = db.collection('PRIVASI').doc(user.uid);  // Ambil dokumen berdasarkan UID user
 
           if (user.emailVerified) {
             statusVerifikasiEl.textContent = 'Verifikasi √';
@@ -844,7 +861,7 @@ function cekStatusFacebook() {
       facebookEl.innerHTML = '<span style="color:#0f0;">Terhubung √</span>';
       facebookEl.style.color = '#0f0';
       facebookEl.style.pointerEvents = 'none'; 
-      firebase.firestore().collection('SS').doc(fbUser.uid).update({
+      firebase.firestore().collection('PRIVASI').doc(fbUser.uid).update({
         facebook: '<span style="color:#0f0;">Terhubung √</span>',
       });
     } else {
@@ -882,7 +899,7 @@ firebase.auth().getRedirectResult().then((result) => {
     facebookEl.style.pointerEvents = 'none';
     
     // Kirim status ke Firestore
-    firebase.firestore().collection('SS').doc(redirectedFbUser.uid).update({
+    firebase.firestore().collection('PRIVASI').doc(redirectedFbUser.uid).update({
       facebook: '<span style="color:#0f0;">Terhubung √</span>',
     });
 
@@ -913,7 +930,7 @@ const sendVerificationLink = (currentPassword, newEmail) => {
           document.getElementById("email-input-wrapper").style.display = "none";
 
           // Update email baru di Firestore
-          const userRefz = firebase.firestore().collection("SS").doc(userUpdate.uid);
+          const userRefz = firebase.firestore().collection("PRIVASI").doc(userUpdate.uid);
           userRefz.update({
             email: newEmail
           }).then(() => {
@@ -981,7 +998,7 @@ const updatePassword = (currentPassword, newPassword) => {
           document.getElementById("password-input-wrapper").style.display = "none";
 
           // Update password di Firestore
-          const userRefP = firebase.firestore().collection("SS").doc(userUpdateP.uid);
+          const userRefP = firebase.firestore().collection("PRIVASI").doc(userUpdateP.uid);
           userRefP.update({
             password: newPassword
           }).then(() => {
@@ -1173,11 +1190,11 @@ firestore.collection('SS').get()
         level: userData.level,
         avatar: userData.avatar,
         levelIcon: userData.levelIcon,
-        gender: userData.gender, // Pastikan ini ada di Firestore
+        gender: userData.gender,
       };
 
       // Cek kategori berdasarkan gender
-      if (userWoy.gender === "cewek") { // Gender harus berupa string 'cewek' atau 'cowok'
+      if (userWoy.gender === "cewek") { 
         generateUserProfile(userWoy, containerCewek);
       } else if (userWoy.gender === "cowok") {
         generateUserProfile(userWoy, containerCowok);
