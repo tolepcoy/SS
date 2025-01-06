@@ -1139,7 +1139,6 @@ closeReq.onclick = () => {
   });
 
 // USER LIST
-// Mengambil data user dari Firestore
 const containerCewek = document.querySelector('.userCewek');
 const containerCowok = document.querySelector('.userCowok');
 
@@ -1148,7 +1147,7 @@ function generateUserProfile(user, container) {
   const userDiv = document.createElement('div');
   userDiv.classList.add('ic-user');
   userDiv.id = user.id;
-  
+
   userDiv.innerHTML = `
     <img id="avatarUser" src="${user.avatar}" alt="Avatar">
     <div class="icUserWrapper">
@@ -1157,7 +1156,7 @@ function generateUserProfile(user, container) {
       <img id="levelIconUser" src="${user.levelIcon}" alt="Level Icon"></span>
     </div>
   `;
-  
+
   container.appendChild(userDiv);
 }
 
@@ -1172,16 +1171,19 @@ firestore.collection('SS').get()
         level: userData.level,
         avatar: userData.avatar,
         levelIcon: userData.levelIcon,
+        gender: userData.gender, // Pastikan ini ada di Firestore
       };
 
-      // Sesuaikan dengan kategori Cowok atau Cewek berdasarkan gender
-      if (userWoy.gender >= cewek) {
+      // Cek kategori berdasarkan gender
+      if (userWoy.gender === "cewek") { // Gender harus berupa string 'cewek' atau 'cowok'
         generateUserProfile(userWoy, containerCewek);
-      } else {
+      } else if (userWoy.gender === "cowok") {
         generateUserProfile(userWoy, containerCowok);
+      } else {
+        console.warn("Gender tidak dikenali untuk user:", userWoy);
       }
     });
   })
   .catch((error) => {
-    console.error("Error getting documents: ", error);
+    console.error("Error getting documents:", error);
   });
