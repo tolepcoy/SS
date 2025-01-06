@@ -424,6 +424,12 @@ editDetailBtn.addEventListener('click', () => {
       saveDetailBtn.addEventListener('click', async () => {
         const newDetail = detailTextarea.value.trim();
 
+// sanitasi start
+function sinitizeInput(input) {
+  const docZSS = new DOMParser().parseFromString(input, 'text/html');
+  return docZSS.body.textContent || "";
+} // sanitasi end
+
         // Validasi isi biodata
         if (newDetail.length > 50) {
           showAlert("Biodata maksimal 50 karakter.");
@@ -431,7 +437,7 @@ editDetailBtn.addEventListener('click', () => {
         }
         
 // sanitasi start filter
-newDetail = sanitizeInput(newDetail);
+newDetail = sinitizeInput(newDetail);
 // sanitasi end
 
         // Simpan ke Firestore
@@ -534,10 +540,6 @@ editLokasiBtn.addEventListener('click', () => {
       // Handle klik tombol save
       saveLokasiBtn.addEventListener('click', async () => {
         const selectedLokasi = lokasiSelect.value;
-
-// sanitasi start
-selectedLokasi = sanitizeInput(selectedLokasi);
-// sanitasi end
 
         // Update lokasi di Firestore
         try {
