@@ -1278,3 +1278,52 @@ document.querySelectorAll('.icon').forEach(item => {
     }
   });
 });
+
+
+// Fungsi untuk mendapatkan Role dan LevelIcon berdasarkan level
+function getRoleAndIcon(userLevel) {
+    const rolesList = [
+        'Minion', 'Baron', 'Knight', 'Guardian', 'Commander',
+        'Champion', 'Lord', 'Grand Lord', 'Prince', 'King',
+        'Absolute King', 'Legendary King', 'King of Glory', 
+        'King Of The Kings', 'Immortal Emperor'
+    ];
+
+    const userRole = rolesList[userLevel - 1] || 'Unknown Role'; // Ambil role sesuai level
+    const userLevelIcon = userLevel; // LevelIcon sama dengan level
+
+    return { userRole, userLevelIcon };
+}
+
+// Fungsi untuk mengambil dan mengupdate semua user
+function fetchAndUpdateAllUsers() {
+    firestore.collection('SS').get() // Ambil semua data dari koleksi 'SS'
+        .then(snapshot => {
+            snapshot.forEach(doc => {
+                const currentUserId = doc.id; // Ambil ID user
+                const currentUserData = doc.data();
+                const userLevel = currentUserData.level;
+
+                // Konversi level ke role dan levelIcon
+                const { userRole, userLevelIcon } = getRoleAndIcon(userLevel);
+
+                // Update elemen untuk user tertentu
+                const userProfileElement = document.getElementById(currentUserId); // Misal id user sesuai dengan id elemen
+
+                if (userProfileElement) {
+                    // Mengupdate elemen profile dengan role dan levelIcon
+                    const roleElement = userProfileElement.querySelector('.role');
+                    const levelIconElement = userProfileElement.querySelector('.levelIcon');
+                    
+                    if (roleElement) roleElement.innerText = userRole;
+                    if (levelIconElement) levelIconElement.src = `level/${userLevelIcon}.png`;
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching users:', error);
+        });
+}
+
+// Panggil fungsi untuk mengambil dan update semua user
+fetchAndUpdateAllUsers();

@@ -326,7 +326,6 @@ body {
 #verimail {
   font-size: 10px;
   font-style: italic;
-  color: #f77;
 }
 
 #ubah-email {
@@ -474,7 +473,6 @@ body {
   z-index: 800;
   font-size: 12px;
   font-weight: bold;
-  color: #0f0;
 }
 
 /* CUSTOM DIALOG LOGOUT */
