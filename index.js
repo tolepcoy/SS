@@ -131,9 +131,6 @@ function openPanel(panelId) {
   panels.forEach(panel => {
     document.getElementById(panel).style.transform = panel === panelId ? "translateX(0)" : "translateX(-100%)";
   });
-  if (panelId === 'secretSidePanel') {
-    loadUserList();
-  }
 }
 
 // Fungsi untuk menampilkan profil user setelah login
@@ -1142,17 +1139,49 @@ closeReq.onclick = () => {
   });
 
 // USER LIST
-// Fungsi untuk memuat allUser.html
-function loadUserList() {
-  const cewok = document.getElementById('cewok');
+// Mengambil data user dari Firestore
+const containerCewek = document.querySelector('.userCewek');
+const containerCowok = document.querySelector('.userCowok');
 
-  fetch('allUser.html')
-    .then(response => response.text())
-    .then(data => {
-      cewok.innerHTML = data;
-})
-    .catch(error => {
-      cewok.innerHTML = 'Gagal memuat data pengguna';
-      console.error('Error:', error);
-  });
+// Fungsi untuk generate profile user secara dinamis
+function generateUserProfile(user, container) {
+  const userDiv = document.createElement('div');
+  userDiv.classList.add('ic-user');
+  userDiv.id = user.id;
+  
+  userDiv.innerHTML = `
+    <img id="avatarUser" src="${user.avatar}" alt="Avatar">
+    <div class="icUserWrapper">
+      <span id="namaUser" class="namaUser">${user.nama}</span>
+      <span class="smallest">Lv. &nbsp;<span id="levelUser">${user.level}</span>&nbsp;&nbsp;
+      <img id="levelIconUser" src="${user.levelIcon}" alt="Level Icon"></span>
+    </div>
+  `;
+  
+  container.appendChild(userDiv);
 }
+
+// Ambil data dari Firestore
+firestore.collection('SS').get()
+  .then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      const userData = doc.data();
+      const userWoy = {
+        id: doc.id,
+        nama: userData.nama,
+        level: userData.level,
+        avatar: userData.avatar,
+        levelIcon: userData.levelIcon,
+      };
+
+      // Sesuaikan dengan kategori Cowok atau Cewek berdasarkan gender
+      if (userWoy.gender >= cewek) {
+        generateUserProfile(userWoy, containerCewek);
+      } else {
+        generateUserProfile(userWoy, containerCowok);
+      }
+    });
+  })
+  .catch((error) => {
+    console.error("Error getting documents: ", error);
+  });
