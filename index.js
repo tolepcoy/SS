@@ -224,16 +224,16 @@ editNamaBtn.addEventListener('click', () => {
             namaEl.textContent = currentNama;
             editNamaBtn.style.display = 'block';
           });
-          
+
+          // Handle klik tombol save
+          saveBtnNama.addEventListener('click', async () => {
+            let newNama = namaInput.value.trim();
+            
 // sanitasi start
 function sanitizeInput(input) {
   const docXSS = new DOMParser().parseFromString(input, 'text/html');
   return docXSS.body.textContent || "";
 } // sanitasi end
-
-          // Handle klik tombol save
-          saveBtnNama.addEventListener('click', async () => {
-            const newNama = namaInput.value.trim();
 
             // Validasi nama
             if (!/^[a-zA-Z\s]{3,15}$/.test(newNama)) {
