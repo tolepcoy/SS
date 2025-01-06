@@ -1280,50 +1280,60 @@ document.querySelectorAll('.icon').forEach(item => {
 });
 
 
-// Fungsi untuk mendapatkan Role dan LevelIcon berdasarkan level
-function getRoleAndIcon(userLevel) {
-    const rolesList = [
-        'Minion', 'Baron', 'Knight', 'Guardian', 'Commander',
-        'Champion', 'Lord', 'Grand Lord', 'Prince', 'King',
-        'Absolute King', 'Legendary King', 'King of Glory', 
-        'King Of The Kings', 'Immortal Emperor'
-    ];
+// Ambil referensi ke koleksi
+const JANGANDIPAKEGICONSTNYA = firebase.firestore();
 
-    const userRole = rolesList[userLevel - 1] || 'Unknown Role'; // Ambil role sesuai level
-    const userLevelIcon = userLevel; // LevelIcon sama dengan level
+function updateAllUsers() {
+  JANGANDIPAKEGICONSTNYA.collection('SS').get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
 
-    return { userRole, userLevelIcon };
-}
+        const DIPAKELAGIWADUH = doc.data();
+        const JANGANDIPAKECONSTSAMA = doc.id;
 
-// Fungsi untuk mengambil dan mengupdate semua user
-function fetchAndUpdateAllUsers() {
-    firestore.collection('SS').get() // Ambil semua data dari koleksi 'SS'
-        .then(snapshot => {
-            snapshot.forEach(doc => {
-                const currentUserId = doc.id; // Ambil ID user
-                const currentUserData = doc.data();
-                const userLevel = currentUserData.level;
+        // Ambil data level dari firestore
+        const level = DIPAKELAGIWADUH.level;
 
-                // Konversi level ke role dan levelIcon
-                const { userRole, userLevelIcon } = getRoleAndIcon(userLevel);
+        // Tentukan role dan levelIcon berdasarkan level
+        const levelIcon = level; // Menyimpan level sebagai levelIcon
+        const role = getRoleText(level); // Mendapatkan role berdasarkan level
 
-                // Update elemen untuk user tertentu
-                const userProfileElement = document.getElementById(currentUserId); // Misal id user sesuai dengan id elemen
-
-                if (userProfileElement) {
-                    // Mengupdate elemen profile dengan role dan levelIcon
-                    const roleElement = userProfileElement.querySelector('.role');
-                    const levelIconElement = userProfileElement.querySelector('.levelIcon');
-                    
-                    if (roleElement) roleElement.innerText = userRole;
-                    if (levelIconElement) levelIconElement.src = `level/${userLevelIcon}.png`;
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching users:', error);
+        // Update data ke firestore
+        JANGANDIPAKEGICONSTNYA.collection('SS').doc(JANGANDIPAKECONSTSAMA).update({
+          levelIcon: levelIcon,
+          role: role
+        }).then(() => {
+          console.log(`User ${JANGANDIPAKECONSTSAMA} data successfully updated!`);
+        }).catch((error) => {
+          console.error(`Error updating user ${JANGANDIPAKECONSTSAMA}: `, error);
         });
+      });
+    })
+    .catch((error) => {
+      console.error("Error getting documents: ", error);
+    });
 }
 
-// Panggil fungsi untuk mengambil dan update semua user
-fetchAndUpdateAllUsers();
+function getRoleText(level) {
+  switch (level) {
+    case 1: return 'Minion';
+    case 2: return 'Baron';
+    case 3: return 'Knight';
+    case 4: return 'Guardian';
+    case 5: return 'Commander';
+    case 6: return 'Champion';
+    case 7: return 'Lord';
+    case 8: return 'Grand Lord';
+    case 9: return 'Prince';
+    case 10: return 'King';
+    case 11: return 'Absolute King';
+    case 12: return 'Legendary King';
+    case 13: return 'King of Glory';
+    case 14: return 'King Of The Kings';
+    case 15: return 'Immortal Emperor';
+    default: return 'Unknown Role';
+  }
+}
+
+// Panggil fungsi untuk mengupdate seluruh user
+updateAllUsers();
