@@ -40,7 +40,7 @@ firebase.auth().onAuthStateChanged((user) => {
     }
 
     // Cek jika user adalah admin
-    firestore.collection("Userss").doc(user.uid).get().then((doc) => {
+    firestore.collection("SS").doc(user.uid).get().then((doc) => {
       if (doc.exists && doc.data().isAdmin) {
         bersihkanChatboxLama();
       }
@@ -51,7 +51,7 @@ firebase.auth().onAuthStateChanged((user) => {
 /* Fungsi membersihkan chat lama
 function bersihkanChatboxLama() {
   const now = new Date();
-  const cutoff = new Date(now.getTime() - 24 * 60 * 1000); // 5mmt
+  const cutoff = new Date(now.getTime() - 1 * 60 * 1000); // 5mmt
   
   const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
 
@@ -756,6 +756,11 @@ document.getElementById('avatar').addEventListener('click', function() {
   this.classList.toggle('zoom');
 });
 
+// zoom avatar-lain
+document.getElementById('avatar-lain').addEventListener('click', function() {
+  this.classList.toggle('zoom');
+});
+
 /*! PANEL SETTING */
 // UNIQUE ID
 firebase.auth().onAuthStateChanged(user => {
@@ -1118,7 +1123,103 @@ function generateUserProfile(user, container) {
     </div>
   `;
 
+  // Menambahkan event listener untuk klik
+  userDiv.addEventListener('click', () => {
+
+// tendang panel
+document.querySelectorAll('.icon').forEach(icon => {
+ icon.classList.remove('ahuy');
+})
+
+document.querySelectorAll('.sidePanel').forEach(dor => {
+ dor.style.transform = 'translateX(-105%)';
+})
+
+// tambah class active
+const nyelipPanel = document.getElementById('profile-lain');
+  nyelipPanel.classList.add('active');
+
+    // Ketika diklik, ambil detail user dari Firestore
+    getUserDetails(user.id);
+  });
+
   container.appendChild(userDiv);
+}
+
+// Fungsi untuk mengambil data user dari Firestore dan menampilkannya di elemen tertentu
+function getUserDetails(userId) {
+  firestore.collection('SS').doc(userId).get()
+    .then((doc) => {
+      if (doc.exists) {
+        const userDetails = doc.data();
+        
+        // Update tampilan elemen spesifik di profile-lain
+        const namaLain = document.getElementById('nama-lain');
+if (namaLain) {
+namaLain.innerHTML = userDetails.nama;
+}
+
+const avatarLain = document.getElementById('avatar-lain');
+if (avatarLain) {
+avatarLain.src = userDetails.avatar;
+}
+
+const levelLain = document.getElementById('level-lain');
+if (levelLain) {
+levelLain.innerHTML = userDetails.level;
+}
+
+const levelIconLain = document.getElementById('levelIcon-lain');
+if (levelIconLain) {
+levelIconLain.src = `level/${userDetails.levelIcon}.png`;
+}
+
+const roleLain = document.getElementById('role-lain');
+if (roleLain) {
+roleLain.innerHTML = userDetails.role;
+}
+
+const detailLain = document.getElementById('detail-lain');
+if (detailLain) {
+detailLain.innerHTML = userDetails.detail;
+}
+
+const lokasiLain = document.getElementById('lokasi-lain');
+if (lokasiLain) {
+lokasiLain.innerHTML = userDetails.lokasi;
+}
+
+const umurLain = document.getElementById('umur-lain');
+if (umurLain) {
+umurLain.innerHTML = userDetails.umur;
+}
+
+const genderLain = document.getElementById('gender-lain');
+if (genderLain) {
+genderLain.src = `icon/${userDetails.gender}.png`;
+}
+
+const rateLain = document.getElementById('rate-lain');
+if (rateLain) {
+rateLain.innerHTML = userDetails.rate;
+}
+
+const bergabungLain = document.getElementById('bergabung-lain');
+if (bergabungLain) {
+bergabungLain.innerHTML = userDetails.bergabung;
+}
+
+const OLstateLain = document.getElementById('OLstate-lain');
+if (OLstateLain) {
+OLstateLain.innerHTML = userDetails.OLstate;
+}
+      } else {
+        console.log('User tidak ditemukan');
+      }
+    })
+    .catch((error) => {
+      console.error("Error getting user details: ", error);
+    });
 }
 
 // Fungsi untuk update profile user
@@ -1160,3 +1261,79 @@ firestore.collection('SS').onSnapshot((snapshot) => {
     }
   });
 });
+
+// Side profil lain nyelip
+let nyelip = document.getElementById('profile-lain');
+document.getElementById('tutup-nyelip').addEventListener('click', function() {
+  nyelip.classList.remove('active');
+});
+
+document.querySelectorAll('.icon').forEach(item => {
+  item.addEventListener('click', () => {
+    
+  const tendangNyelip = document.getElementById('profile-lain');
+    if (tendangNyelip) {
+      tendangNyelip.classList.remove('active');
+    }
+  });
+});
+
+// Fungsi untuk mengambil data user dan update tampilan role
+function getUserDetails(userId) {
+  firestore.collection('SS').doc(userId).get()
+    .then((doc) => {
+      if (doc.exists) {
+        const userDetails = doc.data();
+
+        // Menampilkan role dalam bentuk teks
+        const roleText = getRoleText(userDetails.role);
+
+        // Update tampilan elemen spesifik di profile-lain
+        const roleLain = document.getElementById('role-lain');
+        if (roleLain) {
+          roleLain.innerHTML = roleText;
+        }
+      }
+    })
+    .catch((error) => {
+      console.log("Error getting document:", error);
+    });
+}
+
+// Fungsi untuk mengubah angka role menjadi teks
+function getRoleText(roleNumber) {
+  switch (roleNumber) {
+    case 1:
+      return 'Minion';
+    case 2:
+      return 'Baron';
+    case 3:
+      return 'Knight';
+    case 4:
+      return 'Guardian';
+    case 5:
+      return 'Commander';
+    case 6:
+      return 'Champion';
+    case 7:
+      return 'Lord';
+    case 8:
+      return 'Grand Lord';
+    case 9:
+      return 'Prince';
+    case 10:
+      return 'King';
+    case 11:
+      return 'Absolute King';
+    case 12:
+      return 'Legendary King';
+    case 13:
+      return 'King of Glory';
+    case 14:
+      return 'King Of The King';
+    case 15:
+      return 'Immortal Emperor';
+    default:
+      return 'Unknown Role';
+  }
+}
