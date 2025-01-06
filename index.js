@@ -157,7 +157,8 @@ function updateProfile(data, kategori) {
   document.getElementById('avatar').src = data.avatar;
   document.getElementById('OLstate').innerHTML = data.OLstate;
   document.getElementById('level').innerHTML = data.level;
-  document.getElementById('role').innerHTML = data.role;
+ 
+/* document.getElementById('role').innerHTML = data.role; */
 document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
   document.getElementById('detail').innerHTML = data.detail;
   document.getElementById('lokasi').innerHTML = data.lokasi;
@@ -1174,10 +1175,10 @@ if (levelIconLain) {
 levelIconLain.src = `level/${userDetails.levelIcon}.png`;
 }
 
-const roleLain = document.getElementById('role-lain');
+/* const roleLain = document.getElementById('role-lain');
 if (roleLain) {
 roleLain.innerHTML = userDetails.role;
-}
+} */
 
 const detailLain = document.getElementById('detail-lain');
 if (detailLain) {
@@ -1284,9 +1285,9 @@ function getUserDetails2(userId) {
     .then((doc) => {
       if (doc.exists) {
         const userDetails2 = doc.data();
-        const roleNumber = Number(userDetails2.role); // Konversi ke angka
-        const roleText = getRoleText(roleNumber); // Panggil fungsi dengan nilai yang sudah dikonversi
-        console.log(roleText); // Log roleText untuk memastikan
+        const roleNumber = Number(userDetails2.role);
+        const roleText = getRoleText(roleNumber);
+        console.log(roleText);
         const role2 = document.getElementById('role');
         if (role2) {
           role2.innerHTML = roleText;
