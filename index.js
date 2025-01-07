@@ -750,77 +750,101 @@ editGenderBtn.addEventListener('click', () => {
   editGenderBtn.style.display = 'none';
 
   // Menunggu user login terlebih dahulu
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      // Buat elemen select dan tombol save dan cancel secara dinamis
-      const genderSelect = document.createElement('select');
-      genderSelect.id = 'gender-select';
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    // Ambil data user dari Firestore
+    const genderFirestoreRef = firestore.collection('SS').doc(user.uid);
 
-      // Daftar pilihan gender dengan URL gambar
-      const genderOptions = [
-        { text: 'Laki-laki', value: 'cowok' },
-        { text: 'Perempuan', value: 'cewek' }
-      ];
+    genderFirestoreRef.get().then(doc => {
+      if (doc.exists) {
+        const userData = doc.data();
 
-      genderOptions.forEach(gender => {
-        const genderOption = document.createElement('option');
-        genderOption.value = gender.value;
-        genderOption.textContent = gender.text;
-        genderSelect.appendChild(genderOption);
-      });
-      
-      const cancelGenderBtn = document.createElement('button');
-      cancelGenderBtn.id = 'cancel-gender';
-      cancelGenderBtn.classList.add('edul');
-      cancelGenderBtn.textContent = 'Batal';
-
-      const saveGenderBtn = document.createElement('button');
-      saveGenderBtn.id = 'save-gender';
-      saveGenderBtn.classList.add('edul');
-      saveGenderBtn.textContent = 'Simpan';
-
-      // Tambahkan elemen select dan tombol save setelah gender
-      const genderParentDiv = genderEl.parentNode;
-      genderParentDiv.appendChild(genderSelect);
-      genderParentDiv.appendChild(cancelGenderBtn);
-      genderParentDiv.appendChild(saveGenderBtn);
-      
-  // Handle klik tombol cancel
-      cancelGenderBtn.addEventListener('click', () => {
-   editGenderBtn.style.display = 'block';
-   genderSelect.remove();
-   cancelGenderBtn.remove();
-   saveGenderBtn.remove();
- });
-
-      // Handle klik tombol save
-      saveGenderBtn.addEventListener('click', async () => {
-        const selectedGender = genderSelect.value; // Ambil nilai URL gambar gender yang dipilih
-
-        // Update gender di Firestore
-        try {
-          const genderFirestoreRef = firestore.collection('SS').doc(user.uid);
-          await genderFirestoreRef.update({ gender: selectedGender });
-
-          // Update tampilan gender di halaman
-          genderEl.innerHTML = `<img src="${selectedGender}" alt="Gender Icon" />`;
-
-          // Tampilkan kembali tombol edit
-          editGenderBtn.style.display = 'block';
-
-          // Hapus elemen select dan tombol save setelah selesai
-          genderSelect.remove();
-          cancelGenderBtn.remove();
-          saveGenderBtn.remove();
-        } catch (error) {
-          console.error("Gagal update gender:", error);
-          showAlert("Terjadi kesalahan, coba lagi.");
+        // Cek nilai gender
+        if (userData.gender !== "cewok") {
+          alert("Gender tidak bisa diubah lagi setelah Anda mengaturnya.");
+          editGenderBtn.style.display = 'block'; // Tampilkan kembali tombol edit
+          return; // Stop proses edit
         }
-      });
-    } else {
-      console.log("User not logged in");
+      }
+
+      // Jika gender masih "cewok", lanjut tampilkan dropdown untuk edit
+      tampilkanDropdownEdit();
+    }).catch(error => {
+      console.error("Gagal mendapatkan data user:", error);
+      alert("Terjadi kesalahan, coba lagi.");
+    });
+  } else {
+    console.log("User not logged in");
+  }
+});
+
+// Fungsi untuk menampilkan dropdown edit gender
+function tampilkanDropdownEdit() {
+  const genderSelect = document.createElement('select');
+  genderSelect.id = 'gender-select';
+
+  // Daftar pilihan gender dengan URL gambar
+  const genderOptions = [
+    { text: 'Laki-laki', value: 'cowok' },
+    { text: 'Perempuan', value: 'cewek' }
+  ];
+
+  genderOptions.forEach(gender => {
+    const genderOption = document.createElement('option');
+    genderOption.value = gender.value;
+    genderOption.textContent = gender.text;
+    genderSelect.appendChild(genderOption);
+  });
+
+  const cancelGenderBtn = document.createElement('button');
+  cancelGenderBtn.id = 'cancel-gender';
+  cancelGenderBtn.classList.add('edul');
+  cancelGenderBtn.textContent = 'Batal';
+
+  const saveGenderBtn = document.createElement('button');
+  saveGenderBtn.id = 'save-gender';
+  saveGenderBtn.classList.add('edul');
+  saveGenderBtn.textContent = 'Simpan';
+
+  // Tambahkan elemen select dan tombol save setelah gender
+  const genderParentDiv = genderEl.parentNode;
+  genderParentDiv.appendChild(genderSelect);
+  genderParentDiv.appendChild(cancelGenderBtn);
+  genderParentDiv.appendChild(saveGenderBtn);
+
+  // Handle klik tombol cancel
+  cancelGenderBtn.addEventListener('click', () => {
+    editGenderBtn.style.display = 'block';
+    genderSelect.remove();
+    cancelGenderBtn.remove();
+    saveGenderBtn.remove();
+  });
+
+  // Handle klik tombol save
+  saveGenderBtn.addEventListener('click', async () => {
+    const selectedGender = genderSelect.value; // Ambil nilai URL gambar gender yang dipilih
+
+    // Update gender di Firestore
+    try {
+      const genderFirestoreRef = firestore.collection('SS').doc(user.uid);
+      await genderFirestoreRef.update({ gender: selectedGender });
+
+      // Update tampilan gender di halaman
+      genderEl.innerHTML = `<img src="${selectedGender}" alt="Gender Icon" />`;
+
+      // Tampilkan kembali tombol edit
+      editGenderBtn.style.display = 'block';
+
+      // Hapus elemen select dan tombol save setelah selesai
+      genderSelect.remove();
+      cancelGenderBtn.remove();
+      saveGenderBtn.remove();
+    } catch (error) {
+      console.error("Gagal update gender:", error);
+      alert("Terjadi kesalahan, coba lagi.");
     }
   });
+}
 });
 
 // zoom avatar
