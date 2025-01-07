@@ -26,10 +26,10 @@ body {
     transform: translateX(0);
   }
   50% {
-    transform: translateX(-165%);
+    transform: translateX(-100%);
   }
   100% {
-    transform: translateX(-365%);
+    transform: translateX(-200%);
   }
 }
 
