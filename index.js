@@ -23,44 +23,18 @@ firebase.auth().onAuthStateChanged((TCUser) => {
       showAlert('Anda belum memverifikasi email!');
     }
 
-    firestore.collection("SS").doc(TCUser.uid).get().then((TCDoc) => {
-      if (TCDoc.exists && TCDoc.data().isAdmin) {
-        console.log("TCDoc data:", TCDoc.data());
-
-        const ADMINSIRU = document.querySelectorAll('*');
-const adminOnline = document.getElementById('admin-online');
-const adminContainer = document.getElementById('admin-container');
-
-ADMINSIRU.forEach((elemen) => {
-  elemen.style.backgroundColor = 'black';
-  elemen.style.color = 'gold';
-});
-
-if (adminContainer && adminOnline) {
-  adminContainer.style.display = "block";
-  adminOnline.style.animation = "welcomeAdmin 20s ease-in";
-  console.log("Administrator login");
-
-  setTimeout(() => {
-    ADMINSIRU.forEach((elemen) => {
-      elemen.style.backgroundColor = 'initial'; // Reset ke nilai default
-      elemen.style.color = 'initial'; // Reset ke nilai default
-    });
-  }, 15000);
-
-  setTimeout(() => {
-    adminOnline.style.animation = "none";
-    adminContainer.style.display = "none";
-    console.log("#admin-container off.");
-  }, 20000);
+    firestore.collection("SS").doc(TCUser.uid).get()
+      .then((TCDoc) => {
+        if (TCDoc.exists && TCDoc.data().isAdmin) {
+          console.log("TCDoc data:", TCDoc.data());
 
           // Updater untuk admin
-      TCUpdateAllUsersForAdmin();
+          TCUpdateAllUsersForAdmin();
         }
-      }
-    }).catch((error) => {
-      console.error("Error mengambil data admin:", error);
-    });
+      })
+      .catch((error) => {
+        console.error("Error mengambil data admin:", error);
+      });
   }
 });
 
