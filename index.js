@@ -105,7 +105,7 @@ function TCGetRoleText(TCLevel) {
     case 4: return 'Guardian';
     case 5: return 'Commander';
     case 6: return 'Champion';
-    case 7: return 'Lord';
+    case 7: return '<span id="lord">Lord</span>';
     case 8: return 'Grand Lord';
     case 9: return 'Prince';
     case 10: return 'King';
@@ -763,7 +763,7 @@ editGenderBtn.addEventListener('click', () => {
 
           // Cek nilai gender
           if (userData.gender !== "cewok") {
-            alert("Gender tidak bisa diubah lagi setelah Anda mengaturnya.");
+            showAlert("Gender tidak bisa diubah lagi setelah Anda mengaturnya.");
             editGenderBtn.style.display = 'block'; // Tampilkan kembali tombol edit
             return; // Stop proses edit
           }
@@ -773,7 +773,7 @@ editGenderBtn.addEventListener('click', () => {
         tampilkanDropdownEdit();
       }).catch(error => {
         console.error("Gagal mendapatkan data user:", error);
-        alert("Terjadi kesalahan, coba lagi.");
+        showAlert("Terjadi kesalahan, coba lagi.");
       });
     } else {
       console.log("User not logged in");
@@ -844,7 +844,7 @@ function tampilkanDropdownEdit() {
       saveGenderBtn.remove();
     } catch (error) {
       console.error("Gagal update gender:", error);
-      alert("Terjadi kesalahan, coba lagi.");
+      showAlert("Terjadi kesalahan, coba lagi.");
     }
   });
 }
@@ -1377,31 +1377,31 @@ document.querySelectorAll('.icon').forEach(item => {
 
 
 // Ambil referensi ke koleksi
-const JANGANDIPAKEGICONSTNYA = firebase.firestore();
+const Mantap = firebase.firestore();
 
 function updateAllUsers() {
-  JANGANDIPAKEGICONSTNYA.collection('SS').get()
+  Mantap.collection('SS').get()
     .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
 
-        const DIPAKELAGIWADUH = doc.data();
-        const JANGANDIPAKECONSTSAMA = doc.id;
+        const Waduh = doc.data();
+        const SamaSaja = doc.id;
 
         // Ambil data level dari firestore
-        const level = DIPAKELAGIWADUH.level;
+        const level = Waduh.level;
 
         // Tentukan role dan levelIcon berdasarkan level
         const levelIcon = level;
         const role = getRoleText(level);
 
         // Update data ke firestore
-        JANGANDIPAKEGICONSTNYA.collection('SS').doc(JANGANDIPAKECONSTSAMA).update({
+        Mantap.collection('SS').doc(SamaSaja).update({
           levelIcon: levelIcon,
           role: role
         }).then(() => {
-          console.log(`User ${JANGANDIPAKECONSTSAMA} data successfully updated!`);
+          console.log(`User ${SamaSaja} data successfully updated!`);
         }).catch((error) => {
-          console.error(`Error updating user ${JANGANDIPAKECONSTSAMA}: `, error);
+          console.error(`Error updating user ${SamaSaja}: `, error);
         });
       });
     })
@@ -1418,7 +1418,7 @@ function getRoleText(level) {
     case 4: return 'Guardian';
     case 5: return 'Commander';
     case 6: return 'Champion';
-    case 7: return 'Lord';
+    case 7: return '<span id="lord">Lord</span>';
     case 8: return 'Grand Lord';
     case 9: return 'Prince';
     case 10: return 'King';
