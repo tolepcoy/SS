@@ -27,22 +27,7 @@ firebase.auth().onAuthStateChanged((TCUser) => {
       .then((TCDoc) => {
         if (TCDoc.exists && TCDoc.data().isAdmin) {
           
-// ADMIN SIRU
-firestore.collection("CGlobal").doc("Cbox").onSnapshot((doc) => {
-  console.log("Testing koneksi");
-  
-  if (doc.exists) {
-    const testingElement = document.getElementById("testing");
-    if (testingElement) {
-      testingElement.innerHTML = doc.data().testing;
-      console.log("Testing field updated:", doc.data().testing);
-    } else {
-      console.error("Elemen #testing nggak ketemu!");
-    }
-  } else {
-    console.error("Dokumen testing nggak ada!");
-  }
-});
+
           
           console.log("TCDoc data:", TCDoc.data());
 
@@ -1439,3 +1424,36 @@ function getRoleText(level) {
 
 // Panggil fungsi untuk mengupdate seluruh user
 updateAllUsers();
+
+// ADMIN SIRU
+firebase.auth().onAuthStateChanged((user) => {
+  const testingElement = document.getElementById("testing");
+
+  if (user) {
+    // Jika user login dan UID nya sesuai
+    if (user.uid === 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
+      console.log("Ente login dengan UID yang benar!");
+
+      firestore.collection("CGlobal").doc("Cbox").get().then((doc) => {
+        if (doc.exists) {
+          const testingData = doc.data().testing;
+          testingElement.innerHTML = testingData;
+        } else {
+          console.log("Dokumen tidak ditemukan");
+        }
+      }).catch((error) => {
+        console.error("Error mengambil dokumen: ", error);
+      });
+
+    } else {
+      console.log("UID bukan milik ente, data tidak ditampilkan.");
+    }
+
+  } else {
+    // Jika ente logout
+    console.log("Ente logout!");
+
+    // Kosongin elemen 'testing'
+    testingElement.innerHTML = ""; // Reset atau kosongkan data
+  }
+});
