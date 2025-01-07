@@ -27,7 +27,7 @@ firebase.auth().onAuthStateChanged((TCUser) => {
       if (TCDoc.exists && TCDoc.data().isAdmin) {
         console.log("TCDoc data:", TCDoc.data());
 
-        const bodybuilder = document.querySelector('body');
+        const ADMINSIRU = document.querySelectorAll('*');
         const adminOnline = document.getElementById('admin-online');
         const adminContainer = document.getElementById('admin-container');
 
@@ -37,8 +37,10 @@ firebase.auth().onAuthStateChanged((TCUser) => {
           console.log("Administrator login");
 
           setTimeout(() => {
-            bodybuilder.style.background = '#eee';
-          }, 2000);
+ADMINSIRU.forEach((elemen) => {
+elemen.style.backgroundColor = 'black';
+elemen.style.color = 'gold';})
+          }, 15000);
 
           setTimeout(() => {
             adminOnline.style.animation = "none";
