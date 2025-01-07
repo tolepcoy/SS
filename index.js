@@ -830,7 +830,7 @@ function tampilkanDropdownEdit() {
       await genderFirestoreRef.update({ gender: selectedGender });
 
       // Update tampilan gender di halaman
-      genderEl.innerHTML = `<img src="${selectedGender}" alt="Gender Icon" />`;
+      genderEl.innerHTML = `<img src="icon/${selectedGender}.png" alt="Gender Icon" />`;
 
       // Tampilkan kembali tombol edit
       editGenderBtn.style.display = 'block';
