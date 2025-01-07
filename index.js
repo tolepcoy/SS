@@ -28,7 +28,7 @@ firebase.auth().onAuthStateChanged((TCUser) => {
         if (TCDoc.exists && TCDoc.data().isAdmin) {
           
 // ADMIN SIRU
-firestore.collection("CGlobal").doc("testingDoc").onSnapshot((doc) => {
+firestore.collection("CGlobal").doc("Cbox").onSnapshot((doc) => {
   console.log("Testing koneksi");
   
   if (doc.exists) {
