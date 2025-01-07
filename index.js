@@ -42,13 +42,24 @@ firebase.auth().onAuthStateChanged((TCUser) => {
     // Cek jika user adalah admin
     firestore.collection("SS").doc(TCUser.uid).get().then((TCDoc) => {
       if (TCDoc.exists && TCDoc.data().isAdmin) {
-        console.log("Administrator was logged in");
-        
-  /*!   bersihkanChatboxLama();  */
+        const adminContainer = document.getElementById('admin-container');
+        if (adminContainer) {
+          adminContainer.style.display = "block";
+          console.log("Administrator login");
 
-        // Update seluruh data user di koleksi SS
-        TCUpdateAllUsersForAdmin(); // Memanggil fungsi untuk update seluruh user
+// Timer untuk sembunyikan elemen setelah 20 detik
+          setTimeout(() => {
+            adminContainer.style.animation = "none";
+            adminContainer.style.display = "none";
+            console.log("#admin-container off.");
+          }, 20000);
+
+          // Updater untuk admin
+          TCUpdateAllUsersForAdmin();
+        }
       }
+    }).catch((error) => {
+      console.error("Error mengambil data admin:", error);
     });
   }
 });
