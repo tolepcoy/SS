@@ -14,23 +14,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
-// CUSTOM ALERT
-function showAlert(message) {
-  const alertBox2 = document.createElement('div');
-  alertBox2.classList.add('custom-alert');
-  alertBox2.innerHTML = `
-<div class="alert-box">
-<span class="alert-message">${message}</span>
-<button class="alert-ok">OK</button>
-</div>`;
-    document.body.appendChild(alertBox2);
-    alertBox2.style.display = 'flex';
-    alertBox2.querySelector('.alert-ok').addEventListener('click', () => {
-      alertBox2.style.display = 'none';
-      document.body.removeChild(alertBox2);
-});}
-// END CUSTOM ALERT
-
 // ADMIN WELCOME
 firebase.auth().onAuthStateChanged((TCUser) => {
   if (TCUser) {
@@ -59,7 +42,7 @@ firebase.auth().onAuthStateChanged((TCUser) => {
 
           setTimeout(() => {
             adminOnline.style.animation = "none";
-            adminOnline.style.display = "none"; // Fixed: Use adminOnline
+            adminContainer.style.display = "none";
             console.log("#admin-container off.");
           }, 20000);
 
@@ -275,6 +258,23 @@ function updateProfilePrivasi(dataPrivasi, kategori) {
 
   console.log(`Profil berhasil diperbarui untuk ${kategori}`);
 }
+
+// CUSTOM ALERT
+function showAlert(message) {
+  const alertBox2 = document.createElement('div');
+  alertBox2.classList.add('custom-alert');
+  alertBox2.innerHTML = `
+<div class="alert-box">
+<span class="alert-message">${message}</span>
+<button class="alert-ok">OK</button>
+</div>`;
+    document.body.appendChild(alertBox2);
+    alertBox2.style.display = 'flex';
+    alertBox2.querySelector('.alert-ok').addEventListener('click', () => {
+      alertBox2.style.display = 'none';
+      document.body.removeChild(alertBox2);
+});}
+// END CUSTOM ALERT
 
 // EDIT NAMA
 const namaEl = document.getElementById('nama');
