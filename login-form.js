@@ -21,7 +21,7 @@ registerButton.addEventListener('click', () => {
   const emailRegister = document.getElementById('email').value;
   const passwordRegister = document.getElementById('password').value;
 
-  // CUSTOM ALERT REGISTER
+// CUSTOM ALERT REGISTER
   function showAlert(message) {
     const alertBox = document.createElement('div');
     alertBox.classList.add('custom-alert');
@@ -40,6 +40,7 @@ registerButton.addEventListener('click', () => {
       document.body.removeChild(alertBox);
     });
   }
+// END ALERT CUSTOM REGISTER
 
   if (emailRegister && passwordRegister) {
     // Register User
@@ -78,7 +79,7 @@ registerButton.addEventListener('click', () => {
           isAdmin: 'false',
           verimail: 'Belum Verifikasi ✘',
         }).then(() => {
-          showAlert('Registrasi berhasil!');
+          showAlert('Registrasi berhasil! Silahkan Login dahulu');
           console.log('User privasi berhasil disimpan ke koleksi PRIVASI.');
         }).catch((error) => {
           console.error('Error saving privasi data to Firestore:', error);
@@ -94,57 +95,30 @@ registerButton.addEventListener('click', () => {
   }
 });
 
-
-//FUNGSI LOGIN
+// FUNGSI LOGIN
 const loginButton = document.getElementById('loginButton');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
 
+// Fungsi untuk login
 loginButton.addEventListener('click', () => {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  const emailLogin = emailInput.value;
+  const passwordLogin = passwordInput.value;
 
-  // CUSTOM ALERT LOGIN
-  function showAlertZ(message) {
-    const alertBoxZ = document.createElement('div');
-    alertBoxZ.classList.add('custom-alert');
-    alertBoxZ.innerHTML = `
-      <div class="alert-box">
-        <span class="alert-message">${message}</span>
-        <button class="alert-ok">OK</button>
-      </div>
-    `;
-
-    // Tambahkan alert ke body
-    document.body.appendChild(alertBoxZ);
-
-    // Menampilkan alert
-    alertBoxZ.style.display = 'flex';
-
-    // Close alert saat tombol OK diklik
-    alertBoxZ.querySelector('.alert-ok').addEventListener('click', () => {
-      alertBoxZ.style.display = 'none';
-      document.body.removeChild(alertBoxZ);
-    });
-  }
-
-  if (email && password) {
-    auth.signInWithEmailAndPassword(email, password)
+  if (emailLogin && passwordLogin) {
+    firebase.auth().signInWithEmailAndPassword(emailLogin, passwordLogin)
       .then(userCredential => {
         const user = userCredential.user;
-
-        // Redirect ke index.html jika login berhasil
-        showAlertZ('Login berhasil!');
-        console.log('User logged in:', user.email);
-
-        // Redirect setelah 2 detik (untuk memberi waktu melihat alert)
-        setTimeout(() => {
-          window.location.replace("https://tolepcoy.github.io/SS/index.html");
-        }, 2000);
+        console.log('Login berhasil:', user);
+     alert('Login berhasil');
+     
+        window.location.href = 'https://tolepcoy.github.io/SS/index.html';
       })
       .catch(error => {
-        console.error('Login Error:', error);
-        showAlertZ('Login gagal! Periksa email atau password.');
+        console.error('Login gagal:', error);
+        alert('Login gagal! Periksa email atau password Anda.');
       });
   } else {
-    showAlertZ('Isi email dan password dulu!');
+    alert('Isi email dan password dulu!');
   }
 });
