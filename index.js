@@ -26,6 +26,22 @@ firebase.auth().onAuthStateChanged((TCUser) => {
     firestore.collection("SS").doc(TCUser.uid).get()
       .then((TCDoc) => {
         if (TCDoc.exists && TCDoc.data().isAdmin) {
+          
+// ADMIN SIRU
+firestore.collection("CGlobal").doc("testingDoc").onSnapshot((doc) => {
+  if (doc.exists) {
+    const testingElement = document.getElementById("testing");
+    if (testingElement) {
+      testingElement.innerHTML = doc.data().testing;
+      console.log("Testing field updated:", doc.data().testing);
+    } else {
+      console.error("Elemen #testing nggak ketemu!");
+    }
+  } else {
+    console.error("Dokumen testing nggak ada!");
+  }
+});
+          
           console.log("TCDoc data:", TCDoc.data());
 
           // Updater untuk admin
@@ -85,7 +101,7 @@ function TCGetRoleText(TCLevel) {
     case 13: return 'King of Glory';
     case 14: return 'King Of The Kings';
     case 15: return 'Immortal Emperor';
-    default: return 'Unknown'; // Jika level tidak sesuai
+    default: return 'Unknown';
   }
 }
 
