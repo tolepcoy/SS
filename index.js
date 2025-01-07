@@ -744,38 +744,41 @@ const cancelUmurBtn = document.createElement('button');
 // EDIT GENDER
 const genderEl = document.getElementById('gender');
 const editGenderBtn = document.getElementById('edit-gender');
+let currentUser;
 
 // Fungsi untuk handle klik tombol edit gender
 editGenderBtn.addEventListener('click', () => {
   editGenderBtn.style.display = 'none';
 
   // Menunggu user login terlebih dahulu
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    // Ambil data user dari Firestore
-    const genderFirestoreRef = firestore.collection('SS').doc(user.uid);
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      currentUser = user; // Simpan data user yang login
+      // Ambil data user dari Firestore
+      const genderFirestoreRef = firestore.collection('SS').doc(user.uid);
 
-    genderFirestoreRef.get().then(doc => {
-      if (doc.exists) {
-        const userData = doc.data();
+      genderFirestoreRef.get().then(doc => {
+        if (doc.exists) {
+          const userData = doc.data();
 
-        // Cek nilai gender
-        if (userData.gender !== "cewok") {
-          alert("Gender tidak bisa diubah lagi setelah Anda mengaturnya.");
-          editGenderBtn.style.display = 'block'; // Tampilkan kembali tombol edit
-          return; // Stop proses edit
+          // Cek nilai gender
+          if (userData.gender !== "cewok") {
+            alert("Gender tidak bisa diubah lagi setelah Anda mengaturnya.");
+            editGenderBtn.style.display = 'block'; // Tampilkan kembali tombol edit
+            return; // Stop proses edit
+          }
         }
-      }
 
-      // Jika gender masih "cewok", lanjut tampilkan dropdown untuk edit
-      tampilkanDropdownEdit();
-    }).catch(error => {
-      console.error("Gagal mendapatkan data user:", error);
-      alert("Terjadi kesalahan, coba lagi.");
-    });
-  } else {
-    console.log("User not logged in");
-  }
+        // Jika gender masih "cewok", lanjut tampilkan dropdown untuk edit
+        tampilkanDropdownEdit();
+      }).catch(error => {
+        console.error("Gagal mendapatkan data user:", error);
+        alert("Terjadi kesalahan, coba lagi.");
+      });
+    } else {
+      console.log("User not logged in");
+    }
+  });
 });
 
 // Fungsi untuk menampilkan dropdown edit gender
@@ -822,11 +825,11 @@ function tampilkanDropdownEdit() {
 
   // Handle klik tombol save
   saveGenderBtn.addEventListener('click', async () => {
-    const selectedGender = genderSelect.value; // Ambil nilai URL gambar gender yang dipilih
+    const selectedGender = genderSelect.value; // Ambil nilai gender yang dipilih
 
     // Update gender di Firestore
     try {
-      const genderFirestoreRef = firestore.collection('SS').doc(user.uid);
+      const genderFirestoreRef = firestore.collection('SS').doc(currentUser.uid);
       await genderFirestoreRef.update({ gender: selectedGender });
 
       // Update tampilan gender di halaman
@@ -845,7 +848,6 @@ function tampilkanDropdownEdit() {
     }
   });
 }
-});
 
 // zoom avatar
 document.getElementById('avatar').addEventListener('click', function() {
