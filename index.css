@@ -16,9 +16,9 @@ body {
   display: none;
   background: linear-gradient(to right, transparent, #cbc, transparent);
   position: absolute;
-  width: 75%;
+  width: 74%;
   top: 15%;
-  left: 20px;
+  left: 22px;
   height: 20px;
   overflow: hidden;
 }
@@ -29,7 +29,7 @@ body {
   font-family: "Tolep Roboto";
   font-size: 14px;
   font-weight: bold;
-  color: #900;
+  color: gold;
   text-align: center;
   white-space: nowrap;
   animation: none;

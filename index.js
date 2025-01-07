@@ -28,25 +28,31 @@ firebase.auth().onAuthStateChanged((TCUser) => {
         console.log("TCDoc data:", TCDoc.data());
 
         const ADMINSIRU = document.querySelectorAll('*');
-        const adminOnline = document.getElementById('admin-online');
-        const adminContainer = document.getElementById('admin-container');
+const adminOnline = document.getElementById('admin-online');
+const adminContainer = document.getElementById('admin-container');
 
-        if (adminContainer && adminOnline) {
-          adminContainer.style.display = "block";
-          adminOnline.style.animation = "welcomeAdmin 20s ease-in";
-          console.log("Administrator login");
-
-          setTimeout(() => {
 ADMINSIRU.forEach((elemen) => {
-elemen.style.backgroundColor = 'black';
-elemen.style.color = 'gold';})
-          }, 15000);
+  elemen.style.backgroundColor = 'black';
+  elemen.style.color = 'gold';
+});
 
-          setTimeout(() => {
-            adminOnline.style.animation = "none";
-            adminContainer.style.display = "none";
-            console.log("#admin-container off.");
-          }, 20000);
+if (adminContainer && adminOnline) {
+  adminContainer.style.display = "block";
+  adminOnline.style.animation = "welcomeAdmin 20s ease-in";
+  console.log("Administrator login");
+
+  setTimeout(() => {
+    ADMINSIRU.forEach((elemen) => {
+      elemen.style.backgroundColor = 'initial'; // Reset ke nilai default
+      elemen.style.color = 'initial'; // Reset ke nilai default
+    });
+  }, 15000);
+
+  setTimeout(() => {
+    adminOnline.style.animation = "none";
+    adminContainer.style.display = "none";
+    console.log("#admin-container off.");
+  }, 20000);
 
           // Updater untuk admin
       TCUpdateAllUsersForAdmin();
