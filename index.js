@@ -29,6 +29,8 @@ firebase.auth().onAuthStateChanged((TCUser) => {
           
 // ADMIN SIRU
 firestore.collection("CGlobal").doc("testingDoc").onSnapshot((doc) => {
+  console.log("Testing koneksi");
+  
   if (doc.exists) {
     const testingElement = document.getElementById("testing");
     if (testingElement) {
