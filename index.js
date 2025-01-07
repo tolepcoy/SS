@@ -1426,34 +1426,58 @@ function getRoleText(level) {
 updateAllUsers();
 
 // ADMIN SIRU
-firebase.auth().onAuthStateChanged((user) => {
-  const testingElement = document.getElementById("testing");
+const testingElement = document.getElementById("testing");
 
-  if (user) {
-    // Jika user login dan UID nya sesuai
-    if (user.uid === 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
-      console.log("Ente login dengan UID yang benar!");
+// Mendengarkan perubahan pada koleksi CGlobal -> Cbox
+const testingRef = firestore.collection("CGlobal").doc("Cbox");
 
-      firestore.collection("CGlobal").doc("Cbox").get().then((doc) => {
-        if (doc.exists) {
-          const testingData = doc.data().testing;
-          testingElement.innerHTML = testingData;
-        } else {
-          console.log("Dokumen tidak ditemukan");
-        }
-      }).catch((error) => {
-        console.error("Error mengambil dokumen: ", error);
-      });
-
+testingRef.onSnapshot((doc) => {
+  if (doc.exists) {
+    const testingData = doc.data().testing;
+    
+    // Jika data testing ada, tampilkan di elemen #testing
+    if (testingData) {
+      testingElement.innerHTML = testingData;
     } else {
-      console.log("UID bukan milik ente, data tidak ditampilkan.");
+      testingElement.innerHTML = ""; // Jika kosong (misalnya logout)
     }
-
   } else {
-    // Jika ente logout
-    console.log("Ente logout!");
+    console.log("Dokumen tidak ditemukan");
+  }
+});
 
-    // Kosongin elemen 'testing'
-    testingElement.innerHTML = ""; // Reset atau kosongkan data
+// Fungsi untuk memeriksa apakah user sudah login
+function checkLoginStatus() {
+  const user = firebase.auth().currentUser;
+  if (user && user.uid === 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
+    // User yang sesuai UID login, update data testing
+    setTestingOnLogin();
+  } else {
+    // Jika tidak login atau bukan admin, kosongkan data testing
+    setTestingOnLogout();
+  }
+}
+
+// Fungsi untuk update data testing ketika ente login
+function setTestingOnLogin() {
+  const testingData = `<div style="width: 100%; position: absolute; left: 100%; font-family: Tolep Roboto; font-size: 15px; font-weight: bold; color: #900; text-align: center; white-space: nowrap; animation: welcomeAdmin 15s infinite">Administrator telah login!</div>`;
+  
+  testingRef.update({ testing: testingData });
+}
+
+// Fungsi untuk mengosongkan data testing ketika ente logout
+function setTestingOnLogout() {
+  testingRef.update({ testing: "" });
+}
+
+// Panggil checkLoginStatus() untuk memeriksa status login saat halaman dimuat
+checkLoginStatus();
+
+// Dengar perubahan pada status login (misalnya melalui event listener Firebase Auth)
+firebase.auth().onAuthStateChanged((user) => {
+  if (user && user.uid === 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
+    setTestingOnLogin();
+  } else {
+    setTestingOnLogout();
   }
 });
