@@ -18,13 +18,13 @@ const firestore = firebase.firestore();
 const registerButton = document.getElementById('registerButton');
 
 registerButton.addEventListener('click', () => {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  const emailRegister = document.getElementById('email').value;
+  const passwordRegister = document.getElementById('password').value;
 
   // CUSTOM ALERT REGISTER
   function showAlert(message) {
     const alertBox = document.createElement('div');
-    alertBox.classList.add('custom-alert'); // Tambahkan class untuk alert
+    alertBox.classList.add('custom-alert');
     alertBox.innerHTML = `
       <div class="alert-box">
         <span class="alert-message">${message}</span>
@@ -32,78 +32,62 @@ registerButton.addEventListener('click', () => {
       </div>
     `;
 
-    // Tambahkan alert ke body
     document.body.appendChild(alertBox);
-
-    // Menampilkan alert
     alertBox.style.display = 'flex';
 
-    // Close alert saat tombol OK diklik
     alertBox.querySelector('.alert-ok').addEventListener('click', () => {
       alertBox.style.display = 'none';
       document.body.removeChild(alertBox);
     });
   }
 
-  if (email && password) {
+  if (emailRegister && passwordRegister) {
     // Register User
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        // Ambil user ID (UID) yang telah terdaftar
-        const user = userCredential.user;
+    auth.createUserWithEmailAndPassword(emailRegister, passwordRegister)
+      .then((userCredential) => {
+        const userRegister = userCredential.user;
 
-        // Simpan data user ke Firestore setelah berhasil login
-        auth.onAuthStateChanged(user => {
-          if (user) {
-            // Jika sudah login, simpan data ke Firestore
+        // Simpan data ke koleksi SS
+        const userSSRef = firestore.collection('SS').doc(userRegister.uid);
+        userSSRef.set({
+          nama: 'userSS',
+          OLstate: 'Offline',
+          avatar: 'icon/default_avatar.png',
+          level: '1',
+          role: 'Minion',
+          levelIcon: '1',
+          detail: 'Bio',
+          lokasi: 'Palembang',
+          umur: 'Belum diatur',
+          gender: 'cewok',
+          isAdmin: 'false',
+          requestRate: 'belum request',
+          rate: 'No Rating',
+          bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
+        }).then(() => {
+          console.log('User data berhasil disimpan ke koleksi SS.');
+        }).catch((error) => {
+          console.error('Error saving user data to Firestore:', error);
+        });
 
-            // Menyimpan data umum ke koleksi SS
-            const userSSRef = firestore.collection('SS').doc(user.uid);
-            userSSRef.set({
-              nama: 'userSS',
-              OLstate: 'Offline',
-              avatar: 'icon/default_avatar.png',
-              level: '1',
-              role: 'Minion',
-              levelIcon: '1',
-              detail: 'Bio',
-              lokasi: 'Palembang',
-              umur: 'Belum diatur',
-              gender: 'cewok',
-              isAdmin: 'false',
-              requestRate: 'belum request',
-              rate: 'No Rating',
-              bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
-            }).then(() => {
-              console.log('User data berhasil disimpan ke koleksi SS.');
-            }).catch(error => {
-              console.error('Error saving user data to Firestore:', error);
-            });
-
-            // Menyimpan data privasi ke koleksi PRIVASI
-            const privasiRef = firestore.collection('PRIVASI').doc(user.uid);
-            privasiRef.set({
-              email: user.email,
-              password: '-',
-              isAdmin: 'false',
-              verimail: 'Belum Verifikasi ✘',
-            }).then(() => {
-              showAlert('Registrasi berhasil!');
-              console.log('User privasi berhasil disimpan ke koleksi PRIVASI.');
-
-              window.location.replace("https://tolepcoy.github.io/SS/index.html");
-            }).catch(error => {
-              console.error('Error saving privasi data to Firestore:', error);
-              showAlert('Gagal registrasi!');
-            });
-          } else {
-            showAlert('Login gagal!');
-          }
+        // Simpan data ke koleksi PRIVASI
+        const privasiRef = firestore.collection('PRIVASI').doc(userRegister.uid);
+        privasiRef.set({
+          email: userRegister.email,
+          password: '-',
+          isAdmin: 'false',
+          verimail: 'Belum Verifikasi ✘',
+        }).then(() => {
+          showAlert('Registrasi berhasil!');
+          console.log('User privasi berhasil disimpan ke koleksi PRIVASI.');
+        }).catch((error) => {
+          console.error('Error saving privasi data to Firestore:', error);
+          showAlert('Gagal menyimpan data privasi!');
         });
       })
-      .catch(error => {
-        showAlert('Error!');
-        console.error(error);
+      .catch((error) => {
+        console.error('Error saat registrasi:', error);
+        showAlert('Registrasi gagal!');
       });
   } else {
     showAlert('Isi dulu mang!');
@@ -119,10 +103,10 @@ loginButton.addEventListener('click', () => {
   const password = document.getElementById('password').value;
 
   // CUSTOM ALERT LOGIN
-  function showAlert(message) {
-    const alertBox = document.createElement('div');
-    alertBox.classList.add('custom-alert'); // Tambahkan class untuk alert
-    alertBox.innerHTML = `
+  function showAlertZ(message) {
+    const alertBoxZ = document.createElement('div');
+    alertBoxZ.classList.add('custom-alert');
+    alertBoxZ.innerHTML = `
       <div class="alert-box">
         <span class="alert-message">${message}</span>
         <button class="alert-ok">OK</button>
@@ -130,15 +114,15 @@ loginButton.addEventListener('click', () => {
     `;
 
     // Tambahkan alert ke body
-    document.body.appendChild(alertBox);
+    document.body.appendChild(alertBoxZ);
 
     // Menampilkan alert
-    alertBox.style.display = 'flex';
+    alertBoxZ.style.display = 'flex';
 
     // Close alert saat tombol OK diklik
-    alertBox.querySelector('.alert-ok').addEventListener('click', () => {
-      alertBox.style.display = 'none';
-      document.body.removeChild(alertBox);
+    alertBoxZ.querySelector('.alert-ok').addEventListener('click', () => {
+      alertBoxZ.style.display = 'none';
+      document.body.removeChild(alertBoxZ);
     });
   }
 
@@ -148,7 +132,7 @@ loginButton.addEventListener('click', () => {
         const user = userCredential.user;
 
         // Redirect ke index.html jika login berhasil
-        showAlert('Login berhasil!');
+        showAlertZ('Login berhasil!');
         console.log('User logged in:', user.email);
 
         // Redirect setelah 2 detik (untuk memberi waktu melihat alert)
@@ -158,9 +142,9 @@ loginButton.addEventListener('click', () => {
       })
       .catch(error => {
         console.error('Login Error:', error);
-        showAlert('Login gagal! Periksa email atau password.');
+        showAlertZ('Login gagal! Periksa email atau password.');
       });
   } else {
-    showAlert('Isi email dan password dulu!');
+    showAlertZ('Isi email dan password dulu!');
   }
 });
