@@ -44,21 +44,21 @@ firebase.auth().onAuthStateChanged((TCUser) => {
       if (TCDoc.exists && TCDoc.data().isAdmin) {
         
 /*!   bersihkanChatboxLama();  */
-
-        const adminContainer = document.getElementById('admin-container');
+  const adminOnline = document.getElementById('admin-online');
+  const adminContainer = document.getElementById('admin-container');
+        
         if (adminContainer) {
           adminContainer.style.display = "block";
+          adminOnline.style.animation = "welcomeAdmin 20s ease-in";
           console.log("Administrator login");
-
-// Timer untuk sembunyikan elemen setelah 20 detik
           setTimeout(() => {
-            adminContainer.style.animation = "none";
-            adminContainer.style.display = "none";
+            adminOnline.style.animation = "none";
+            admin.style.display = "none";
             console.log("#admin-container off.");
           }, 20000);
 
           // Updater untuk admin
-          TCUpdateAllUsersForAdmin();
+      TCUpdateAllUsersForAdmin();
         }
       }
     }).catch((error) => {

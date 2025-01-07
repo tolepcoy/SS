@@ -14,7 +14,7 @@ body {
 
 #admin-container {
   display: none;
-  background: yellow;
+  background: linear-gradient(to right, transparent, #cbc, transparent);
   position: absolute;
   width: 75%;
   top: 15%;
@@ -32,7 +32,7 @@ body {
   color: #900;
   text-align: center;
   white-space: nowrap;
-  animation: welcomeAdmin 20s ease-in;
+  animation: none;
 }
 
 @keyframes welcomeAdmin {
@@ -40,7 +40,7 @@ body {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-250%);
+    transform: translateX(-350%);
   }
 }
 
@@ -744,7 +744,10 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   transform: translateX(0%);
 }
 
-
+/*! ===== R O L E ===== */
+#lord {
+  color: gold;
+}
 
 
 
