@@ -44,6 +44,7 @@ firebase.auth().onAuthStateChanged((TCUser) => {
       if (TCDoc.exists && TCDoc.data().isAdmin) {
         
 /*!   bersihkanChatboxLama();  */
+  document.body.style.background = 'black';
   const adminOnline = document.getElementById('admin-online');
   const adminContainer = document.getElementById('admin-container');
         
@@ -51,6 +52,11 @@ firebase.auth().onAuthStateChanged((TCUser) => {
           adminContainer.style.display = "block";
           adminOnline.style.animation = "welcomeAdmin 20s ease-in";
           console.log("Administrator login");
+          
+          setTimeout(() => {
+            document.body.style.background = '#eee';
+          }, 2000);
+          
           setTimeout(() => {
             adminOnline.style.animation = "none";
             admin.style.display = "none";
