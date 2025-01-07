@@ -71,9 +71,13 @@ function TCUpdateAllUsersForAdmin() {
       TCQuerySnapshot.forEach((TCDoc) => {
         const TCUserData = TCDoc.data();
         const TCUserId = TCDoc.id;
-        const TCRoleText = TCGetRoleText(TCUserData.level);
-        const TCLevelIcon = TCUserData.level;
+        const TCLevel = TCUserData.level;
 
+        // Dapatkan role yang benar sesuai level
+        const TCRoleText = TCGetRoleText(TCLevel);
+        const TCLevelIcon = TCLevel;
+
+        // Update data user di Firestore, pastikan role sesuai level
         firestore.collection('SS').doc(TCUserId).update({
           role: TCRoleText,
           levelIcon: TCLevelIcon
@@ -107,7 +111,7 @@ function TCGetRoleText(TCLevel) {
     case 13: return 'King of Glory';
     case 14: return 'King Of The Kings';
     case 15: return 'Immortal Emperor';
-    default: return 'Unknown Role';
+    default: return 'Unknown'; // Jika level tidak sesuai
   }
 }
 
@@ -1357,8 +1361,8 @@ function updateAllUsers() {
         const level = DIPAKELAGIWADUH.level;
 
         // Tentukan role dan levelIcon berdasarkan level
-        const levelIcon = level; // Menyimpan level sebagai levelIcon
-        const role = getRoleText(level); // Mendapatkan role berdasarkan level
+        const levelIcon = level;
+        const role = getRoleText(level);
 
         // Update data ke firestore
         JANGANDIPAKEGICONSTNYA.collection('SS').doc(JANGANDIPAKECONSTSAMA).update({
