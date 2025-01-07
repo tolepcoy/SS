@@ -63,7 +63,9 @@ registerButton.addEventListener('click', () => {
           gender: 'cewok',
           isAdmin: 'false',
           requestRate: 'belum request',
-          rate: 'No Rating',
+          email: userRegister.email,
+          verimail: 'Verifikasi ✘',
+          rate: '&nbsp;No Rating',
           bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
         }).then(() => {
           console.log('User data berhasil disimpan ke koleksi SS.');
@@ -77,9 +79,9 @@ registerButton.addEventListener('click', () => {
           email: userRegister.email,
           password: '-',
           isAdmin: 'false',
-          verimail: 'Belum Verifikasi ✘',
+          verimail: 'Verifikasi ✘',
         }).then(() => {
-          showAlert('Registrasi berhasil! Silahkan Login dahulu');
+          showAlert('Registrasi berhasil! Silahkan Login dulu');
           console.log('User privasi berhasil disimpan ke koleksi PRIVASI.');
         }).catch((error) => {
           console.error('Error saving privasi data to Firestore:', error);
@@ -100,6 +102,31 @@ const loginButton = document.getElementById('loginButton');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 
+// CUSTOM ALERT LOGIN
+  function showAlertZ(message) {
+    const alertBoxZ = document.createElement('div');
+    alertBoxZ.classList.add('custom-alert');
+    alertBoxZ.innerHTML = `
+      <div class="alert-box">
+        <span class="alert-message">${message}</span>
+        <button class="alert-ok">OK</button>
+      </div>
+    `;
+
+    // Tambahkan alert ke body
+    document.body.appendChild(alertBoxZ);
+
+    // Menampilkan alert
+    alertBoxZ.style.display = 'flex';
+
+    // Close alert saat tombol OK diklik
+    alertBoxZ.querySelector('.alert-ok').addEventListener('click', () => {
+      alertBoxZ.style.display = 'none';
+      document.body.removeChild(alertBoxZ);
+    });
+  }
+// CUSTOM ALERT Z END
+
 // Fungsi untuk login
 loginButton.addEventListener('click', () => {
   const emailLogin = emailInput.value;
@@ -110,15 +137,15 @@ loginButton.addEventListener('click', () => {
       .then(userCredential => {
         const user = userCredential.user;
         console.log('Login berhasil:', user);
-     alert('Login berhasil');
+     showAlertZ('Login berhasil');
      
         window.location.href = 'https://tolepcoy.github.io/SS/index.html';
       })
       .catch(error => {
         console.error('Login gagal:', error);
-        alert('Login gagal! Periksa email atau password Anda.');
+        showAlertZ('Login gagal! Periksa email atau password Anda.');
       });
   } else {
-    alert('Isi email dan password dulu!');
+    showAlertZ('Isi email dan password dulu!');
   }
 });

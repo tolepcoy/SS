@@ -42,6 +42,9 @@ firebase.auth().onAuthStateChanged((TCUser) => {
     // Cek jika user adalah admin
     firestore.collection("SS").doc(TCUser.uid).get().then((TCDoc) => {
       if (TCDoc.exists && TCDoc.data().isAdmin) {
+        
+/*!   bersihkanChatboxLama();  */
+
         const adminContainer = document.getElementById('admin-container');
         if (adminContainer) {
           adminContainer.style.display = "block";
@@ -224,7 +227,6 @@ function updateProfile(data, kategori) {
   document.getElementById('avatar').src = data.avatar;
   document.getElementById('OLstate').innerHTML = data.OLstate;
   document.getElementById('level').innerHTML = data.level;
- 
   document.getElementById('role').innerHTML = data.role;
 document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
   document.getElementById('detail').innerHTML = data.detail;
@@ -233,7 +235,9 @@ document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
   document.getElementById('gender').src = `icon/${data.gender}.png`;
   document.getElementById('rate').innerHTML = data.rate;
   document.getElementById('bergabung').innerHTML = data.bergabung;
-  
+  document.getElementById('verimail').innerHTML = data.verimail;
+  document.getElementById('email').innerHTML = data.email;
+
   console.log(`Profil berhasil diperbarui untuk ${kategori}`);
 }
 });
