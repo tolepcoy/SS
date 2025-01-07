@@ -31,35 +31,35 @@ function showAlert(message) {
 });}
 // END CUSTOM ALERT
 
-// Cek status login dan verifikasi email
+// ADMIN WELCOME
 firebase.auth().onAuthStateChanged((TCUser) => {
   if (TCUser) {
-    // Cek jika email belum diverifikasi
+    console.log("Auth state changed:", TCUser);
+
     if (!TCUser.emailVerified) {
       showAlert('Anda belum memverifikasi email!');
     }
 
-    // Cek jika user adalah admin
     firestore.collection("SS").doc(TCUser.uid).get().then((TCDoc) => {
       if (TCDoc.exists && TCDoc.data().isAdmin) {
-        
-/*!   bersihkanChatboxLama();  */
-  let bodybuilder = document.querySelector('body');
-  const adminOnline = document.getElementById('admin-online');
-  const adminContainer = document.getElementById('admin-container');
-        
-        if (adminContainer) {
+        console.log("TCDoc data:", TCDoc.data());
+
+        const bodybuilder = document.querySelector('body');
+        const adminOnline = document.getElementById('admin-online');
+        const adminContainer = document.getElementById('admin-container');
+
+        if (adminContainer && adminOnline) {
           adminContainer.style.display = "block";
           adminOnline.style.animation = "welcomeAdmin 20s ease-in";
           console.log("Administrator login");
-          
+
           setTimeout(() => {
-            bodybuilder.style.background = '#777';
+            bodybuilder.style.background = '#eee';
           }, 2000);
-          
+
           setTimeout(() => {
             adminOnline.style.animation = "none";
-            admin.style.display = "none";
+            adminOnline.style.display = "none"; // Fixed: Use adminOnline
             console.log("#admin-container off.");
           }, 20000);
 
@@ -124,6 +124,7 @@ function TCGetRoleText(TCLevel) {
   }
 }
 
+/*!   bersihkanChatboxLama();  */
 /* Fungsi membersihkan chat lama
 function bersihkanChatboxLama() {
   const now = new Date();
