@@ -1188,58 +1188,87 @@ closeReq.onclick = () => {
 };
 
 // ONLINE STATE
-  const firestoreOL = firebase.firestore();
-  let intervalId = null; // Variabel untuk menyimpan ID interval
+let intervalId = null;
 
-  // Fungsi untuk mengupdate status online di Firestore
-  function updateOnlineStatus(user) {
+function updateOnlineStatus(user) {
+  const userRefOL = firestore.collection('SS').doc(user.uid);
+  const statusOl = document.getElementById('OLstate');
+
+  // Update status menjadi online
+  userRefOL.update({
+    OLstate: 'Online &bull;'
+  }, { merge: true })
+    .then(() => {
+      statusOl.innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
+    })
+    .catch((error) => {
+      console.error('Gagal mengupdate status online:', error);
+    });
+}
+
+function updateOfflineStatus(user) {
+  const userRefOL = firestore.collection('SS').doc(user.uid);
+  const statusOl = document.getElementById('OLstate');
+
+  // Update status menjadi offline
+  userRefOL.update({
+    OLstate: 'Offline'
+  }, { merge: true })
+    .then(() => {
+      statusOl.innerHTML = 'Offline';
+      statusOl.style.color = '#999';
+    })
+    .catch((error) => {
+      console.error('Gagal mengupdate status offline:', error);
+    });
+}
+
+function startOnlineInterval(user) {
+  if (intervalId) return;
+
+  updateOnlineStatus(user);
+  intervalId = setInterval(() => {
+    updateOnlineStatus(user);
+  }, 5 * 1000); // Setiap 5 detik
+}
+
+function stopOnlineInterval(user) {
+  if (intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;
+    updateOfflineStatus(user); // Update status offline ketika berhenti
+  }
+}
+
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    console.log('User online:', user.email);
+    startOnlineInterval(user);
+
+    // Listen for changes to user's online status in Firestore
     const userRefOL = firestore.collection('SS').doc(user.uid);
-    const statusOl = document.getElementById('OLstate');
+    userRefOL.onSnapshot((doc) => {
+      if (doc.exists) {
+        const data = doc.data();
+        if (data.OLstate === 'Online &bull;') {
+          // Tampilkan status online pada elemen HTML
+          document.getElementById('OLstate').innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
+        } else {
+          // Tampilkan status offline pada elemen HTML
+          document.getElementById('OLstate').innerHTML = 'Offline';
+        }
+      }
+    });
+  } else {
+    console.log('User tidak login.');
+    stopOnlineInterval(); // Hentikan interval update status online
 
-    userRefOL.update({
-      OLstate: 'Online &bull;'
-    }, { merge: true })
-      .then(() => {
-        statusOl.innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
-      })
-      .catch((error) => {
-        console.error('Gagal mengupdate status online:', error);
-      });
+    // Hapus status di elemen HTML
+    const statusOl2 = document.getElementById('OLstate');
+    statusOl2.innerHTML = 'Offline';
+    statusOl2.style.color = '#999';
   }
-
-  // Fungsi untuk mulai interval
-  function startOnlineInterval(user) {
-    if (intervalId) return; // Jika interval sudah berjalan, jangan buat yang baru
-
-    updateOnlineStatus(user); // Update langsung saat login
-    intervalId = setInterval(() => {
-      updateOnlineStatus(user); // Update setiap 5 menit
-    }, 5 * 60 * 1000);
-  }
-
-  // Fungsi untuk menghentikan interval
-  function stopOnlineInterval() {
-    if (intervalId) {
-      clearInterval(intervalId);
-      intervalId = null;
-    }
-  }
-
-  // Memantau perubahan status login
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      console.log('User online:', user.email);
-      startOnlineInterval(user);
-    } else {
-      console.log('User tidak login.');
-      stopOnlineInterval();
-
-      // Hapus status di elemen HTML
-      const statusOl2 = document.getElementById('OLstate');
-      statusOl2.innerHTML = 'Offline';
-      statusOl2.style.color = '#999';
-    }
-  });
+});
 
 // USER LIST
 const containerCewek = document.querySelector('.userCewek');
