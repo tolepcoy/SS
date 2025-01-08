@@ -1188,72 +1188,45 @@ closeReq.onclick = () => {
 };
 
 // ONLINE STATE
-
-// Fungsi update status di Firestore
-function updateOnlineStatus(user) {
-  const userRefOL = firestore.collection('SS').doc(user.uid);
-
-  userRefOL.update({
-    OLstate: 'Online &bull;'
-  }, { merge: true })
-    .catch((error) => {
-      console.error('Gagal mengupdate status online:', error);
-    });
-}
-
-// Fungsi update offline di Firestore
-function updateOfflineStatus(user) {
-  const userRefOL = firestore.collection('SS').doc(user.uid);
-
-  userRefOL.update({
-    OLstate: 'Offline'
-  }, { merge: true })
-    .catch((error) => {
-      console.error('Gagal mengupdate status offline:', error);
-    });
-}
-
-// Memantau perubahan status login
 firebase.auth().onAuthStateChanged((user) => {
+  const statusOl = document.getElementById('OLstate');
+  const statusOlLain = document.getElementById('OLstate-lain');
+  
   if (user) {
     console.log('User online:', user.email);
-
-    // Update status online saat user login
-    updateOnlineStatus(user);
-
-    // Memantau perubahan dokumen untuk status online/offline
+    
     const userRefOL = firestore.collection('SS').doc(user.uid);
+
+    // Listener real-time untuk status user di Firestore
     userRefOL.onSnapshot((doc) => {
       if (doc.exists) {
         const data = doc.data();
-        const statusOl = document.getElementById('OLstate');
-        const statusOlLain = document.getElementById('OLstate-lain');
-
         if (data.OLstate === 'Online &bull;') {
           statusOl.innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
           statusOlLain.innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
         } else {
-          statusOl.innerHTML = 'Offline';
-          statusOl.style.color = '#a77';
-          statusOlLain.innerHTML = 'Offline';
-          statusOlLain.style.color = '#a77';
+          statusOl.innerHTML = '<span style="color:#a77;">Offline</span>';
+          statusOlLain.innerHTML = '<span style="color:#a77;">Offline</span>';
         }
       }
     });
 
+    // Update status ke Online
+    userRefOL.set({ OLstate: 'Online &bull;' }, { merge: true });
   } else {
     console.log('User tidak login.');
 
-    // Stop semua proses dan update status offline
-    const statusOl2 = document.getElementById('OLstate');
-    const statusOl2Lain = document.getElementById('OLstate-lain');
-    statusOl2.innerHTML = 'Offline';
-    statusOl2.style.color = '#a77';
-    statusOl2Lain.innerHTML = 'Offline';
-    statusOl2Lain.style.color = '#a77';
-
-    if (user) {
-      updateOfflineStatus(user); // Update status offline di Firestore
+    // Pastikan status user di Firestore jadi Offline
+    const userRefOL = firestore.collection('SS').doc(firebase.auth().currentUser?.uid);
+    if (userRefOL) {
+      userRefOL.set({ OLstate: 'Offline' }, { merge: true })
+        .then(() => {
+          statusOl.innerHTML = '<span style="color:#a77;">Offline</span>';
+          statusOlLain.innerHTML = '<span style="color:#a77;">Offline</span>';
+        })
+        .catch((error) => {
+          console.error('Gagal mengupdate status offline:', error);
+        });
     }
   }
 });
