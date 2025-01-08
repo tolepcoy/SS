@@ -56,7 +56,7 @@ async function adminLogin(uid) {
     } catch (error) {
         console.error('Error saat login admin:', error);
     }
-}
+
 
 // ADMIN SIRU
 const testingElement = document.getElementById("testing");
@@ -127,11 +127,12 @@ firebase.auth().onAuthStateChanged((user) => {
   if (user && user.uid === 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
     setTestingOnLogin(); // Admin login, update data testing
   } else {
-    stopIntervalIfLoggedOut(); // Admin logout, matikan interval dan kosongkan data testing
+    stopIntervalIfLoggedOut();
   }
 });
+}
 
-// ADMIN WELCOME
+/* ADMIN WELCOME
 firebase.auth().onAuthStateChanged((TCUser) => {
   if (TCUser) {
     console.log("Auth state changed:", TCUser);
@@ -198,11 +199,11 @@ function TCGetRoleText(TCLevel) {
     case 6: return '<span id="Champion6">Champion</span>';
     case 7: return '<span id="Prince7">Prince</span>';
     case 8: return '<span id="Lord8">Lord</span>';
-    case 9: return '<span id="CelestialLord9">Celestial Overlord</span>';
+    case 9: return '<span id="CelestialLord9">Celestial Lord</span>';
     case 10: return '<span id="GrandLord10">Grand Lord</span>';
-    case 11: return '<span id="Conqueror11">Eternal Conqueror</span>';
+    case 11: return '<span id="Conqueror11">Conqueror</span>';
     case 12: return '<span id="Supreme12">Supreme</span>';
-    case 13: return '<span id="EternalSupreme13">Grand Supreme</span>';
+    case 13: return '<span id="EternalSupreme13">Eternal Supreme</span>';
     case 14: return '<span id="King14">King</span>';
     case 15: return '<span id="AbsoluteKing15">Absolute King</span>';
     case 16: return '<span id="LegendaryKing16">Legendary King</span>';
@@ -214,6 +215,7 @@ function TCGetRoleText(TCLevel) {
     default: return 'Unknown';
   }
 }
+*/
 
 /*!   bersihkanChatboxLama();  */
 /* Fungsi membersihkan chat lama
@@ -1534,11 +1536,11 @@ function getRoleText(level) {
     case 6: return '<span id="Champion6">Champion</span>';
     case 7: return '<span id="Prince7">Prince</span>';
     case 8: return '<span id="Lord8">Lord</span>';
-    case 9: return '<span id="CelestialLord9">Celestial Overlord</span>';
+    case 9: return '<span id="CelestialLord9">Celestial Lord</span>';
     case 10: return '<span id="GrandLord10">Grand Lord</span>';
-    case 11: return '<span id="Conqueror11">Eternal Conqueror</span>';
+    case 11: return '<span id="Conqueror11">Conqueror</span>';
     case 12: return '<span id="Supreme12">Supreme</span>';
-    case 13: return '<span id="EternalSupreme13">Grand Supreme</span>';
+    case 13: return '<span id="EternalSupreme13">Eternal Supreme</span>';
     case 14: return '<span id="King14">King</span>';
     case 15: return '<span id="AbsoluteKing15">Absolute King</span>';
     case 16: return '<span id="LegendaryKing16">Legendary King</span>';
