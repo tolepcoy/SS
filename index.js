@@ -1486,7 +1486,7 @@ firebase.auth().onAuthStateChanged((user) => {
 console.log("User login:", user.email);
         
 // Cek apakah user admin
-  const adminRef = firestore.collection("SS").doc(user.uid);
+  const adminRef = firestore.collection("SS").doc("c5AbAGemIcfsphDrXu56I8OZyEo1");
   adminRef.get()
    .then((doc) => {
      if (doc.exists && doc.data().role === "admin") {
@@ -1504,7 +1504,7 @@ console.error("Dokumen tidak ditemukan!");
  }
 })
  } else {
-console.warn("User bukan admin!");
+console.log("User bukan admin!");
  }
 })
  .catch((error) => {
