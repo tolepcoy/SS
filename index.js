@@ -1481,20 +1481,51 @@ updateAllUsers();
 // ADMIN SIRU
 // Cek login user
 firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    // Cek apakah user admin
-    const adminRef = firestore.collection("SS").doc(user.uid);
-    adminRef.onSnapshot((doc) => {
-        if (doc.exists) {
-          const isAdmin = doc.data().isAdmin;
- if (isAdmin === true) {
-console.log("Tolep Coy adalah admin");
+    if (user) {
+        console.log("User login:", user.email);
 
-// Ambil data dari Firestore
-            const docRef = firestore.collection("CGlobal").doc("Cbox");
-            docRef.onSnapshot((doc) => {
-    if (doc.exists) {
-    const data = doc.data();
-  document.getElementById("Halo").innerHTML = data.Halo;
-}})}}})} 
+        // Cek apakah user admin
+        const adminRef = firestore.collection("SS").doc(user.uid);
+        adminRef.get().then((doc) => {
+            if (doc.exists) {
+                const isAdmin = doc.data().isAdmin;
+                if (isAdmin === true) {
+                    console.log("Tolep Coy adalah admin");
+
+                    // Admin login: Update data di Firestore
+                    const docRef = firestore.collection("CGlobal").doc("Cbox");
+                    docRef.set(
+                        { Halo: "Admin baru saja login" },
+                        { merge: true }
+                    );
+                }
+            }
+        }).catch((error) => {
+            console.error("Error cek admin:", error);
+        });
+
+        // Dengarkan perubahan data di Cbox (Notifikasi Global)
+        const docRef = firestore.collection("CGlobal").doc("Cbox");
+        docRef.onSnapshot((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+
+                // Update elemen hanya kalau admin login
+                if (data.Halo === "Admin baru saja login") {
+                    document.getElementById("Halo").innerHTML = data.Halo;
+                    console.log("Data elemen di-update:", data.Halo);
+                } else {
+                    document.getElementById("Halo").innerHTML = "";
+                    console.log("Admin belum login.");
+                }
+            } else {
+                console.error("Dokumen Cbox tidak ditemukan!");
+            }
+        });
+    } else {
+        console.log("User belum login");
+
+        // Hapus elemen kalau tidak ada user yang login
+        document.getElementById("Halo").innerHTML = "";
+    }
 });
