@@ -27,13 +27,13 @@ async function adminLogin(uid) {
         const level = ssData.level;
         const levelIcon = ssData.levelIcon;
 
-        // Ambil data dari koleksi CGlobal untuk dokumen Cbox
-        const cboxDoc = await firestore.collection('CGlobal').doc('Cbox').get();
-        if (!cboxDoc.exists) {
-            console.log('Dokumen Cbox tidak ditemukan di koleksi CGlobal');
+        // Ambil data dari koleksi CGlobal untuk dokumen role
+        const roleDoc = await firestore.collection('CGlobal').doc('role').get();
+        if (!roleDoc.exists) {
+            console.log('Dokumen role tidak ditemukan di koleksi CGlobal');
             return;
         }
-        const cboxData = cboxDoc.data();
+        const roleData = roleDoc.data();
 
         // Validasi apakah level dan levelIcon konsisten
         if (level !== levelIcon) {
@@ -44,14 +44,14 @@ async function adminLogin(uid) {
         }
 
         // Update role dengan value dari field yang sesuai di CGlobal
-        const roleField = cboxData[String(level)]; // Mengambil nilai berdasarkan level
+        const roleField = roleData[String(level)]; // Mengambil nilai berdasarkan level
         if (roleField) {
             await firestore.collection('SS').doc(uid).update({
                 role: roleField
             });
             console.log(`Updated role ke ${roleField}`);
         } else {
-            console.log(`Field ${level} tidak ditemukan di Cbox`);
+            console.log(`Field ${level} tidak ditemukan di role`);
         }
     } catch (error) {
         console.error('Error saat login admin:', error);
