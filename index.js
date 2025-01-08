@@ -1483,34 +1483,45 @@ updateAllUsers();
 // Cek login user
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-console.log("TOLEP COY LOGIN");
-        
-// Cek apakah user admin
-  const adminRef = firestore.collection("SS").doc(user.uid);
-  adminRef.get()
-   .then((doc) => {
-     if (doc.exists && doc.data().isAdmin === "true") {
-console.log("User adalah admin");
-                    
-// Ambil data dari Firestore
-  const docRef = firestore.collection("CGlobal").doc("Cbox");
-  docRef.get()
-    .then((doc) => {
-     if (doc.exists) {
-  const data = doc.data();
-  document.getElementById("Halo").innerHTML = data.Halo;
-} else {
-console.error("Dokumen tidak ditemukan!");
- }
-})
- } else {
-console.log("User bukan admin!");
- }
-})
- .catch((error) => {
- console.error("Error mengambil data user:", error);
-});
- } else {
-console.log("User belum login");
- }
+    console.log("TOLEP COY LOGIN");
+
+    // Cek apakah user admin
+    const adminRef = firestore.collection("SS").doc(user.uid);
+    adminRef.get()
+      .then((doc) => {
+        if (doc.exists) {
+          const isAdmin = doc.data().isAdmin;
+          console.log("isAdmin value:", isAdmin); // Log nilai isAdmin
+          
+          // Cek apakah isAdmin benar-benar boolean true
+          if (isAdmin === true) {
+            console.log("User adalah admin");
+
+            // Ambil data dari Firestore
+            const docRef = firestore.collection("CGlobal").doc("Cbox");
+            docRef.get()
+              .then((doc) => {
+                if (doc.exists) {
+                  const data = doc.data();
+                  document.getElementById("Halo").innerHTML = data.Halo;
+                } else {
+                  console.error("Dokumen tidak ditemukan!");
+                }
+              })
+              .catch((error) => {
+                console.error("Error mengambil dokumen:", error);
+              });
+          } else {
+            console.log("User bukan admin! Nilai isAdmin:", isAdmin); // Log jika user bukan admin
+          }
+        } else {
+          console.log("Dokumen user tidak ditemukan di Firestore!");
+        }
+      })
+      .catch((error) => {
+        console.error("Error mengambil data user:", error);
+      });
+  } else {
+    console.log("User belum login");
+  }
 });
