@@ -1489,7 +1489,7 @@ console.log("User login:", user.email);
   const adminRef = firestore.collection("SS").doc("c5AbAGemIcfsphDrXu56I8OZyEo1");
   adminRef.get()
    .then((doc) => {
-     if (doc.exists && doc.data().role === "admin") {
+     if (doc.exists && doc.data().isAdmin === "true") {
 console.log("User adalah admin");
                     
 // Ambil data dari Firestore
