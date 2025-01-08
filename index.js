@@ -1193,12 +1193,16 @@ let intervalId = null;
 function updateOnlineStatus(user) {
   const userRefOL = firestore.collection('SS').doc(user.uid);
   const statusOl = document.getElementById('OLstate');
+  const statusOlLain = document.getElementById('OLstate-lain');
 
   // Update status menjadi online
   userRefOL.update({
     OLstate: 'Online &bull;'
   }, { merge: true })
     .then(() => {
+      
+      statusOlLain.innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
+      
       statusOl.innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
     })
     .catch((error) => {
@@ -1209,12 +1213,17 @@ function updateOnlineStatus(user) {
 function updateOfflineStatus(user) {
   const userRefOL = firestore.collection('SS').doc(user.uid);
   const statusOl = document.getElementById('OLstate');
+  const statusOlLain = document.getElementById('OLstate-lain');
 
   // Update status menjadi offline
   userRefOL.update({
     OLstate: 'Offline'
   }, { merge: true })
     .then(() => {
+      
+      statusOlLain.innerHTML = 'Offline';
+      statusOlLain.style.color = '#999';
+      
       statusOl.innerHTML = 'Offline';
       statusOl.style.color = '#999';
     })
@@ -1253,9 +1262,13 @@ firebase.auth().onAuthStateChanged((user) => {
         if (data.OLstate === 'Online &bull;') {
           // Tampilkan status online pada elemen HTML
           document.getElementById('OLstate').innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
+          
+          document.getElementById('OLstate-lain').innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
+          
         } else {
           // Tampilkan status offline pada elemen HTML
           document.getElementById('OLstate').innerHTML = 'Offline';
+          document.getElementById('OLstate-lain').innerHTML = 'Offline';
         }
       }
     });
@@ -1267,6 +1280,10 @@ firebase.auth().onAuthStateChanged((user) => {
     const statusOl2 = document.getElementById('OLstate');
     statusOl2.innerHTML = 'Offline';
     statusOl2.style.color = '#999';
+    
+    const statusOl2Lain = document.getElementById('OLstate-lain');
+    statusOl2Lain.innerHTML = 'Offline';
+    statusOl2Lain.style.color = '#999';
   }
 });
 
