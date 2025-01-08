@@ -1482,36 +1482,29 @@ updateAllUsers();
 // Cek login user
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    console.log("User terdeteksi login:", user.uid);
-
-    // Cek apakah user adalah admin
+    // Cek apakah user admin
     const adminRef = firestore.collection("SS").doc(user.uid);
-    adminRef.get().then((doc) => {
-      if (doc.exists) {
-        const isAdmin = doc.data().isAdmin;
-
-        if (isAdmin === true) {
-          console.log("Tolep Coy adalah admin");
-
-          // Listener untuk dokumen CGlobal/Cbox
-          firestore.collection("CGlobal").doc("Cbox").onSnapshot((doc) => {
-            if (doc.exists) {
-              const data = doc.data();
-              document.getElementById("Halo").innerHTML = data.Halo;
-            } else {
-              console.error("Dokumen Cbox tidak ditemukan!");
-            }
-          });
-        } else {
-          console.log("User ini bukan admin!");
+    adminRef.onSnapshot((doc) => {
+        if (doc.exists) {
+          const isAdmin = doc.data().isAdmin;
+          if (isAdmin === true) {
+            console.log("Tolep Coy adalah admin");
+            
+            // Ambil data dari Firestore hanya saat admin login
+            const docRef = firestore.collection("CGlobal").doc("Cbox");
+            docRef.onSnapshot((doc) => {
+              if (doc.exists) {
+                const data = doc.data();
+                document.getElementById("Halo").innerHTML = data.Halo;  // Tampilkan di elemen #Halo
+              } else {
+                console.log("Dokumen Cbox nggak ada.");
+              }
+            });
+          }
         }
-      } else {
-        console.error("Dokumen user tidak ditemukan!");
-      }
-    }).catch((error) => {
-      console.error("Error memeriksa admin:", error);
     });
   } else {
-    console.log("Tidak ada user yang login");
+    // Jika user logout, kosongkan elemen #Halo
+    document.getElementById("Halo").innerHTML = '';
   }
 });
