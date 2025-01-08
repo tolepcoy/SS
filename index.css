@@ -12,7 +12,7 @@ body {
   user-select: none;
 }
 
-#testing {
+#Halo {
   position: absolute;
   width: 74%;
   top: 15%;
@@ -190,6 +190,11 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: -5px;
+}
+
+.parentLV {
+  margin-bottom: 2px;
 }
 
 #level,

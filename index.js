@@ -58,81 +58,7 @@ async function adminLogin(uid) {
     }
 }
 
-// ADMIN SIRU
-const testingElement = document.getElementById("testing");
-const testingRef = firestore.collection("CGlobal").doc("Cbox");
-let intervalIdAdmin;
-
-// Fungsi untuk memeriksa status login dan update data testing
-function checkLoginStatus() {
-  const user = firebase.auth().currentUser;
-  
-  if (user && user.uid === 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
-    // Admin login, update data testing
-    setTestingOnLogin();
-  } else {
-    // Jika bukan admin atau user belum login, kosongkan data testing
-    setTestingOnLogout();
-  }
-}
-
-// Fungsi untuk update data testing saat admin login
-function setTestingOnLogin() {
-  const testingData = `<div style="width: 100%; position: absolute; left: 100%; font-family: Tolep Roboto; font-size: 15px; font-weight: bold; color: #900; text-align: center; white-space: nowrap; animation: welcomeAdmin 15s infinite">Administrator telah login!</div>`;
-  
-  testingRef.update({ testing: testingData })
-    .then(() => {
-      console.log('Data testing diupdate saat admin login');
-    })
-    .catch((error) => {
-      console.error("Error updating document: ", error);
-    });
-}
-
-// Fungsi untuk mengosongkan data testing saat admin logout
-function setTestingOnLogout() {
-  testingRef.update({ testing: "" })
-    .then(() => {
-      console.log('Data testing dikosongkan saat admin logout');
-    })
-    .catch((error) => {
-      console.error("Error updating document: ", error);
-    });
-}
-
-// Cek status login saat halaman dimuat
-checkLoginStatus();
-
-// Interval untuk cek koneksi UID setiap 5 detik
-intervalIdAdmin = setInterval(() => {
-  const user = firebase.auth().currentUser;
-  if (user && user.uid === 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
-    setTestingOnLogin(); // Update data testing jika admin login
-  } else {
-    setTestingOnLogout(); // Kosongkan data testing jika admin logout
-  }
-}, 5000); // Cek setiap 5 detik
-
-// Fungsi untuk mematikan interval dan kosongkan testing jika user logout
-function stopIntervalIfLoggedOut() {
-  const user = firebase.auth().currentUser;
-  if (!user || user.uid !== 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
-    clearInterval(intervalIdAdmin); // Matikan interval
-    setTestingOnLogout(); // Kosongkan data testing
-  }
-}
-
-// Dengar perubahan status login dan logout
-firebase.auth().onAuthStateChanged((user) => {
-  if (user && user.uid === 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
-    setTestingOnLogin(); // Admin login, update data testing
-  } else {
-    stopIntervalIfLoggedOut();
-  }
-});
-
-
-/* ADMIN WELCOME
+/* ADMIN DOR
 firebase.auth().onAuthStateChanged((TCUser) => {
   if (TCUser) {
     console.log("Auth state changed:", TCUser);
@@ -1552,3 +1478,23 @@ function getRoleText(level) {
 
 // Panggil fungsi untuk mengupdate seluruh user
 updateAllUsers();
+
+// ADMIN SIRU
+// Ambil data dari Firestore
+   const docRef = firestore.collection("CGlobal").doc("Cbox");
+   docRef.get()
+.then((doc) => {
+  console.log("Halo1");
+   if (doc.exists) {
+     console.log("Halo2");
+   const data = doc.data();
+   console.log("Halo3");
+document.getElementById("Halo").textContent = data.Halo;
+ } else {
+   console.log("Halo4");
+console.error("Dokumen tidak ditemukan!");
+ }
+})
+   .catch((error) => {
+console.error("Error mengambil dokumen:", error);
+});
