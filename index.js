@@ -1480,17 +1480,37 @@ function getRoleText(level) {
 updateAllUsers();
 
 // ADMIN SIRU
+// Cek login user
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+console.log("User login:", user.email);
+        
+// Cek apakah user admin
+  const adminRef = firestore.collection("SS").doc(user.uid);
+  adminRef.get()
+   .then((doc) => {
+     if (doc.exists && doc.data().role === "admin") {
+console.log("User adalah admin");
+                    
 // Ambil data dari Firestore
-   const docRef = firestore.collection("CGlobal").doc("Cbox");
-   docRef.get()
-.then((doc) => {
-   if (doc.exists) {
-   const data = doc.data();
-document.getElementById("Halo").innerHTML = data.Halo;
- } else {
+  const docRef = firestore.collection("CGlobal").doc("Cbox");
+  docRef.get()
+    .then((doc) => {
+     if (doc.exists) {
+  const data = doc.data();
+  document.getElementById("Halo").innerHTML = data.Halo;
+} else {
 console.error("Dokumen tidak ditemukan!");
  }
 })
-   .catch((error) => {
-console.error("Error mengambil dokumen:", error);
+ } else {
+console.warn("User bukan admin!");
+ }
+})
+ .catch((error) => {
+ console.error("Error mengambil data user:", error);
+});
+ } else {
+console.log("User belum login");
+ }
 });
