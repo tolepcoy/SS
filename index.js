@@ -234,7 +234,7 @@ firebase.auth().onAuthStateChanged(user => {
   if (user) {
     const userRef = firestore.collection('SS').doc(user.uid);
 
-    userRef.onSnapshot(doc => {
+    userRef.get(doc => {
       if (doc.exists) {
         const data = doc.data();
         updateProfile(data, 'User'); 
@@ -274,7 +274,7 @@ firebase.auth().onAuthStateChanged(user => {
   if (user) {
     const userRefPrivasi = firestore.collection('PRIVASI').doc(user.uid);
 
-    userRefPrivasi.onSnapshot(doc => {
+    userRefPrivasi.get(doc => {
       if (doc.exists) {
         const dataPrivasi = doc.data();
         updateProfilePrivasi(dataPrivasi, 'User'); 
@@ -1378,7 +1378,7 @@ function updateUserProfile(user) {
 }
 
 // Real-time listener dari Firestore
-firestore.collection('SS').onSnapshot((snapshot) => {
+firestore.collection('SS').get((snapshot) => {
   snapshot.docChanges().forEach((change) => {
     const userData = change.doc.data();
     const userWoy = {
@@ -1491,37 +1491,33 @@ firebase.auth().onAuthStateChanged((user) => {
       .then((doc) => {
         if (doc.exists) {
           const isAdmin = doc.data().isAdmin;
-          console.log("isAdmin value:", isAdmin); // Log nilai isAdmin
-          
-          // Cek apakah isAdmin benar-benar boolean true
+          console.log("isAdmin value:", isAdmin);
           if (isAdmin === true) {
             console.log("User adalah admin");
-
-            // Ambil data dari Firestore
-            const docRef = firestore.collection("CGlobal").doc("Cbox");
-            docRef.get()
-              .then((doc) => {
-                if (doc.exists) {
-                  const data = doc.data();
-                  document.getElementById("Halo").innerHTML = data.Halo;
-                } else {
-                  console.error("Dokumen tidak ditemukan!");
-                }
-              })
-              .catch((error) => {
-                console.error("Error mengambil dokumen:", error);
-              });
-          } else {
-            console.log("User bukan admin! Nilai isAdmin:", isAdmin); // Log jika user bukan admin
-          }
-        } else {
-          console.log("Dokumen user tidak ditemukan di Firestore!");
-        }
-      })
-      .catch((error) => {
-        console.error("Error mengambil data user:", error);
-      });
+// Ambil data dari Firestore
+  const docRef = firestore.collection("CGlobal").doc("Cbox");
+docRef.onSnapshot((doc) => {
+  if (doc.exists) {
+    const data = doc.data();
+    document.getElementById("Halo").innerHTML = data.Halo;
   } else {
-    console.log("User belum login");
+console.error("Dokumen tidak ditemukan!");
+ }
+})
+  .catch((error) => {
+console.error("Error mengambil dokumen:", error);
+});
+ } else {
+console.log("User bukan admin! Nilai isAdmin:", isAdmin);
+ }
+} else {
+console.log("Dokumen user tidak ditemukan di Firestore!");
+ }
+})
+  .catch((error) => {
+console.error("Error mengambil data user:", error);
+});
+  } else {
+console.log("User belum login");
   }
 });
