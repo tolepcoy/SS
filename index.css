@@ -500,6 +500,14 @@ body {
   font-weight: bold;
 }
 
+#Online, #Online-lain {
+  color: #0f0;
+}
+
+#Offline, #Offline2, #Offline-lain, #Offline2-lain {
+  color: #a77;
+}
+
 /* CUSTOM DIALOG LOGOUT */
 .custom-dialog {
   position: fixed;

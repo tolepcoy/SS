@@ -1190,6 +1190,7 @@ closeReq.onclick = () => {
 // ONLINE STATE
 let intervalId = null;
 
+// Update status menjadi online
 function updateOnlineStatus(user) {
   const userRefOL = firestore.collection('SS').doc(user.uid);
   const statusOl = document.getElementById('OLstate');
@@ -1200,9 +1201,10 @@ function updateOnlineStatus(user) {
     OLstate: 'Online &bull;'
   }, { merge: true })
     .then(() => {
-      
+      statusOlLain.id = 'Online-lain';
       statusOlLain.innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
       
+      statusOl.id = 'Online';
       statusOl.innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
     })
     .catch((error) => {
@@ -1210,6 +1212,7 @@ function updateOnlineStatus(user) {
     });
 }
 
+// Update status menjadi offline
 function updateOfflineStatus(user) {
   const userRefOL = firestore.collection('SS').doc(user.uid);
   const statusOl = document.getElementById('OLstate');
@@ -1220,18 +1223,15 @@ function updateOfflineStatus(user) {
     OLstate: 'Offline'
   }, { merge: true })
     .then(() => {
-      
-      statusOlLain.innerHTML = 'Offline';
-      statusOlLain.style.color = '#999';
-      
-      statusOl.innerHTML = 'Offline';
-      statusOl.style.color = '#999';
+      statusOlLain.id = 'Offline2-lain';
+      statusOl.id = 'Offline2';
     })
     .catch((error) => {
       console.error('Gagal mengupdate status offline:', error);
     });
 }
 
+// Start interval untuk update status online secara berkala
 function startOnlineInterval(user) {
   if (intervalId) return;
 
@@ -1241,6 +1241,7 @@ function startOnlineInterval(user) {
   }, 5 * 1000); // Setiap 5 detik
 }
 
+// Stop interval dan update status offline
 function stopOnlineInterval(user) {
   if (intervalId) {
     clearInterval(intervalId);
@@ -1262,13 +1263,12 @@ firebase.auth().onAuthStateChanged((user) => {
         if (data.OLstate === 'Online &bull;') {
           // Tampilkan status online pada elemen HTML
           document.getElementById('OLstate').innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
-          
           document.getElementById('OLstate-lain').innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
-          
-        } else {
-          // Tampilkan status offline pada elemen HTML
+        } else if (data.OLstate === 'Offline') {
+          // Tampilkan status offline pada elemen HTML dan stop interval
           document.getElementById('OLstate').innerHTML = 'Offline';
           document.getElementById('OLstate-lain').innerHTML = 'Offline';
+          stopOnlineInterval(user); // Hentikan interval update status
         }
       }
     });
@@ -1278,12 +1278,10 @@ firebase.auth().onAuthStateChanged((user) => {
 
     // Hapus status di elemen HTML
     const statusOl2 = document.getElementById('OLstate');
-    statusOl2.innerHTML = 'Offline';
-    statusOl2.style.color = '#999';
+    statusOl2.id = 'offline';
     
     const statusOl2Lain = document.getElementById('OLstate-lain');
-    statusOl2Lain.innerHTML = 'Offline';
-    statusOl2Lain.style.color = '#999';
+    statusOl2Lain.id = 'Offline-lain';
   }
 });
 
