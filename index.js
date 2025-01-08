@@ -1484,14 +1484,10 @@ updateAllUsers();
    const docRef = firestore.collection("CGlobal").doc("Cbox");
    docRef.get()
 .then((doc) => {
-  console.log("Halo1");
    if (doc.exists) {
-     console.log("Halo2");
    const data = doc.data();
-   console.log("Halo3");
-document.getElementById("Halo").textContent = data.Halo;
+document.getElementById("Halo").innerHTML = data.Halo;
  } else {
-   console.log("Halo4");
 console.error("Dokumen tidak ditemukan!");
  }
 })
