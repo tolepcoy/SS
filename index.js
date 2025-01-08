@@ -14,6 +14,123 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
+// ADMIN UPDATE LEVEL
+async function adminLogin(uid) {
+    try {
+        // Ambil data dari koleksi SS
+        const ssDoc = await firestore.collection('SS').doc(uid).get();
+        if (!ssDoc.exists) {
+            console.log('User tidak ditemukan di koleksi SS');
+            return;
+        }
+        const ssData = ssDoc.data();
+        const level = ssData.level;
+        const levelIcon = ssData.levelIcon;
+
+        // Ambil data dari koleksi CGlobal untuk dokumen Cbox
+        const cboxDoc = await firestore.collection('CGlobal').doc('Cbox').get();
+        if (!cboxDoc.exists) {
+            console.log('Dokumen Cbox tidak ditemukan di koleksi CGlobal');
+            return;
+        }
+        const cboxData = cboxDoc.data();
+
+        // Validasi apakah level dan levelIcon konsisten
+        if (level !== levelIcon) {
+            await firestore.collection('SS').doc(uid).update({
+                levelIcon: level
+            });
+            console.log(`Updated levelIcon ke ${level}`);
+        }
+
+        // Update role dengan value dari field yang sesuai di CGlobal
+        const roleField = cboxData[String(level)]; // Mengambil nilai berdasarkan level
+        if (roleField) {
+            await firestore.collection('SS').doc(uid).update({
+                role: roleField
+            });
+            console.log(`Updated role ke ${roleField}`);
+        } else {
+            console.log(`Field ${level} tidak ditemukan di Cbox`);
+        }
+    } catch (error) {
+        console.error('Error saat login admin:', error);
+    }
+}
+
+// ADMIN SIRU
+const testingElement = document.getElementById("testing");
+const testingRef = firestore.collection("CGlobal").doc("Cbox");
+let intervalIdAdmin;
+
+// Fungsi untuk memeriksa status login dan update data testing
+function checkLoginStatus() {
+  const user = firebase.auth().currentUser;
+  
+  if (user && user.uid === 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
+    // Admin login, update data testing
+    setTestingOnLogin();
+  } else {
+    // Jika bukan admin atau user belum login, kosongkan data testing
+    setTestingOnLogout();
+  }
+}
+
+// Fungsi untuk update data testing saat admin login
+function setTestingOnLogin() {
+  const testingData = `<div style="width: 100%; position: absolute; left: 100%; font-family: Tolep Roboto; font-size: 15px; font-weight: bold; color: #900; text-align: center; white-space: nowrap; animation: welcomeAdmin 15s infinite">Administrator telah login!</div>`;
+  
+  testingRef.update({ testing: testingData })
+    .then(() => {
+      console.log('Data testing diupdate saat admin login');
+    })
+    .catch((error) => {
+      console.error("Error updating document: ", error);
+    });
+}
+
+// Fungsi untuk mengosongkan data testing saat admin logout
+function setTestingOnLogout() {
+  testingRef.update({ testing: "" })
+    .then(() => {
+      console.log('Data testing dikosongkan saat admin logout');
+    })
+    .catch((error) => {
+      console.error("Error updating document: ", error);
+    });
+}
+
+// Cek status login saat halaman dimuat
+checkLoginStatus();
+
+// Interval untuk cek koneksi UID setiap 5 detik
+intervalIdAdmin = setInterval(() => {
+  const user = firebase.auth().currentUser;
+  if (user && user.uid === 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
+    setTestingOnLogin(); // Update data testing jika admin login
+  } else {
+    setTestingOnLogout(); // Kosongkan data testing jika admin logout
+  }
+}, 5000); // Cek setiap 5 detik
+
+// Fungsi untuk mematikan interval dan kosongkan testing jika user logout
+function stopIntervalIfLoggedOut() {
+  const user = firebase.auth().currentUser;
+  if (!user || user.uid !== 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
+    clearInterval(intervalIdAdmin); // Matikan interval
+    setTestingOnLogout(); // Kosongkan data testing
+  }
+}
+
+// Dengar perubahan status login dan logout
+firebase.auth().onAuthStateChanged((user) => {
+  if (user && user.uid === 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
+    setTestingOnLogin(); // Admin login, update data testing
+  } else {
+    stopIntervalIfLoggedOut(); // Admin logout, matikan interval dan kosongkan data testing
+  }
+});
+
 // ADMIN WELCOME
 firebase.auth().onAuthStateChanged((TCUser) => {
   if (TCUser) {
@@ -73,21 +190,27 @@ function TCUpdateAllUsersForAdmin() {
 // Fungsi untuk menentukan role berdasarkan level
 function TCGetRoleText(TCLevel) {
   switch (TCLevel) {
-    case 1: return 'Minion';
-    case 2: return 'Baron';
-    case 3: return 'Knight';
-    case 4: return 'Guardian';
-    case 5: return 'Commander';
-    case 6: return 'Champion';
-    case 7: return '<span id="lord">Lord</span>';
-    case 8: return 'Grand Lord';
-    case 9: return 'Prince';
-    case 10: return 'King';
-    case 11: return 'Absolute King';
-    case 12: return 'Legendary King';
-    case 13: return 'King of Glory';
-    case 14: return 'King Of The Kings';
-    case 15: return 'Immortal Emperor';
+    case 1: return '<span id="Minion1">Minion</span>';
+    case 2: return '<span id="Baron2">Baron</span>';
+    case 3: return '<span id="Knight3">Knight</span>';
+    case 4: return '<span id="Guardian4">Guardian</span>';
+    case 5: return '<span id="Commander5">Commander';
+    case 6: return '<span id="Champion6">Champion</span>';
+    case 7: return '<span id="Prince7">Prince</span>';
+    case 8: return '<span id="Lord8">Lord</span>';
+    case 9: return '<span id="CelestialLord9">Celestial Overlord</span>';
+    case 10: return '<span id="GrandLord10">Grand Lord</span>';
+    case 11: return '<span id="Conqueror11">Eternal Conqueror</span>';
+    case 12: return '<span id="Supreme12">Supreme</span>';
+    case 13: return '<span id="EternalSupreme13">Grand Supreme</span>';
+    case 14: return '<span id="King14">King</span>';
+    case 15: return '<span id="AbsoluteKing15">Absolute King</span>';
+    case 16: return '<span id="LegendaryKing16">Legendary King</span>';
+    case 17: return '<span id="KingOfGlory17">King Of Glory</span>';
+    case 18: return '<span id="KingOfTheKings18">King Of The Kings</span>';
+    case 19: return '<span id="Emperor19">Emperor</span>';
+    case 20: return '<span id="ImmortalEmperor20">IMMORTAL EMPEROR</span>';
+    case 21: return '<span id="GOD21">GOD</span>';
     default: return 'Unknown';
   }
 }
@@ -1367,7 +1490,6 @@ document.querySelectorAll('.icon').forEach(item => {
   });
 });
 
-
 // Ambil referensi ke koleksi
 const Mantap = firebase.firestore();
 
@@ -1404,80 +1526,30 @@ function updateAllUsers() {
 
 function getRoleText(level) {
   switch (level) {
-    case 1: return 'Minion';
-    case 2: return 'Baron';
-    case 3: return 'Knight';
-    case 4: return 'Guardian';
-    case 5: return 'Commander';
-    case 6: return 'Champion';
-    case 7: return '<span id="lord">Lord</span>';
-    case 8: return 'Grand Lord';
-    case 9: return 'Prince';
-    case 10: return 'King';
-    case 11: return 'Absolute King';
-    case 12: return 'Legendary King';
-    case 13: return 'King of Glory';
-    case 14: return 'King Of The Kings';
-    case 15: return 'Immortal Emperor';
+    case 1: return '<span id="Minion1">Minion</span>';
+    case 2: return '<span id="Baron2">Baron</span>';
+    case 3: return '<span id="Knight3">Knight</span>';
+    case 4: return '<span id="Guardian4">Guardian</span>';
+    case 5: return '<span id="Commander5">Commander';
+    case 6: return '<span id="Champion6">Champion</span>';
+    case 7: return '<span id="Prince7">Prince</span>';
+    case 8: return '<span id="Lord8">Lord</span>';
+    case 9: return '<span id="CelestialLord9">Celestial Overlord</span>';
+    case 10: return '<span id="GrandLord10">Grand Lord</span>';
+    case 11: return '<span id="Conqueror11">Eternal Conqueror</span>';
+    case 12: return '<span id="Supreme12">Supreme</span>';
+    case 13: return '<span id="EternalSupreme13">Grand Supreme</span>';
+    case 14: return '<span id="King14">King</span>';
+    case 15: return '<span id="AbsoluteKing15">Absolute King</span>';
+    case 16: return '<span id="LegendaryKing16">Legendary King</span>';
+    case 17: return '<span id="KingOfGlory17">King Of Glory</span>';
+    case 18: return '<span id="KingOfTheKings18">King Of The Kings</span>';
+    case 19: return '<span id="Emperor19">Emperor</span>';
+    case 20: return '<span id="ImmortalEmperor20">IMMORTAL EMPEROR</span>';
+    case 21: return '<span id="GOD21">GOD</span>';
+    default: return 'Unknown';
   }
 }
 
 // Panggil fungsi untuk mengupdate seluruh user
 updateAllUsers();
-
-// ADMIN SIRU
-const testingElement = document.getElementById("testing");
-
-// Mendengarkan perubahan pada koleksi CGlobal -> Cbox
-const testingRef = firestore.collection("CGlobal").doc("Cbox");
-
-testingRef.onSnapshot((doc) => {
-  if (doc.exists) {
-    const testingData = doc.data().testing;
-    
-    // Jika data testing ada, tampilkan di elemen #testing
-    if (testingData) {
-      testingElement.innerHTML = testingData;
-    } else {
-      testingElement.innerHTML = ""; // Jika kosong (misalnya logout)
-    }
-  } else {
-    console.log("Dokumen tidak ditemukan");
-  }
-});
-
-// Fungsi untuk memeriksa apakah user sudah login
-function checkLoginStatus() {
-  const user = firebase.auth().currentUser;
-  if (user && user.uid === 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
-    // User yang sesuai UID login, update data testing
-    setTestingOnLogin();
-  } else {
-    // Jika tidak login atau bukan admin, kosongkan data testing
-    setTestingOnLogout();
-  }
-}
-
-// Fungsi untuk update data testing ketika ente login
-function setTestingOnLogin() {
-  const testingData = `<div style="width: 100%; position: absolute; left: 100%; font-family: Tolep Roboto; font-size: 15px; font-weight: bold; color: #900; text-align: center; white-space: nowrap; animation: welcomeAdmin 15s infinite">Administrator telah login!</div>`;
-  
-  testingRef.update({ testing: testingData });
-}
-
-// Fungsi untuk mengosongkan data testing ketika ente logout
-function setTestingOnLogout() {
-  testingRef.update({ testing: "" });
-}
-
-// Panggil checkLoginStatus() untuk memeriksa status login saat halaman dimuat
-checkLoginStatus();
-
-// Dengar perubahan pada status login (misalnya melalui event listener Firebase Auth)
-firebase.auth().onAuthStateChanged((user) => {
-  if (user && user.uid === 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
-    setTestingOnLogin();
-  } else {
-    setTestingOnLogout();
-  }
-});
