@@ -10,6 +10,7 @@ body {
   background: #eee;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+  color: white;
 }
 
 #Halo {
@@ -127,7 +128,6 @@ body {
   width: 85%;
   height: 100%;
   background: linear-gradient(to right, #555, #292929);
-  color: white;
   border-radius: 0 16px 16px 0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
   transition: transform 0.5s ease-in-out;
@@ -724,7 +724,6 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   width: 85%;
   height: 100%;
   background: linear-gradient(to right, #555, #292929);
-  color: white;
   border-radius: 0 16px 16px 0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
   transition: transform 0.5s ease-in-out;
@@ -992,6 +991,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   margin-bottom: 15px;
   background: #f9f9f9;
   border-radius: 6px;
+  color: black;
 }
 
 #messageForm {

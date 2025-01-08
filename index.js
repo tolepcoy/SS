@@ -1199,28 +1199,44 @@ firebase.auth().onAuthStateChanged((user) => {
 
     // Listener real-time untuk status user di Firestore
     userRefOL.onSnapshot((doc) => {
+      console.log('Snapshot diterima', doc);  // Cek apakah snapshot diterima
       if (doc.exists) {
         const data = doc.data();
+        console.log('Data Firestore:', data);  // Cek data yang diterima dari Firestore
+
         if (data.OLstate === 'Online &bull;') {
+          console.log('Status Online diterima');
           statusOl.innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
           statusOlLain.innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
         } else {
+          console.log('Status Offline diterima');
           statusOl.innerHTML = '<span style="color:#a77;">Offline</span>';
           statusOlLain.innerHTML = '<span style="color:#a77;">Offline</span>';
         }
+      } else {
+        console.log('Dokumen tidak ditemukan');
       }
     });
 
     // Update status ke Online
-    userRefOL.set({ OLstate: 'Online &bull;' }, { merge: true });
+    console.log('Mengupdate status ke Online');
+    userRefOL.set({ OLstate: 'Online &bull;' }, { merge: true })
+      .then(() => {
+        console.log('Status berhasil diperbarui ke Online');
+      })
+      .catch((error) => {
+        console.error('Gagal memperbarui status online:', error);
+      });
   } else {
     console.log('User tidak login.');
 
     // Pastikan status user di Firestore jadi Offline
     const userRefOL = firestore.collection('SS').doc(firebase.auth().currentUser?.uid);
     if (userRefOL) {
+      console.log('Mengupdate status ke Offline');
       userRefOL.set({ OLstate: 'Offline' }, { merge: true })
         .then(() => {
+          console.log('Status berhasil diperbarui ke Offline');
           statusOl.innerHTML = '<span style="color:#a77;">Offline</span>';
           statusOlLain.innerHTML = '<span style="color:#a77;">Offline</span>';
         })
