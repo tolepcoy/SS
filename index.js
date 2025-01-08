@@ -1483,10 +1483,10 @@ updateAllUsers();
 // Cek login user
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-console.log("User login:", user.email);
+console.log("TOLEP COY LOGIN");
         
 // Cek apakah user admin
-  const adminRef = firestore.collection("SS").doc("c5AbAGemIcfsphDrXu56I8OZyEo1");
+  const adminRef = firestore.collection("SS").doc(user.uid);
   adminRef.get()
    .then((doc) => {
      if (doc.exists && doc.data().isAdmin === "true") {
