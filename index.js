@@ -56,7 +56,7 @@ async function adminLogin(uid) {
     } catch (error) {
         console.error('Error saat login admin:', error);
     }
-
+}
 
 // ADMIN SIRU
 const testingElement = document.getElementById("testing");
@@ -130,7 +130,7 @@ firebase.auth().onAuthStateChanged((user) => {
     stopIntervalIfLoggedOut();
   }
 });
-}
+
 
 /* ADMIN WELCOME
 firebase.auth().onAuthStateChanged((TCUser) => {
@@ -967,13 +967,10 @@ function tampilkanDropdownEdit() {
 }
 
 // zoom avatar
-document.getElementById('avatar').addEventListener('click', function() {
-  this.classList.toggle('zoom');
-});
-
-// zoom avatar-lain
-document.getElementById('avatar-lain').addEventListener('click', function() {
-  this.classList.toggle('zoom');
+document.querySelectorAll('.avatar').forEach(function(avatar) {
+  avatar.addEventListener('click', function() {
+    this.classList.toggle('zoom');
+  });
 });
 
 /*! PANEL SETTING */
