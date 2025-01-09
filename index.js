@@ -1418,23 +1418,52 @@ function getRoleText(level) {
 // mengupdate seluruh user
 updateAllUsers();
 
-// ADMIN SIRU
-// Cek login user
+// CHAT BOX
+const messageForm = document.getElementById('messageForm');
+const messageInput = document.getElementById('messageInput');
+const chatBox = document.getElementById('chatBox');
+const sendButton = document.getElementById('sendButton');
+
+// Cek apakah pengguna sudah login
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    // Cek apakah user admin
-    const adminRef = firestore.collection("SS").doc(user.uid);
-    adminRef.onSnapshot((doc) => {
-        if (doc.exists) {
-          const isAdmin = doc.data().isAdmin;
- if (isAdmin === true) {
-console.log("Tolep Coy adalah admin");
+    // Jika pengguna sudah login, tampilkan form chat dan aktifkan fitur chat
+    messageForm.style.display = 'block';
+    sendButton.disabled = false; // Aktifkan tombol kirim
 
-// Ambil data dari Firestore
-            const docRef = firestore.collection("CGlobal").doc("Cbox");
-            docRef.onSnapshot((doc) => {
-    if (doc.exists) {
-    const data = doc.data();
-  document.getElementById("Halo").innerHTML = data.Halo;
-}})}}})} 
+    // Kirim pesan ke Firestore
+    messageForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const message = messageInput.value;
+
+      // Simpan pesan ke Firestore
+      firestore.collection('messages').add({
+        text: message,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        userId: user.uid, // Simpan ID pengguna yang mengirim pesan
+      });
+
+      messageInput.value = ''; // Clear input field
+    });
+
+    // Menampilkan pesan secara real-time
+    firestore.collection('messages')
+      .orderBy('timestamp')
+      .onSnapshot((snapshot) => {
+        chatBox.innerHTML = ''; // Bersihkan chatBox sebelum menampilkan pesan baru
+
+        snapshot.forEach((doc) => {
+          const messageData = doc.data();
+          const messageElement = document.createElement('div');
+          messageElement.textContent = messageData.text;
+          chatBox.appendChild(messageElement);
+        });
+      });
+  } else {
+    // Jika pengguna belum login, sembunyikan form chat
+    messageForm.style.display = 'none';
+    sendButton.disabled = true; // Nonaktifkan tombol kirim
+    chatBox.innerHTML = '<p>Silakan login untuk mengirim pesan.</p>'; // Tampilkan pesan login
+  }
 });
