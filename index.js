@@ -14,14 +14,14 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
-//DEBUGGING
+/* //DEBUGGING
 const originalUpdate = firestore.CollectionReference.prototype.update;
 
 firestore.CollectionReference.prototype.update = function(data) {
   console.log('Firestore update:', this.path, data);
   return originalUpdate.call(this, data);
 };
-//END DEBUGGING
+//END DEBUGGING */
 
 // ADMIN UPDATE LEVEL
 async function adminLogin(uid) {
