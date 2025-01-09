@@ -251,7 +251,6 @@ firebase.auth().onAuthStateChanged(user => {
 function updateProfile(data, kategori) {
   document.getElementById('nama').innerHTML = data.nama;
   document.getElementById('avatar').src = data.avatar;
-  document.getElementById('OLstate').innerHTML = data.OLstate;
   document.getElementById('level').innerHTML = data.level;
   document.getElementById('role').innerHTML = data.role;
 document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
@@ -1186,66 +1185,6 @@ closeReq.onclick = () => {
   document.getElementById('reqRate').classList.remove('active');
   document.getElementById('r2').classList.remove('active');
 };
-/*
-// ONLINE STATE
-firebase.auth().onAuthStateChanged((user) => {
-  const statusOl = document.getElementById('OLstate');
-  const statusOlLain = document.getElementById('OLstate-lain');
-  
-  if (user) {
-    console.log('User online:', user.email);
-    
-    const userRefOL = firestore.collection('SS').doc(user.uid);
-
-    // Listener real-time untuk status user di Firestore
-    userRefOL.onSnapshot((doc) => {
-      console.log('Snapshot diterima', doc);  // Cek apakah snapshot diterima
-      if (doc.exists) {
-        const data = doc.data();
-        console.log('Data Firestore:', data);  // Cek data yang diterima dari Firestore
-
-        if (data.OLstate === 'Online &bull;') {
-          console.log('Status Online diterima');
-          statusOl.innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
-          statusOlLain.innerHTML = '<span style="color:#0f0">Online <b style="font-size:30px; vertical-align:middle;">&bull;</b></span>';
-        } else {
-          console.log('Status Offline diterima');
-          statusOl.innerHTML = '<span style="color:#a77;">Offline</span>';
-          statusOlLain.innerHTML = '<span style="color:#a77;">Offline</span>';
-        }
-      } else {
-        console.log('Dokumen tidak ditemukan');
-      }
-    });
-
-    // Update status ke Online
-    console.log('Mengupdate status ke Online');
-    userRefOL.set({ OLstate: 'Online &bull;' }, { merge: true })
-      .then(() => {
-        console.log('Status berhasil diperbarui ke Online');
-      })
-      .catch((error) => {
-        console.error('Gagal memperbarui status online:', error);
-      });
-  } else {
-    console.log('User tidak login.');
-
-    // Pastikan status user di Firestore jadi Offline
-    const userRefOL = firestore.collection('SS').doc(firebase.auth().currentUser?.uid);
-    if (userRefOL) {
-      console.log('Mengupdate status ke Offline');
-      userRefOL.set({ OLstate: 'Offline' }, { merge: true })
-        .then(() => {
-          console.log('Status berhasil diperbarui ke Offline');
-          statusOl.innerHTML = '<span style="color:#a77;">Offline</span>';
-          statusOlLain.innerHTML = '<span style="color:#a77;">Offline</span>';
-        })
-        .catch((error) => {
-          console.error('Gagal mengupdate status offline:', error);
-        });
-    }
-  }
-}); */
 
 // USER LIST
 const containerCewek = document.querySelector('.userCewek');
@@ -1350,11 +1289,6 @@ rateLain.innerHTML = userDetails.rate;
 const bergabungLain = document.getElementById('bergabung-lain');
 if (bergabungLain) {
 bergabungLain.innerHTML = userDetails.bergabung;
-}
-
-const OLstateLain = document.getElementById('OLstate-lain');
-if (OLstateLain) {
-OLstateLain.innerHTML = userDetails.OLstate;
 }
       } else {
         console.log('User tidak ditemukan');

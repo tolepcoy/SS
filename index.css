@@ -488,18 +488,6 @@ body {
   font-size: 18px;
 }
 
-/* online state */
-#OLstate,
-#OLstate-lain {
-  position: absolute;
-  top: 7px;
-  left: 10px;
-  pointer-events: none;
-  z-index: 800;
-  font-size: 12px;
-  font-weight: bold;
-}
-
 /* CUSTOM DIALOG LOGOUT */
 .custom-dialog {
   position: fixed;

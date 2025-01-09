@@ -52,7 +52,6 @@ registerButton.addEventListener('click', () => {
         const userSSRef = firestore.collection('SS').doc(userRegister.uid);
         userSSRef.set({
           nama: 'userSS',
-          OLstate: 'Offline',
           avatar: 'icon/default_avatar.png',
           level: '1',
           role: 'Minion',
