@@ -1549,3 +1549,39 @@ ${messageData.text}
       }
   }
 });
+
+
+// Debugging untuk user tertentu
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    // Cek apakah user adalah admin
+    firestore.collection('SS').doc(user.uid).get().then((doc) => {
+      if (doc.exists) {
+        const userData = doc.data();
+
+        if (userData.isAdmin) {
+          console.log('Admin login berhasil, menjalankan debugging...');
+
+          // Update role untuk user tertentu
+          const targetUid = "aqgovbUIE3XguMCsMLZjgha1dqg1";
+          firestore.collection('SS').doc(targetUid).update({
+            role: "testing"
+          }).then(() => {
+            console.log(`Role untuk user dengan UID ${targetUid} berhasil diubah menjadi "testing".`);
+          }).catch((error) => {
+            console.error(`Gagal mengubah role untuk user dengan UID ${targetUid}:`, error);
+          });
+
+        } else {
+          console.log('User bukan admin, tidak ada tindakan.');
+        }
+      } else {
+        console.error('Data user tidak ditemukan.');
+      }
+    }).catch((error) => {
+      console.error('Error mengambil data admin:', error);
+    });
+  } else {
+    console.log('Tidak ada user yang login.');
+  }
+});
