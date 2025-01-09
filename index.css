@@ -1072,13 +1072,13 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 .text-chat {
-  background: rgba(0, 0, 0, 0.2);
+  background: linear-gradient(to bottom, transparent, rgba(0, 70, 0, 0.1);
   display: block;
   font-family: Arial;
   font-size: 15px;
   line-height: 0.9;
-  border-radius: 0px 10px 6px 6px;
-  padding: 11px, 2px, 2px 2px;
+  border-radius: 6px 6px 15px 7px;
+  padding: 15px 5px 5px 5px;
   margin-top: -7px;
 }
 
