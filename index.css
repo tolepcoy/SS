@@ -1010,6 +1010,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 .chatWrapper {
+  display: flex;
   margin-top: 10px;
   margin-bottom: 10px;
   padding: 5px 15px 5px 5px;
@@ -1019,7 +1020,6 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 .senderWrapper {
-  display: flex;
   align-items: center;
 }
 
@@ -1044,7 +1044,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 #LVL {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .ic-level {
@@ -1061,6 +1061,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 .ic-gender {
+  margin-left: 10px;
   width: 10px;
   height: 10px;
 }
