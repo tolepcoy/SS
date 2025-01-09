@@ -14,6 +14,15 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
+//DEBUGGING
+const originalUpdate = firestore.CollectionReference.prototype.update;
+
+firestore.CollectionReference.prototype.update = function(data) {
+  console.log('Firestore update:', this.path, data);
+  return originalUpdate.call(this, data);
+};
+//END DEBUGGING
+
 // ADMIN UPDATE LEVEL
 async function adminLogin(uid) {
     try {
@@ -180,7 +189,6 @@ function TCGetRoleText(TCLevel) {
     case 19: return '<span id="Emperor19">Emperor</span>';
     case 20: return '<span id="ImmortalEmperor20">IMMORTAL EMPEROR</span>';
     case 21: return '<span id="GOD21">GOD</span>';
-    default: return 'Unknown';
   }
 }
 
@@ -1387,7 +1395,7 @@ function updateAllUsers() {
         const Waduh = doc.data();
         const SamaSaja = doc.id;
 
-        // Ambil data level dari firestore
+// Ambil data level dari firestore
         const level = Waduh.level;
 
         // Tentukan role dan levelIcon berdasarkan level
@@ -1433,7 +1441,6 @@ function getRoleText(level) {
     case 19: return '<span id="Emperor19">Emperor</span>';
     case 20: return '<span id="ImmortalEmperor20">IMMORTAL EMPEROR</span>';
     case 21: return '<span id="GOD21">GOD</span>';
-    default: return 'Unknown';
   }
 }
 // mengupdate seluruh user
