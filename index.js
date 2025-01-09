@@ -1479,8 +1479,8 @@ firebase.auth().onAuthStateChanged((user) => {
 <img class="ic-levelIcon" src="level/${messageData.levelIcon}.png" />
 </div>
 </div>
-  <p>${messageData.text}</p>
 </div>`;
+  <p>${messageData.text}</p>
               chatBox.appendChild(messageElement);
             });
 
