@@ -1466,7 +1466,6 @@ firebase.auth().onAuthStateChanged((user) => {
               const messageData = doc.data();
               const messageElement = document.createElement('div');
               messageElement.innerHTML = `
-<div style="margin-bottom:10px;">
 <div class="chatWrapper">
 
 <div class="senderWrapper">
@@ -1480,7 +1479,6 @@ firebase.auth().onAuthStateChanged((user) => {
 <div class="levelWrapper">
 <span id="LVL">Lv. <span class="ic-level">${messageData.level}</span></span>
 <img class="ic-levelIcon" src="level/${messageData.levelIcon}.png" />
-</div>
 </div>
 </div>
 </div>
