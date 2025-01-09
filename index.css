@@ -1030,11 +1030,10 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 .senderWrapper {
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
-  margin-right: auto;
+  justify-content: flex-start;
 }
 
 .ic-avatar {
@@ -1073,7 +1072,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 .text-chat {
-  background: rgba(185, 255, 180, 0.2);
+  background: rgba(0, 0, 0, 0.2);
   display: block;
   font-family: Arial;
   font-size: 15px;
