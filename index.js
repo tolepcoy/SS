@@ -1424,46 +1424,66 @@ const messageInput = document.getElementById('messageInput');
 const chatBox = document.getElementById('chatBox');
 const sendButton = document.getElementById('sendButton');
 
-// Cek apakah pengguna sudah login
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    // Jika pengguna sudah login, tampilkan form chat dan aktifkan fitur chat
     messageForm.style.display = 'block';
-    sendButton.disabled = false; // Aktifkan tombol kirim
+    sendButton.disabled = false;
 
-    // Kirim pesan ke Firestore
-    messageForm.addEventListener('submit', (e) => {
-      e.preventDefault();
+    // Ambil nama dari koleksi SS berdasarkan uid
+    firestore.collection('SS').doc(user.uid).get().then((doc) => {
+      if (doc.exists) {
+        const avatar = doc.data().avatar;
+        const userName = doc.data().nama;
+        const level = doc.data().level;
+        const levelIcon = doc.data().levelIcon;
+        
+        messageForm.addEventListener('submit', (e) => {
+          e.preventDefault();
 
-      const message = messageInput.value;
+          const message = messageInput.value;
 
-      // Simpan pesan ke Firestore
-      firestore.collection('messages').add({
-        text: message,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        userId: user.uid, // Simpan ID pengguna yang mengirim pesan
-      });
+          firestore.collection('CHATBOX').add({
+            nama: userName,
+            avatar: avatar,
+            level: level,
+            levelIcon: levelIcon,
+            text: message,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            userId: user.uid,
+          });
 
-      messageInput.value = ''; // Clear input field
+          messageInput.value = '';
+        });
+
+        firestore.collection('CHATBOX')
+          .orderBy('timestamp')
+          .onSnapshot((snapshot) => {
+            chatBox.innerHTML = '';
+
+            snapshot.forEach((doc) => {
+              const messageData = doc.data();
+              const messageElement = document.createElement('div');
+              messageElement.innerHTML = `
+<div class="chatWrapper">
+  <div class="senderWrapper">
+    <img class="ic-avatar" src="${messageData.avatar}" />
+    <span class="sender">${messageData.nama}</span>
+  </div>
+  <span>Lv. <span class="ic-level">${messageData.level}</span></span>
+  <img class="ic-levelIcon" src="level/${messageData.levelIcon}.png" />
+  <p>${messageData.text}</p>
+</div>`;
+              chatBox.appendChild(messageElement);
+            });
+          });
+      }
+    }).catch((error) => {
+      console.error("Error getting document: ", error);
     });
 
-    // Menampilkan pesan secara real-time
-    firestore.collection('messages')
-      .orderBy('timestamp')
-      .onSnapshot((snapshot) => {
-        chatBox.innerHTML = ''; // Bersihkan chatBox sebelum menampilkan pesan baru
-
-        snapshot.forEach((doc) => {
-          const messageData = doc.data();
-          const messageElement = document.createElement('div');
-          messageElement.textContent = messageData.text;
-          chatBox.appendChild(messageElement);
-        });
-      });
   } else {
-    // Jika pengguna belum login, sembunyikan form chat
     messageForm.style.display = 'none';
-    sendButton.disabled = true; // Nonaktifkan tombol kirim
-    chatBox.innerHTML = '<p>Silakan login untuk mengirim pesan.</p>'; // Tampilkan pesan login
+    sendButton.disabled = true;
+    chatBox.innerHTML = '<p style="text-align:center;font-weight:bold;">Silakan login untuk mengirim pesan.</p>';
   }
 });

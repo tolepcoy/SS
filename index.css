@@ -1042,6 +1042,12 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   height: 15px;
 }
 
+.ic-levelIcon {
+  margin-right: 10px;
+  width: auto;
+  height: 15px;
+}
+
 .ic-gender {
   width: 10px;
   height: 10px;
