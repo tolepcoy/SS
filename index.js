@@ -102,7 +102,7 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 });
 
-/* ADMIN DOR
+// ADMIN DOR
 firebase.auth().onAuthStateChanged((TCUser) => {
   if (TCUser) {
     console.log("Auth state changed:", TCUser);
@@ -183,8 +183,6 @@ function TCGetRoleText(TCLevel) {
     default: return 'Unknown';
   }
 }
-
-*/
 
 /*! ===== BODY ELEMENT ===== */
 // Fungsi untuk menutup side panel

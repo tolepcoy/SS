@@ -147,7 +147,6 @@ a {
   justify-content: center;
   align-items: center;
   width: 80%;
-  height: 75px;
   text-align: center;
   font-size: 14px;
   padding: 10px;
@@ -967,7 +966,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 #GOD {
   
 }
-
+/* ------ ROLE END ------- */
 /* Chat Container */
 #chatContainer {
   position: relative;
