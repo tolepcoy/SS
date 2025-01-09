@@ -1082,9 +1082,3 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   padding: 15px 5px 5px 5px;
   margin-top: -7px;
 }
-
-#loginChat:hover {
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-}

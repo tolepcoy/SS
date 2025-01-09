@@ -1523,6 +1523,38 @@ ${messageData.text}
   } else {
     messageForm.style.display = 'none';
     sendButton.disabled = true;
-    chatBox.innerHTML = '<div style="text-align:center;font-weight:bold;"><h5>Silakan login untuk mengirim pesan.</h5><a href="https://tolepcoy.github.io/SS/login-form.html"><button id="loginChat" style="background:url("icon/bgBtn2.png");background-size: 100% 100%;color: white;border: none;border-radius: 5px;padding: 5px 15px;cursor: pointer;width: 80px;height: 30px;transition: width 5s linear, height 5s linear, opacity 5s linear;">Login</button></a></div>';
+    
+    
+    setTimeout(() => {
+      chatBox.innerHTML = '<div id="beforeChatLogin" style="text-align:center;font-weight:bold;"><h5>Silakan login untuk mengirim pesan.</h5><button id="loginChat"><a href="https://tolepcoy.github.io/SS/login-form.html">Login</a></button></div>';
+    }, 100);
+
+    setTimeout(() => {
+      const loginChatBtn = document.getElementById("loginChat");
+      if (loginChatBtn) {
+        loginChatBtn.style.background = 'url("icon/bgBtn2.png")';
+    loginChatBtn.style.backgroundSize = '100% 100%';
+    loginChatBtn.style.color = 'white';
+    loginChatBtn.style.border = 'none';
+    loginChatBtn.style.borderRadius = '5px';
+    loginChatBtn.style.padding = '5px 15px';
+    loginChatBtn.style.cursor = 'pointer';
+    loginChatBtn.style.width = '80px';
+    loginChatBtn.style.height = '30px';
+    loginChatBtn.style.transition = 'width 3s linear, height 3s linear, opacity 3s linear';
+
+  loginChatBtn.addEventListener("mouseenter", () => {
+    loginChatBtn.style.opacity = "0";
+    loginChatBtn.style.width = "100%";
+    loginChatBtn.style.height = "100%";
+  });
+
+  loginChatBtn.addEventListener("mouseleave", () => {
+    loginChatBtn.style.opacity = "1";
+    loginChatBtn.style.width = "80px";
+    loginChatBtn.style.height = "30px";
+  });
+      }
+    }, 200);
   }
 });
