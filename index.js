@@ -1476,11 +1476,11 @@ firebase.auth().onAuthStateChanged((user) => {
 <span class="sender">${messageData.nama}</span>
 <img class="ic-gender" src="icon/${messageData.gender}.png" />
 </div>
-</div>
 
 <div class="levelWrapper">
 <span id="LVL">Lv. <span class="ic-level">${messageData.level}</span></span>
 <img class="ic-levelIcon" src="level/${messageData.levelIcon}.png" />
+</div>
 </div>
 </div>
 </div>
