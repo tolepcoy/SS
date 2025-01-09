@@ -1429,7 +1429,7 @@ firebase.auth().onAuthStateChanged((user) => {
     messageForm.style.display = 'block';
     sendButton.disabled = false;
 
-    // Ambil nama dari koleksi SS berdasarkan uid
+// Ambil data dari koleksi SS
     firestore.collection('SS').doc(user.uid).get().then((doc) => {
       if (doc.exists) {
         const avatar = doc.data().avatar;
@@ -1492,8 +1492,10 @@ firebase.auth().onAuthStateChanged((user) => {
     });
 
   } else {
-    messageForm.style.display = 'none';
-    sendButton.disabled = true;
-    chatBox.innerHTML = '<h5 style="text-align:center;font-weight:bold;">Silakan login untuk mengirim pesan.</h5>';
+    messageForm.style.display = 'flex';
+    sendButton.disabled = false;
+ /*   chatBox.innerHTML = '<h5 style="text-align:center;font-weight:bold;">Silakan login untuk mengirim pesan.</h5>'; */
   }
 });
+
+//

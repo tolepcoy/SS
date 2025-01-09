@@ -964,6 +964,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 
 /* Chat Container */
 #chatContainer {
+  position: relative;
   background: #eee;
   flex-grow: 1;
   padding: 20px;
@@ -983,6 +984,11 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 #messageForm {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 87%;
   display: flex;
   justify-content: space-between;
 }
