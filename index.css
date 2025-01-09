@@ -1030,6 +1030,10 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.flexSender {
+  display: flex;
+}
+
 .senderWrapper {
   align-items: center;
   display: flex;
@@ -1052,7 +1056,6 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 
 .levelWrapper {
   display: flex;
-  margin-left: 30px;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -1086,8 +1089,8 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   display: block;
   line-height: 0.9;
   border-radius: 0px 10px 6px 6px;
-  padding-top: 10px;
-  margin-top: -5px;
+  padding: 11px, 2px, 2px 2px;
+  margin-top: -7px;
 }
 
 #loginChat {
