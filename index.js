@@ -58,7 +58,7 @@ async function adminLogin(uid) {
     }
 }
 
-/* ADMIN DOR
+/* ADMIN DOR */
 firebase.auth().onAuthStateChanged((TCUser) => {
   if (TCUser) {
     console.log("Auth state changed:", TCUser);
@@ -71,8 +71,6 @@ firebase.auth().onAuthStateChanged((TCUser) => {
       .then((TCDoc) => {
         if (TCDoc.exists && TCDoc.data().isAdmin) {
           
-
-          
           console.log("TCDoc data:", TCDoc.data());
 
           // Updater untuk admin
@@ -84,6 +82,8 @@ firebase.auth().onAuthStateChanged((TCUser) => {
       });
   }
 });
+
+/*
 
 // Fungsi untuk update seluruh data user jika admin login
 function TCUpdateAllUsersForAdmin() {
@@ -141,13 +141,11 @@ function TCGetRoleText(TCLevel) {
     default: return 'Unknown';
   }
 }
-*/
 
-/*!   bersihkanChatboxLama();  */
-/* Fungsi membersihkan chat lama
+// CLEAR CHAT ADMIN
 function bersihkanChatboxLama() {
   const now = new Date();
-  const cutoff = new Date(now.getTime() - 1 * 60 * 1000); // 5mmt
+  const cutoff = new Date(now.getTime() - 1 * 60 * 1000); // 1mmt
   
   const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
 
@@ -161,7 +159,9 @@ function bersihkanChatboxLama() {
       console.log("Dokumen lama berhasil dihapus.");
     })
     .catch((error) => console.error("Error fetching documents:", error));
-} */
+}
+
+*/
 
 /*! ===== BODY ELEMENT ===== */
 // Fungsi untuk menutup side panel
@@ -1479,8 +1479,8 @@ firebase.auth().onAuthStateChanged((user) => {
 <img class="ic-levelIcon" src="level/${messageData.levelIcon}.png" />
 </div>
 </div>
-</div>`;
-  <p>${messageData.text}</p>
+</div>
+  <p>${messageData.text}</p>`;
               chatBox.appendChild(messageElement);
             });
 
