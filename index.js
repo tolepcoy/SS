@@ -1469,20 +1469,24 @@ firebase.auth().onAuthStateChanged((user) => {
 <div class="chatWrapper">
 
 <div class="senderWrapper">
-<div class="flexSender">
 <img class="ic-avatar" src="${messageData.avatar}" />
+<div>
 <div>
 <span class="sender">${messageData.nama}</span>
 <img class="ic-gender" src="icon/${messageData.gender}.png" />
 </div>
-
-<div class="levelWrapper">
+<div>
 <span id="LVL">Lv. <span class="ic-level">${messageData.level}</span></span>
 <img class="ic-levelIcon" src="level/${messageData.levelIcon}.png" />
 </div>
 </div>
 </div>
-  <div class="text-chat">${messageData.text}</div></div>`;
+
+<div class="text-chat">
+${messageData.text}
+</div>
+
+</div>`;
               chatBox.appendChild(messageElement);
             });
 
