@@ -1523,13 +1523,7 @@ ${messageData.text}
   } else {
     messageForm.style.display = 'none';
     sendButton.disabled = true;
-    
-    
-    setTimeout(() => {
-      chatBox.innerHTML = '<div id="beforeChatLogin" style="text-align:center;font-weight:bold;"><h5>Silakan login untuk mengirim pesan.</h5><button id="loginChat"><a href="https://tolepcoy.github.io/SS/login-form.html">Login</a></button></div>';
-    }, 100);
-
-    setTimeout(() => {
+    chatBox.innerHTML = '<div id="beforeChatLogin" style="text-align:center;font-weight:bold;"><h5>Silakan login untuk mengirim pesan.</h5><button id="loginChat"><a href="https://tolepcoy.github.io/SS/login-form.html">Login</a></button></div>';
       const loginChatBtn = document.getElementById("loginChat");
       if (loginChatBtn) {
         loginChatBtn.style.background = 'url("icon/bgBtn2.png")';
@@ -1555,6 +1549,5 @@ ${messageData.text}
     loginChatBtn.style.height = "30px";
   });
       }
-    }, 200);
   }
 });
