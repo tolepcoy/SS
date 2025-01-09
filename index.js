@@ -1480,7 +1480,7 @@ firebase.auth().onAuthStateChanged((user) => {
 </div>
 </div>
 </div>
-  <p>${messageData.text}</p>`;
+  <div class="text-chat">${messageData.text}</div>`;
               chatBox.appendChild(messageElement);
             });
 
@@ -1492,9 +1492,9 @@ firebase.auth().onAuthStateChanged((user) => {
     });
 
   } else {
-    messageForm.style.display = 'flex';
-    sendButton.disabled = false;
- /*   chatBox.innerHTML = '<h5 style="text-align:center;font-weight:bold;">Silakan login untuk mengirim pesan.</h5>'; */
+    messageForm.style.display = 'none';
+    sendButton.disabled = true;
+    chatBox.innerHTML = '<div style="text-align:center;font-weight:bold;"><h5>Silakan login untuk mengirim pesan.</h5><p><button id="loginChat" onclick="window.location.href="https://tolepcoy.github.io/SS/login-form.html";">Login</button></p></div>';
   }
 });
 
