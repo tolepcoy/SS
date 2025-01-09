@@ -1186,7 +1186,7 @@ closeReq.onclick = () => {
   document.getElementById('reqRate').classList.remove('active');
   document.getElementById('r2').classList.remove('active');
 };
-
+/*
 // ONLINE STATE
 firebase.auth().onAuthStateChanged((user) => {
   const statusOl = document.getElementById('OLstate');
@@ -1245,7 +1245,7 @@ firebase.auth().onAuthStateChanged((user) => {
         });
     }
   }
-});
+}); */
 
 // USER LIST
 const containerCewek = document.querySelector('.userCewek');
