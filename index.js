@@ -1436,6 +1436,7 @@ firebase.auth().onAuthStateChanged((user) => {
         const userName = doc.data().nama;
         const level = doc.data().level;
         const levelIcon = doc.data().levelIcon;
+        const gender = doc.data().gender;
         
         messageForm.addEventListener('submit', (e) => {
           e.preventDefault();
@@ -1447,6 +1448,7 @@ firebase.auth().onAuthStateChanged((user) => {
             avatar: avatar,
             level: level,
             levelIcon: levelIcon,
+            gender: gender,
             text: message,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             userId: user.uid,
@@ -1469,12 +1471,17 @@ firebase.auth().onAuthStateChanged((user) => {
     <img class="ic-avatar" src="${messageData.avatar}" />
     <span class="sender">${messageData.nama}</span>
   </div>
-  <span>Lv. <span class="ic-level">${messageData.level}</span></span>
+  <div class="levelWrapper">
+  <span id="LVL">Lv. <span class="ic-level">${messageData.level}</span></span>
   <img class="ic-levelIcon" src="level/${messageData.levelIcon}.png" />
+  <img class="ic-gender" src="icon/${messageData.gender}.png" />
+  </div>
   <p>${messageData.text}</p>
 </div>`;
               chatBox.appendChild(messageElement);
             });
+
+            chatBox.scrollTop = chatBox.scrollHeight;
           });
       }
     }).catch((error) => {
@@ -1484,6 +1491,6 @@ firebase.auth().onAuthStateChanged((user) => {
   } else {
     messageForm.style.display = 'none';
     sendButton.disabled = true;
-    chatBox.innerHTML = '<p style="text-align:center;font-weight:bold;">Silakan login untuk mengirim pesan.</p>';
+    chatBox.innerHTML = '<h5 style="text-align:center;font-weight:bold;">Silakan login untuk mengirim pesan.</h5>';
   }
 });
