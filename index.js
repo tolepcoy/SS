@@ -142,25 +142,6 @@ function TCGetRoleText(TCLevel) {
   }
 }
 
-// CLEAR CHAT ADMIN
-function bersihkanChatboxLama() {
-  const now = new Date();
-  const cutoff = new Date(now.getTime() - 1 * 60 * 1000); // 1mmt
-  
-  const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
-
-  firestore.collection("chatbox")
-    .where("timestamp", "<", cutoffTimestamp)
-    .get()
-    .then((snapshot) => {
-      snapshot.forEach((doc) => {
-        doc.ref.delete().catch((error) => console.error("Error deleting document:", error));
-      });
-      console.log("Dokumen lama berhasil dihapus.");
-    })
-    .catch((error) => console.error("Error fetching documents:", error));
-}
-
 */
 
 /*! ===== BODY ELEMENT ===== */
@@ -1426,7 +1407,7 @@ const sendButton = document.getElementById('sendButton');
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    messageForm.style.display = 'block';
+    messageForm.style.display = 'flex';
     sendButton.disabled = false;
 
 // Ambil data dari koleksi SS
@@ -1501,5 +1482,50 @@ ${messageData.text}
     messageForm.style.display = 'none';
     sendButton.disabled = true;
     chatBox.innerHTML = '<div style="text-align:center;font-weight:bold;"><h5>Silakan login untuk mengirim pesan.</h5><a href="https://tolepcoy.github.io/SS/login-form.html"><button id="loginChat">Login</button></a></div>';
+  }
+});
+
+// CLEAR CHAT ADMIN
+// Fungsi untuk menghapus dokumen lama
+function bersihkanChatboxLama() {
+  const now = new Date();
+  const cutoff = new Date(now.getTime() - 1 * 60 * 1000);
+  
+  const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
+
+  firestore.collection("CHATBOX")
+    .where("timestamp", "<", cutoffTimestamp)
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        doc.ref.delete()
+          .then(() => console.log(`Dokumen ${doc.id} berhasil dihapus.`))
+          .catch((error) => console.error("Error deleting document:", error));
+      });
+      console.log("Semua dokumen lama berhasil dihapus.");
+    })
+    .catch((error) => console.error("Error fetching documents:", error));
+}
+
+// Listener untuk cek user login
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    firestore.collection('SS').doc(user.uid).get().then((doc) => {
+      if (doc.exists) {
+        const userData = doc.data();
+
+        // Cek apakah user adalah admin
+        if (userData.isAdmin) {
+          console.log('Admin login terdeteksi. Memulai pembersihan chat lama...');
+          bersihkanChatboxLama();
+        } else {
+          console.log('Bukan admin, pembersihan tidak dilakukan.');
+        }
+      } else {
+        console.error("Data user tidak ditemukan.");
+      }
+    }).catch((error) => console.error("Error getting user data:", error));
+  } else {
+    console.log("Tidak ada user yang login.");
   }
 });
