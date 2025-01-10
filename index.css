@@ -1108,3 +1108,23 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   padding: 15px 5px 5px 5px;
   margin-top: -7px;
 }
+
+/* Style untuk Admin */
+.admin .sender {
+  color: red;
+  font-weight: bold;
+}
+
+.admin .text-chat {
+  background-color: #ffeb3b;
+}
+
+/* Style untuk Moderator */
+.moderator .sender {
+  color: blue;
+  font-style: italic;
+}
+
+.moderator .text-chat {
+  background-color: #e3f2fd;
+}

@@ -183,6 +183,7 @@ firebase.auth().onAuthStateChanged(user => {
 // Fungsi untuk memperbarui UI profil
 function updateProfilePrivasi(dataPrivasi, kategori) {
   document.getElementById('email').innerHTML = dataPrivasi.email;
+  document.getElementById('member').src = `icon/${data.member}.png`;
   document.getElementById('verimail').innerHTML = dataPrivasi.verimail;
 
   console.log(`Profil berhasil diperbarui untuk ${kategori}`);
@@ -816,6 +817,7 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 // STATUS VERIFIKASI EMAIL
+// STATUS VERIFIKASI EMAIL
 const statusVerifikasiEl = document.getElementById('verimail');
 const statusMember = document.getElementById('member');
 
@@ -826,56 +828,40 @@ function cekStatusVerifikasi() {
     if (user) {
       user.reload() // Reload data user untuk memastikan data terbaru
         .then(() => {
-          const userDoc = firestore.collection('PRIVASI').doc(user.uid);  // Ambil dokumen berdasarkan UID user
-
           if (user.emailVerified) {
             statusVerifikasiEl.textContent = 'Verifikasi √';
             statusVerifikasiEl.style.color = '#0f0';
+            statusVerifikasiEl.style.cursor = 'default';
             statusMember.textContent = 'memberAcc';
-            statusVerifikasiEl.style.cursor = 'default'; // Tidak clickable jika sudah diverifikasi
-            // Update status verifikasi di Firestore
+            
+            // Update status verifikasi di Firestore jika status berubah
+            const userDoc = firestore.collection('PRIVASI').doc(user.uid);
             userDoc.update({
-              email: user.email, // Update email
-              member: 'memberAcc',
-              verimail: 'Verifikasi √' // Update status verifikasi
-            })
-            .then(() => {
-              console.log('Email di verifikasi');
-            })
-            .catch(error => {
-              console.error('Gagal mengupdate status verifikasi di Firestore:', error);
+              verimail: 'Verifikasi √',
+              member: 'memberAcc'
+            }).then(() => {
+              console.log('Status verifikasi diperbarui di Firestore.');
+            }).catch(error => {
+              console.error('Gagal mengupdate Firestore:', error);
             });
           } else {
             statusVerifikasiEl.textContent = 'Verifikasi Email';
             statusVerifikasiEl.style.color = '#f55';
             statusVerifikasiEl.style.cursor = 'pointer';
             statusMember.textContent = 'memberNotAcc';
-            
+
+            // Event untuk mengirim email verifikasi
             statusVerifikasiEl.onclick = () => {
               const konfirmasi = confirm('Kirim aktifasi ke email?');
               if (konfirmasi) {
                 user.sendEmailVerification()
-                  .then(() => {
-                    showAlert('Email verifikasi berhasil dikirim. Cek inbox email!');
-                  })
+                  .then(() => showAlert('Email verifikasi berhasil dikirim. Cek inbox email!'))
                   .catch(error => {
                     console.error('Gagal kirim email verifikasi:', error);
                     showAlert('Gagal mengirim email verifikasi.');
                   });
               }
             };
-            // Update status verifikasi di Firestore
-            userDoc.update({
-              email: user.email, // Update email
-              member: 'memberNotAcc',
-              verimail: 'Verifikasi Email' // Update status verifikasi
-            })
-            .then(() => {
-              console.log('Status verifikasi di Firestore telah diperbarui');
-            })
-            .catch(error => {
-              console.error('Gagal mengupdate status verifikasi di Firestore:', error);
-            });
           }
         })
         .catch(error => {
@@ -961,7 +947,6 @@ document.getElementById("kirim-email").addEventListener("click", () => {
 });
 
 // UBAH PASSWORD
-// Fungsi untuk reauthenticate user
 const reauthenticatePassword = (currentPassword) => {
   const userPas2 = firebase.auth().currentUser;
   const credPas2 = firebase.auth.EmailAuthProvider.credential(userPas2.email, currentPassword);
@@ -978,16 +963,6 @@ const updatePassword = (currentPassword, newPassword) => {
         .then(() => {
           showAlert("Password berhasil diperbarui.");
           document.getElementById("password-input-wrapper").style.display = "none";
-
-          // Update password di Firestore
-          const userRefP = firebase.firestore().collection("PRIVASI").doc(userUpdateP.uid);
-          userRefP.update({
-            password: newPassword
-          }).then(() => {
-            console.log("Password berhasil diperbarui di Firestore");
-          }).catch((error) => {
-            console.error("Gagal memperbarui password di Firestore: ", error);
-          });
         })
         .catch((error) => {
           console.error("Error mengubah password:", error);
@@ -1269,7 +1244,7 @@ firebase.auth().onAuthStateChanged((user) => {
     messageForm.style.display = 'flex';
     sendButton.disabled = false;
 
-// Ambil data dari koleksi SS
+    // Ambil data dari koleksi SS
     firestore.collection('SS').doc(user.uid).get().then((doc) => {
       if (doc.exists) {
         const avatar = doc.data().avatar;
@@ -1277,7 +1252,9 @@ firebase.auth().onAuthStateChanged((user) => {
         const level = doc.data().level;
         const levelIcon = doc.data().level;
         const gender = doc.data().gender;
-        
+        const isAdmin = doc.data().isAdmin || false;  // Ambil isAdmin
+        const isModerator = doc.data().isModerator || false;  // Ambil isModerator
+
         messageForm.addEventListener('submit', (e) => {
           e.preventDefault();
 
@@ -1292,6 +1269,8 @@ firebase.auth().onAuthStateChanged((user) => {
             text: message,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             userId: user.uid,
+            isAdmin: isAdmin,  // Kirim isAdmin ke Firestore
+            isModerator: isModerator,  // Kirim isModerator ke Firestore
           });
 
           messageInput.value = '';
@@ -1305,6 +1284,15 @@ firebase.auth().onAuthStateChanged((user) => {
             snapshot.forEach((doc) => {
               const messageData = doc.data();
               const messageElement = document.createElement('div');
+              
+              // Cek apakah user admin atau moderator
+              let userClass = '';
+              if (messageData.isAdmin) {
+                userClass = 'admin';  // Class untuk admin
+              } else if (messageData.isModerator) {
+                userClass = 'moderator';  // Class untuk moderator
+              }
+
               messageElement.innerHTML = `
 <div class="chatWrapper">
 
@@ -1335,7 +1323,7 @@ ${messageData.text}
       }
     }).catch((error) => {
       console.error("Error getting document: ", error);
-    });    
+    });
 
   } else {
     messageForm.style.display = 'none';

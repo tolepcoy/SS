@@ -53,7 +53,6 @@ registerButton.addEventListener('click', () => {
         userSSRef.set({
           nama: 'userSS',
           avatar: 'icon/default_avatar.png',
-          member: 'memberNotAcc',
           level: 1,
           role: 1,
           levelIcon: 1,
@@ -61,10 +60,8 @@ registerButton.addEventListener('click', () => {
           lokasi: 'Palembang',
           umur: null,
           gender: 'cewok',
-          isAdmin: false,
           requestRate: 'belum request',
           email: userRegister.email,
-          verimail: 'Verifikasi Email',
           rate: '&nbsp;No Rating',
           bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
         }).then(() => {
@@ -77,9 +74,7 @@ registerButton.addEventListener('click', () => {
         const privasiRef = firestore.collection('PRIVASI').doc(userRegister.uid);
         privasiRef.set({
           email: userRegister.email,
-          password: '-',
           member: 'memberNotAcc',
-          isAdmin: false,
           verimail: 'Verifikasi Email',
         }).then(() => {
           showAlert('Registrasi berhasil! Silahkan Login dulu');
