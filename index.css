@@ -1058,7 +1058,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   margin-right: 10px;
 }
 
-#LVL {
+.LVL {
   font-size: 14px;
 }
 
