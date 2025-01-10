@@ -1146,7 +1146,7 @@ avatarLain.src = userDetails.avatar;
 
 const memberLain = document.getElementById('member-lain');
 if (memberLain) {
-gmemberLain.src = `icon/${userDetails.member}.png`;
+memberLain.src = `icon/${userDetails.member}.png`;
 }
 
 const levelLain = document.getElementById('level-lain');
@@ -1335,74 +1335,7 @@ ${messageData.text}
       }
     }).catch((error) => {
       console.error("Error getting document: ", error);
-    });
-    
-    
-// Ambil dari koleksi Administrator
-    firestore.collection('Administrator').doc(user.uid).get().then((doc) => {
-      if (doc.exists) {
-        const avatar = doc.data().avatar;
-        const userName = doc.data().nama;
-        const level = doc.data().level;
-        const levelIcon = doc.data().level;
-        
-        messageForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-
-          const message = messageInput.value;
-
-          firestore.collection('CHATBOX').add({
-            nama: userName,
-            avatar: avatar,
-            level: level,
-            levelIcon: level,
-            text: message,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            userId: user.uid,
-          });
-
-          messageInput.value = '';
-        });
-
-        firestore.collection('CHATBOX')
-          .orderBy('timestamp')
-          .onSnapshot((snapshot) => {
-            chatBox.innerHTML = '';
-
-            snapshot.forEach((doc) => {
-              const messageData = doc.data();
-              const messageElement = document.createElement('div');
-              messageElement.innerHTML = `
-<div class="chatWrapper">
-
-<div class="senderWrapper">
-<img class="ic-avatar" src="${messageData.avatar}" />
-<div>
-<div>
-<span class="sender">${messageData.nama}</span>
-</div>
-<div>
-<span class="LVL">Lv. <span class="ic-level">${messageData.level}</span></span>
-<img class="ic-levelIcon" src="level/${messageData.level}.gif" />
-</div>
-</div>
-</div>
-
-<div class="text-chat">
-${messageData.text}
-</div>
-
-</div>`;
-              chatBox.appendChild(messageElement);
-            });
-
-            chatBox.scrollTop = chatBox.scrollHeight;
-          });
-      }
-    }).catch((error) => {
-      console.error("Error getting document: ", error);
-    });
-    
+    });    
 
   } else {
     messageForm.style.display = 'none';
