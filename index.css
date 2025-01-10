@@ -987,9 +987,16 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 #TolepCoy {
   font-family: Tolep Roboto;
   font-size: 13px;
-  font-weight: normal;
   text-transform: uppercase;
-  color: #ccc;
+  color: #0f0;
+}
+
+/* MOMOD 0.5 */
+#Momod {
+  font-family: Tolep Roboto;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #f00;
 }
 /* ------ ROLE END ------- */
 /* Chat Container */
@@ -1052,7 +1059,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   margin-bottom: 10px;
   padding: 5px 15px 5px 5px;
   border-radius: 20px 6px 25px 6px;
-  background: #888;
+  background: linear-gradient(to bottom, #555, #888);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -1064,8 +1071,8 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 .ic-avatar {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   margin-right: 8px;
 }
@@ -1074,10 +1081,11 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   font-family: "Tolep Default";
   font-weight: bold;
   margin-right: 10px;
+  font-size: 14px;
 }
 
 .LVL {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .ic-level {
@@ -1090,7 +1098,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 .ic-levelIcon {
   margin-right: 10px;
   width: auto;
-  height: 15px;
+  height: 14px;
 }
 
 .ic-gender {
@@ -1102,29 +1110,9 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   background: linear-gradient(to bottom, transparent, rgba(70, 0, 70, 0.3);
   display: block;
   font-family: Arial;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 0.9;
   border-radius: 6px 6px 15px 7px;
   padding: 15px 5px 5px 5px;
   margin-top: -7px;
-}
-
-/* Style untuk Admin */
-.admin .sender {
-  color: red;
-  font-size: 50px;
-}
-
-.admin .text-chat {
-  background-color: #ffeb3b;
-}
-
-/* Style untuk Moderator */
-.moderator .sender {
-  color: blue;
-  font-style: italic;
-}
-
-.moderator .text-chat {
-  background-color: #e3f2fd;
 }
