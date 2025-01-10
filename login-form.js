@@ -53,14 +53,14 @@ registerButton.addEventListener('click', () => {
         userSSRef.set({
           nama: 'userSS',
           avatar: 'icon/default_avatar.png',
-          level: '1',
-          role: 'Minion',
-          levelIcon: '1',
+          level: 1,
+          role: 1,
+          levelIcon: 1,
           detail: 'Bio',
           lokasi: 'Palembang',
-          umur: 'Belum diatur',
+          umur: null,
           gender: 'cewok',
-          isAdmin: 'false',
+          isAdmin: false,
           requestRate: 'belum request',
           email: userRegister.email,
           verimail: 'Verifikasi ✘',
@@ -77,7 +77,7 @@ registerButton.addEventListener('click', () => {
         privasiRef.set({
           email: userRegister.email,
           password: '-',
-          isAdmin: 'false',
+          isAdmin: false,
           verimail: 'Verifikasi ✘',
         }).then(() => {
           showAlert('Registrasi berhasil! Silahkan Login dulu');

@@ -14,56 +14,10 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
-/*
-// ADMIN UPDATE LEVEL
-async function adminLogin(uid) {
-    try {
-        // Ambil data dari koleksi SS
-        const ssDoc = await firestore.collection('SS').doc(uid).get();
-        if (!ssDoc.exists) {
-            console.log('User tidak ditemukan di koleksi SS');
-            return;
-        }
-        const ssData = ssDoc.data();
-        const level = ssData.level;
-        const levelIcon = ssData.level;
-
-        // Ambil data dari koleksi CGlobal untuk dokumen role
-        const roleDoc = await firestore.collection('CGlobal').doc('role').get();
-        if (!roleDoc.exists) {
-            console.log('Dokumen role tidak ditemukan di koleksi CGlobal');
-            return;
-        }
-        const roleData = roleDoc.data();
-
-        // Validasi apakah level dan levelIcon konsisten
-        if (level !== levelIcon) {
-            await firestore.collection('SS').doc(uid).update({
-                levelIcon: level
-            });
-            console.log(`Updated levelIcon ke ${level}`);
-        }
-
-        // Update role dengan value dari field yang sesuai di CGlobal
-        const roleField = roleData[String(level)]; // Mengambil nilai berdasarkan level
-        if (roleField) {
-            await firestore.collection('SS').doc(uid).update({
-                role: roleField
-            });
-            console.log(`Updated role ke ${roleField}`);
-        } else {
-            console.log(`Field ${level} tidak ditemukan di role`);
-        }
-    } catch (error) {
-        console.error('Error saat login admin:', error);
-    }
-}
-*/
-
 // CLEAR CHAT ADMIN
 function bersihkanChatboxLama() {
   const now = new Date();
-  const cutoff = new Date(now.getTime() - 1 * 60 * 1000);
+  const cutoff = new Date(now.getTime() - 30 * 60 * 1000);
   
   const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
 
