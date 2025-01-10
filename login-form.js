@@ -63,7 +63,7 @@ registerButton.addEventListener('click', () => {
           isAdmin: false,
           requestRate: 'belum request',
           email: userRegister.email,
-          verimail: 'Verifikasi ✘',
+          verimail: 'Verifikasi Email',
           rate: '&nbsp;No Rating',
           bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
         }).then(() => {
@@ -78,7 +78,7 @@ registerButton.addEventListener('click', () => {
           email: userRegister.email,
           password: userRegister.password,
           isAdmin: false,
-          verimail: 'Verifikasi ✘',
+          verimail: 'Verifikasi Email',
         }).then(() => {
           showAlert('Registrasi berhasil! Silahkan Login dulu');
           console.log('User privasi berhasil disimpan ke koleksi PRIVASI.');

@@ -844,7 +844,7 @@ function cekStatusVerifikasi() {
               console.error('Gagal mengupdate status verifikasi di Firestore:', error);
             });
           } else {
-            statusVerifikasiEl.textContent = 'Belum Verifikasi ✘';
+            statusVerifikasiEl.textContent = 'Verifikasi Email';
             statusVerifikasiEl.style.color = '#f55';
             statusVerifikasiEl.style.cursor = 'pointer';
             
@@ -864,7 +864,7 @@ function cekStatusVerifikasi() {
             // Update status verifikasi di Firestore
             userDoc.update({
               email: user.email, // Update email
-              verimail: 'Belum Verifikasi ✘' // Update status verifikasi
+              verimail: 'Verifikasi Email' // Update status verifikasi
             })
             .then(() => {
               console.log('Status verifikasi di Firestore telah diperbarui');
