@@ -1430,7 +1430,7 @@ firebase.auth().onAuthStateChanged((user) => {
       case 19: return '<span id="Emperor19">Emperor</span>';
       case 20: return '<span id="ImmortalEmperor20">IMMORTAL EMPEROR</span>';
       case 21: return '<span id="GOD21">GOD</span>';
-      // masalah
+      case 0: return '<span id="TolepCoy">Administrator</span>';
     }
   }
 });

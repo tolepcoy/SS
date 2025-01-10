@@ -982,6 +982,15 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   text-shadow: 1px 1px 2px black, 0px 0px 5px black;
   letter-spacing: 1.5;
 }
+
+/* ADMIN 0 */
+#TolepCoy {
+  font-family: Tolep Roboto;
+  font-size: 13px;
+  font-weight: normal;
+  text-transform: uppercase;
+  color: #ccc;
+}
 /* ------ ROLE END ------- */
 /* Chat Container */
 #chatContainer {
@@ -1001,7 +1010,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   margin-bottom: 15px;
   background: #f9f9f9;
   border-radius: 6px;
-  color: black;
+  color: white;
 }
 
 #messageForm {
@@ -1043,7 +1052,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   margin-bottom: 10px;
   padding: 5px 15px 5px 5px;
   border-radius: 20px 6px 25px 6px;
-  background: rgba(0, 255, 0, 0.2);
+  background: #222;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
