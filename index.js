@@ -38,7 +38,7 @@ function bersihkanChatboxLama() {
 // Listener untuk cek user login
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    firestore.collection('SS').doc(user.uid).get().then((doc) => {
+    firestore.collection('Administrator').doc(user.uid).get().then((doc) => {
       if (doc.exists) {
         const userData = doc.data();
 
@@ -168,7 +168,7 @@ firebase.auth().onAuthStateChanged(user => {
   if (user) {
     const userRefPrivasi = firestore.collection('PRIVASI').doc(user.uid);
 
-    userRefPrivasi.onSnapshot(doc => {
+    userRefPrivasi.get(doc => {
       if (doc.exists) {
         const dataPrivasi = doc.data();
         updateProfilePrivasi(dataPrivasi, 'User'); 
@@ -826,8 +826,7 @@ function cekStatusVerifikasi() {
     if (user) {
       user.reload() // Reload data user untuk memastikan data terbaru
         .then(() => {
-          const db = firebase.firestore();  // Ambil instance Firestore
-          const userDoc = db.collection('PRIVASI').doc(user.uid);  // Ambil dokumen berdasarkan UID user
+          const userDoc = firestore.collection('PRIVASI').doc(user.uid);  // Ambil dokumen berdasarkan UID user
 
           if (user.emailVerified) {
             statusVerifikasiEl.textContent = 'Verifikasi √';
@@ -1365,14 +1364,14 @@ ${messageData.text}
 // Selalu Berubah Parah!
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    firestore.collection('SS').doc(user.uid).get().then((doc) => {
-      if (doc.exists && doc.data().isAdmin === true) { // Pastikan isAdmin bernilai true
+    firestore.collection('Administrator').doc(user.uid).get().then((doc) => {
+      if (doc.exists && doc.data().isAdmin === true) {
         console.log('ADMIN TOLEP DETECTED!');
 
         firestore.collection('SS').get().then((snapshot) => {
           snapshot.forEach((doc) => {
             const data = doc.data();
-            const uid = doc.id; // Dapatkan UID dari dokumen
+            const uid = doc.id;
             const levelnya = data.level;
             const role = getRoleText(levelnya);
 
@@ -1425,33 +1424,4 @@ firebase.auth().onAuthStateChanged((user) => {
       // masalah
     }
   }
-});
-
-// hapus
-// ID dokumen yang akan dipindahkan
-const documentId = 'c5AbAGemIcfsphDrXu56I8OZyEo1';
-
-// Referensi ke dokumen sumber (koleksi SS)
-const sourceDocRef = firestore.collection('SS').doc(documentId);
-
-// Referensi ke dokumen tujuan (koleksi Administrator)
-const targetDocRef = firestore.collection('Administrator').doc(documentId);
-
-// Mendapatkan data dari dokumen sumber
-sourceDocRef.get().then((docSnapshot) => {
-    if (docSnapshot.exists) {
-        // Data dari dokumen sumber
-        const data = docSnapshot.data();
-
-        // Menyimpan data ke dokumen tujuan
-        targetDocRef.set(data).then(() => {
-            console.log('Data berhasil dipindahkan ke koleksi Administrator');
-        }).catch((error) => {
-            console.error('Gagal menyimpan data ke koleksi Administrator:', error);
-        });
-    } else {
-        console.log('Dokumen sumber tidak ditemukan di koleksi SS');
-    }
-}).catch((error) => {
-    console.error('Gagal membaca dokumen dari koleksi SS:', error);
 });
