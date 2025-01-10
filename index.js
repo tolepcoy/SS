@@ -1274,8 +1274,8 @@ firebase.auth().onAuthStateChanged((user) => {
         const level = doc.data().level;
         const levelIcon = doc.data().level;
         const gender = doc.data().gender;
-        const isAdmin = doc.data().isAdmin || true;  // Ambil isAdmin
-        const isModerator = doc.data().isModerator || true;  // Ambil isModerator
+        const isAdmin = doc.data().isAdmin || true;
+        const isModerator = doc.data().isModerator || true;
 
         messageForm.addEventListener('submit', (e) => {
           e.preventDefault();
@@ -1308,14 +1308,13 @@ firebase.auth().onAuthStateChanged((user) => {
               const messageElement = document.createElement('div');
               
 // Cek user admin atau moderator
-              let userClass = '';
-              if (messageData.isAdmin) {
-userClass = 'admin';  // Class untuk admin
-              } else if (messageData.isModerator) {
-                userClass = 'moderator';  // Class untuk moderator
-              }
-
-              messageElement.innerHTML = `
+   let userClass = '';
+   if (messageData.isAdmin) {
+userClass = 'admin';
+} else if (messageData.isModerator) {
+userClass = 'moderator';
+}
+   messageElement.innerHTML = `
 <div class="chatWrapper">
 
 <div class="senderWrapper">
@@ -1350,7 +1349,7 @@ ${messageData.text}
   } else {
     messageForm.style.display = 'none';
     sendButton.disabled = true;
-    chatBox.innerHTML = '<div id="beforeChatLogin" style="text-align:center;font-weight:bold;"><h5>Silakan login untuk mengirim pesan.</h5><button id="loginChat"><a href="https://tolepcoy.github.io/SS/login-form.html">Login</a></button></div>';
+    chatBox.innerHTML = '<div id="beforeChatLogin" style="text-align:center;font-weight:bold;color:black;"><h5>Silakan login untuk mengirim pesan.</h5><button id="loginChat"><a href="https://tolepcoy.github.io/SS/login-form.html">Login</a></button></div>';
       const loginChatBtn = document.getElementById("loginChat");
       if (loginChatBtn) {
         loginChatBtn.style.background = 'url("icon/bgBtn2.png")';

@@ -1052,7 +1052,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   margin-bottom: 10px;
   padding: 5px 15px 5px 5px;
   border-radius: 20px 6px 25px 6px;
-  background: #222;
+  background: #888;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -1112,7 +1112,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 /* Style untuk Admin */
 .admin .sender {
   color: red;
-  font-weight: bold;
+  font-size: 50px;
 }
 
 .admin .text-chat {
