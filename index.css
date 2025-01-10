@@ -1059,9 +1059,9 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   margin-top: 10px;
   margin-bottom: 10px;
   padding: 5px 15px 5px 5px;
-  border-radius: 20px 6px 25px 6px;
+  border-radius: 20px 8px 25px 8px;
   background: linear-gradient(to bottom, #555, #888);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.5) inset, 5px 5px 10px rgba(0, 0, 0, 0.6) inset;
 }
 
 .senderWrapper {
@@ -1082,7 +1082,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   font-family: "Tolep Default";
   font-weight: bold;
   margin-right: 10px;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .LVL {
@@ -1108,12 +1108,11 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 .text-chat {
-  background: linear-gradient(to bottom, transparent, rgba(70, 0, 70, 0.3);
   display: block;
   font-family: Arial;
-  font-size: 12px;
+  font-size: 10px;
   line-height: 0.9;
   border-radius: 6px 6px 15px 7px;
-  padding: 15px 5px 5px 5px;
+  padding: 15px 5px 5px 7px;
   margin-top: -7px;
 }
