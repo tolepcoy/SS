@@ -83,6 +83,9 @@ a {
 }
 
 .line-break {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
   width: 90%;
   height: 2px;
   background: linear-gradient(to right, rgba(255, 255, 255, 0.2), #bbb, rgba(255, 255, 255, 0.2));
@@ -1004,13 +1007,13 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   position: relative;
   background: linear-gradient(to left, #333, #aaa, #222);
   flex-grow: 1;
-  padding: 20px;
+  padding: 0px 15px;
   margin-right: 15%;
   overflow: hidden;
 }
 
 #chatBox {
-  height: 70vh;
+  height: 75%;
   overflow-y: auto;
   border: 1px solid #ddd;
   padding: 10px;
@@ -1022,9 +1025,9 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 #messageForm {
-  position: absolute;
+  position: relative;
   left: 50%;
-  bottom: 20px;
+  top: 10px;
   transform: translateX(-50%);
   width: 87%;
   display: flex;
@@ -1034,6 +1037,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 #messageInput {
+  background: rgba(255, 255, 255, 0.8);
   width: 80%;
   padding: 10px;
   border-radius: 6px 0 0 6px;
@@ -1060,7 +1064,6 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   margin-bottom: 10px;
   padding: 5px 15px 5px 5px;
   border-radius: 20px 8px 25px 8px;
-  background: linear-gradient(to bottom, #555, #888);
   box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.5) inset, 5px 5px 10px rgba(0, 0, 0, 0.6) inset;
 }
 
@@ -1082,7 +1085,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   font-family: "Tolep Default";
   font-weight: bold;
   margin-right: 10px;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .LVL {
@@ -1110,7 +1113,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 .text-chat {
   display: block;
   font-family: Arial;
-  font-size: 10px;
+  font-size: 14px;
   line-height: 0.9;
   border-radius: 6px 6px 15px 7px;
   padding: 15px 5px 5px 7px;
