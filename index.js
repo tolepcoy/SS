@@ -14,15 +14,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
-/* //DEBUGGING
-const originalUpdate = firestore.CollectionReference.prototype.update;
-
-firestore.CollectionReference.prototype.update = function(data) {
-  console.log('Firestore update:', this.path, data);
-  return originalUpdate.call(this, data);
-};
-//END DEBUGGING */
-
+/*
 // ADMIN UPDATE LEVEL
 async function adminLogin(uid) {
     try {
@@ -34,7 +26,7 @@ async function adminLogin(uid) {
         }
         const ssData = ssDoc.data();
         const level = ssData.level;
-        const levelIcon = ssData.levelIcon;
+        const levelIcon = ssData.level;
 
         // Ambil data dari koleksi CGlobal untuk dokumen role
         const roleDoc = await firestore.collection('CGlobal').doc('role').get();
@@ -66,6 +58,7 @@ async function adminLogin(uid) {
         console.error('Error saat login admin:', error);
     }
 }
+*/
 
 // CLEAR CHAT ADMIN
 function bersihkanChatboxLama() {
@@ -110,87 +103,6 @@ firebase.auth().onAuthStateChanged((user) => {
     console.log("Tidak ada user yang login.");
   }
 });
-
-// ADMIN DOR
-firebase.auth().onAuthStateChanged((TCUser) => {
-  if (TCUser) {
-    console.log("Auth state changed:", TCUser);
-
-    if (!TCUser.emailVerified) {
-      showAlert('Anda belum memverifikasi email!');
-    }
-
-    firestore.collection("SS").doc(TCUser.uid).get()
-      .then((TCDoc) => {
-        if (TCDoc.exists && TCDoc.data().isAdmin) {
-          
-          console.log("TCDoc data:", TCDoc.data());
-
-          // Updater untuk admin
-          TCUpdateAllUsersForAdmin();
-        }
-      })
-      .catch((error) => {
-        console.error("Error mengambil data admin:", error);
-      });
-  }
-});
-
-// Fungsi untuk update seluruh data user jika admin login
-function TCUpdateAllUsersForAdmin() {
-  firestore.collection('SS').get()
-    .then((TCQuerySnapshot) => {
-      TCQuerySnapshot.forEach((TCDoc) => {
-        const TCUserData = TCDoc.data();
-        const TCUserId = TCDoc.id;
-        const TCLevel = TCUserData.level;
-
-        // Dapatkan role yang benar sesuai level
-        const TCRoleText = TCGetRoleText(TCLevel);
-        const TCLevelIcon = TCLevel;
-
-        // Update data user di Firestore, pastikan role sesuai level
-        firestore.collection('SS').doc(TCUserId).update({
-          role: TCRoleText,
-          levelIcon: TCLevelIcon
-        }).then(() => {
-          console.log(`User ${TCUserId} updated successfully!`);
-        }).catch((TCError) => {
-          console.error("Error updating user: ", TCError);
-        });
-      });
-    })
-    .catch((TCError) => {
-      console.error("Error fetching user data: ", TCError);
-    });
-}
-
-// Fungsi untuk menentukan role berdasarkan level
-function TCGetRoleText(TCLevel) {
-  switch (TCLevel) {
-    case 1: return '<span id="Minion1">Minion</span>';
-    case 2: return '<span id="Baron2">Baron</span>';
-    case 3: return '<span id="Knight3">Knight</span>';
-    case 4: return '<span id="Guardian4">Guardian</span>';
-    case 5: return '<span id="Commander5">Commander';
-    case 6: return '<span id="Champion6">Champion</span>';
-    case 7: return '<span id="Prince7">Prince</span>';
-    case 8: return '<span id="Lord8">Lord</span>';
-    case 9: return '<span id="CelestialLord9">Celestial Lord</span>';
-    case 10: return '<span id="GrandLord10">Grand Lord</span>';
-    case 11: return '<span id="Conqueror11">Conqueror</span>';
-    case 12: return '<span id="Supreme12">Supreme</span>';
-    case 13: return '<span id="EternalSupreme13">Eternal Supreme</span>';
-    case 14: return '<span id="King14">King</span>';
-    case 15: return '<span id="AbsoluteKing15">Absolute King</span>';
-    case 16: return '<span id="LegendaryKing16">Legendary King</span>';
-    case 17: return '<span id="KingOfGlory17">King Of Glory</span>';
-    case 18: return '<span id="KingOfTheKings18">King Of The Kings</span>';
-    case 19: return '<span id="Emperor19">Emperor</span>';
-    case 20: return '<span id="ImmortalEmperor20">IMMORTAL EMPEROR</span>';
-    case 21: return '<span id="GOD21">GOD</span>';
-  }
-}
 
 /*! ===== BODY ELEMENT ===== */
 // Fungsi untuk menutup side panel
@@ -282,7 +194,7 @@ function updateProfile(data, kategori) {
   document.getElementById('avatar').src = data.avatar;
   document.getElementById('level').innerHTML = data.level;
   document.getElementById('role').innerHTML = data.role;
-document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
+document.getElementById('levelIcon').src = `level/${data.level}.png`;
   document.getElementById('detail').innerHTML = data.detail;
   document.getElementById('lokasi').innerHTML = data.lokasi;
   document.getElementById('umur').innerHTML = data.umur;
@@ -1230,7 +1142,7 @@ function generateUserProfile(user, container) {
     <div class="icUserWrapper">
       <span id="namaUser" class="namaUser">${user.nama}</span>
       <span class="smallest">Lv. &nbsp;<span id="levelUser">${user.level}</span>&nbsp;&nbsp;
-      <img id="levelIconUser" src="level/${user.levelIcon}.png" alt="Level Icon"></span>
+      <img id="levelIconUser" src="level/${user.level}.png" alt="Level Icon"></span>
     </div>
   `;
 
@@ -1282,7 +1194,7 @@ levelLain.innerHTML = userDetails.level;
 
 const levelIconLain = document.getElementById('levelIcon-lain');
 if (levelIconLain) {
-levelIconLain.src = `level/${userDetails.levelIcon}.png`;
+levelIconLain.src = `level/${userDetails.level}.png`;
 }
 
  const roleLain = document.getElementById('role-lain');
@@ -1343,7 +1255,7 @@ function updateUserProfile(user) {
   userDiv.querySelector('#avatarUser').src = user.avatar;
   userDiv.querySelector('#namaUser').textContent = user.nama;
   userDiv.querySelector('#levelUser').textContent = user.level;
-  userDiv.querySelector('#levelIconUser').src = `level/${user.levelIcon}.png`;
+  userDiv.querySelector('#levelIconUser').src = `level/${user.level}.png`;
 }
 
 // Real-time listener dari Firestore
@@ -1355,7 +1267,7 @@ firestore.collection('SS').onSnapshot((snapshot) => {
       nama: userData.nama,
       level: userData.level,
       avatar: userData.avatar,
-      levelIcon: userData.levelIcon,
+      levelIcon: userData.level,
       gender: userData.gender,
     };
 
@@ -1384,68 +1296,6 @@ document.querySelectorAll('.icon').forEach(item => {
   });
 });
 
-// Ambil referensi ke koleksi
-const Mantap = firebase.firestore();
-
-function updateAllUsers() {
-  Mantap.collection('SS').get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-
-        const Waduh = doc.data();
-        const SamaSaja = doc.id;
-
-// Ambil data level dari firestore
-        const level = Waduh.level;
-
-        // Tentukan role dan levelIcon berdasarkan level
-        const levelIcon = level;
-        const role = getRoleText(level);
-
-        // Update data ke firestore
-        Mantap.collection('SS').doc(SamaSaja).update({
-          levelIcon: levelIcon,
-          role: role
-        }).then(() => {
-          console.log(`User ${SamaSaja} data successfully updated!`);
-        }).catch((error) => {
-          console.error(`Error updating user ${SamaSaja}: `, error);
-        });
-      });
-    })
-    .catch((error) => {
-      console.error("Error getting documents: ", error);
-    });
-}
-
-function getRoleText(level) {
-  switch (level) {
-    case 1: return '<span id="Minion1">Minion</span>';
-    case 2: return '<span id="Baron2">Baron</span>';
-    case 3: return '<span id="Knight3">Knight</span>';
-    case 4: return '<span id="Guardian4">Guardian</span>';
-    case 5: return '<span id="Commander5">Commander';
-    case 6: return '<span id="Champion6">Champion</span>';
-    case 7: return '<span id="Prince7">Prince</span>';
-    case 8: return '<span id="Lord8">Lord</span>';
-    case 9: return '<span id="CelestialLord9">Celestial Lord</span>';
-    case 10: return '<span id="GrandLord10">Grand Lord</span>';
-    case 11: return '<span id="Conqueror11">Conqueror</span>';
-    case 12: return '<span id="Supreme12">Supreme</span>';
-    case 13: return '<span id="EternalSupreme13">Eternal Supreme</span>';
-    case 14: return '<span id="King14">King</span>';
-    case 15: return '<span id="AbsoluteKing15">Absolute King</span>';
-    case 16: return '<span id="LegendaryKing16">Legendary King</span>';
-    case 17: return '<span id="KingOfGlory17">King Of Glory</span>';
-    case 18: return '<span id="KingOfTheKings18">King Of The Kings</span>';
-    case 19: return '<span id="Emperor19">Emperor</span>';
-    case 20: return '<span id="ImmortalEmperor20">IMMORTAL EMPEROR</span>';
-    case 21: return '<span id="GOD21">GOD</span>';
-  }
-}
-// mengupdate seluruh user
-updateAllUsers();
-
 // CHAT BOX
 const messageForm = document.getElementById('messageForm');
 const messageInput = document.getElementById('messageInput');
@@ -1463,7 +1313,7 @@ firebase.auth().onAuthStateChanged((user) => {
         const avatar = doc.data().avatar;
         const userName = doc.data().nama;
         const level = doc.data().level;
-        const levelIcon = doc.data().levelIcon;
+        const levelIcon = doc.data().level;
         const gender = doc.data().gender;
         
         messageForm.addEventListener('submit', (e) => {
@@ -1475,7 +1325,7 @@ firebase.auth().onAuthStateChanged((user) => {
             nama: userName,
             avatar: avatar,
             level: level,
-            levelIcon: levelIcon,
+            levelIcon: level,
             gender: gender,
             text: message,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -1505,7 +1355,7 @@ firebase.auth().onAuthStateChanged((user) => {
 </div>
 <div>
 <span id="LVL">Lv. <span class="ic-level">${messageData.level}</span></span>
-<img class="ic-levelIcon" src="level/${messageData.levelIcon}.png" />
+<img class="ic-levelIcon" src="level/${messageData.level}.png" />
 </div>
 </div>
 </div>
@@ -1557,38 +1407,68 @@ ${messageData.text}
   }
 });
 
-
-// Debugging untuk user tertentu
+/*! ------- M A S A L A H ------- */
+// Selalu Berubah Parah!
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    // Cek apakah user adalah admin
     firestore.collection('SS').doc(user.uid).get().then((doc) => {
-      if (doc.exists) {
-        const userData = doc.data();
+      if (doc.exists && doc.data().isAdmin === true) { // Pastikan isAdmin bernilai true
+        console.log('ADMIN TOLEP DETECTED!');
 
-        if (userData.isAdmin) {
-          console.log('Admin login berhasil, menjalankan debugging...');
+        firestore.collection('SS').get().then((snapshot) => {
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            const uid = doc.id; // Dapatkan UID dari dokumen
+            const levelnya = data.level;
+            const role = getRoleText(levelnya);
 
-          // Update role untuk user tertentu
-          const targetUid = "aqgovbUIE3XguMCsMLZjgha1dqg1";
-          firestore.collection('SS').doc(targetUid).update({
-            role: "testing"
-          }).then(() => {
-            console.log(`Role untuk user dengan UID ${targetUid} berhasil diubah menjadi "testing".`);
-          }).catch((error) => {
-            console.error(`Gagal mengubah role untuk user dengan UID ${targetUid}:`, error);
+            firestore.collection('SS').doc(uid).update({
+              level: levelnya,
+              levelIcon: levelnya,
+              role: role
+            }).then(() => {
+              console.log(`Role untuk user dengan UID ${uid} berhasil diubah.`);
+            }).catch((error) => {
+              console.error(`Gagal mengubah role untuk user dengan UID ${uid}:`, error);
+            });
           });
-
-        } else {
-          console.log('User bukan admin, tidak ada tindakan.');
-        }
+        }).catch((error) => {
+          console.error('Error mengambil data pengguna:', error);
+        });
       } else {
-        console.error('Data user tidak ditemukan.');
+        console.log('User bukan admin, tidak ada tindakan.');
       }
     }).catch((error) => {
-      console.error('Error mengambil data admin:', error);
+      console.error('Error mengambil data user:', error);
     });
   } else {
     console.log('Tidak ada user yang login.');
+  }
+
+  function getRoleText(level) {
+    switch (level) {
+      case 1: return '<span id="Minion1">Minion</span>';
+      case 2: return '<span id="Baron2">Baron</span>';
+      case 3: return '<span id="Knight3">Knight</span>';
+      case 4: return '<span id="Guardian4">Guardian</span>';
+      case 5: return '<span id="Commander5">Commander</span>';
+      case 6: return '<span id="Champion6">Champion</span>';
+      case 7: return '<span id="Prince7">Prince</span>';
+      case 8: return '<span id="Lord8">Lord</span>';
+      case 9: return '<span id="CelestialLord9">Celestial Lord</span>';
+      case 10: return '<span id="GrandLord10">Grand Lord</span>';
+      case 11: return '<span id="Conqueror11">Conqueror</span>';
+      case 12: return '<span id="Supreme12">Supreme</span>';
+      case 13: return '<span id="EternalSupreme13">Eternal Supreme</span>';
+      case 14: return '<span id="King14">King</span>';
+      case 15: return '<span id="AbsoluteKing15">Absolute King</span>';
+      case 16: return '<span id="LegendaryKing16">Legendary King</span>';
+      case 17: return '<span id="KingOfGlory17">King Of Glory</span>';
+      case 18: return '<span id="KingOfTheKings18">King Of The Kings</span>';
+      case 19: return '<span id="Emperor19">Emperor</span>';
+      case 20: return '<span id="ImmortalEmperor20">IMMORTAL EMPEROR</span>';
+      case 21: return '<span id="GOD21">GOD</span>';
+      // masalah
+    }
   }
 });
