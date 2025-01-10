@@ -155,8 +155,6 @@ document.getElementById('levelIcon').src = `level/${data.level}.png`;
   document.getElementById('gender').src = `icon/${data.gender}.png`;
   document.getElementById('rate').innerHTML = data.rate;
   document.getElementById('bergabung').innerHTML = data.bergabung;
-  document.getElementById('verimail').innerHTML = data.verimail;
-  document.getElementById('email').innerHTML = data.email;
 
   console.log(`Profil berhasil diperbarui untuk ${kategori}`);
 }
