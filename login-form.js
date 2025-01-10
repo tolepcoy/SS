@@ -53,6 +53,7 @@ registerButton.addEventListener('click', () => {
         userSSRef.set({
           nama: 'userSS',
           avatar: 'icon/default_avatar.png',
+          member: 'memberNotAcc',
           level: 1,
           role: 1,
           levelIcon: 1,
@@ -77,6 +78,7 @@ registerButton.addEventListener('click', () => {
         privasiRef.set({
           email: userRegister.email,
           password: userRegister.password,
+          member: 'memberNotAcc',
           isAdmin: false,
           verimail: 'Verifikasi Email',
         }).then(() => {

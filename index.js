@@ -146,6 +146,7 @@ firebase.auth().onAuthStateChanged(user => {
 function updateProfile(data, kategori) {
   document.getElementById('nama').innerHTML = data.nama;
   document.getElementById('avatar').src = data.avatar;
+  document.getElementById('member').src = `icon/${data.member}.png`;
   document.getElementById('level').innerHTML = data.level;
   document.getElementById('role').innerHTML = data.role;
 document.getElementById('levelIcon').src = `level/${data.level}.png`;
@@ -816,6 +817,7 @@ firebase.auth().onAuthStateChanged(user => {
 
 // STATUS VERIFIKASI EMAIL
 const statusVerifikasiEl = document.getElementById('verimail');
+const statusMember = document.getElementById('member');
 
 // Fungsi untuk update status verifikasi
 function cekStatusVerifikasi() {
@@ -829,10 +831,12 @@ function cekStatusVerifikasi() {
           if (user.emailVerified) {
             statusVerifikasiEl.textContent = 'Verifikasi √';
             statusVerifikasiEl.style.color = '#0f0';
+            statusMember.textContent = 'memberAcc';
             statusVerifikasiEl.style.cursor = 'default'; // Tidak clickable jika sudah diverifikasi
             // Update status verifikasi di Firestore
             userDoc.update({
               email: user.email, // Update email
+              member: 'memberAcc',
               verimail: 'Verifikasi √' // Update status verifikasi
             })
             .then(() => {
@@ -845,6 +849,7 @@ function cekStatusVerifikasi() {
             statusVerifikasiEl.textContent = 'Verifikasi Email';
             statusVerifikasiEl.style.color = '#f55';
             statusVerifikasiEl.style.cursor = 'pointer';
+            statusMember.textContent = 'memberNotAcc';
             
             statusVerifikasiEl.onclick = () => {
               const konfirmasi = confirm('Kirim aktifasi ke email?');
@@ -862,6 +867,7 @@ function cekStatusVerifikasi() {
             // Update status verifikasi di Firestore
             userDoc.update({
               email: user.email, // Update email
+              member: 'memberNotAcc',
               verimail: 'Verifikasi Email' // Update status verifikasi
             })
             .then(() => {
@@ -1138,6 +1144,11 @@ if (avatarLain) {
 avatarLain.src = userDetails.avatar;
 }
 
+const memberLain = document.getElementById('member-lain');
+if (memberLain) {
+gmemberLain.src = `icon/${userDetails.member}.png`;
+}
+
 const levelLain = document.getElementById('level-lain');
 if (levelLain) {
 levelLain.innerHTML = userDetails.level;
@@ -1372,7 +1383,7 @@ ${messageData.text}
 </div>
 <div>
 <span class="LVL">Lv. <span class="ic-level">${messageData.level}</span></span>
-<img class="ic-levelIcon" src="level/${messageData.level}.png" />
+<img class="ic-levelIcon" src="level/${messageData.level}.gif" />
 </div>
 </div>
 </div>
