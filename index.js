@@ -1426,3 +1426,32 @@ firebase.auth().onAuthStateChanged((user) => {
     }
   }
 });
+
+// hapus
+// ID dokumen yang akan dipindahkan
+const documentId = 'c5AbAGemIcfsphDrXu56I8OZyEo1';
+
+// Referensi ke dokumen sumber (koleksi SS)
+const sourceDocRef = firestore.collection('SS').doc(documentId);
+
+// Referensi ke dokumen tujuan (koleksi Administrator)
+const targetDocRef = firestore.collection('Administrator').doc(documentId);
+
+// Mendapatkan data dari dokumen sumber
+sourceDocRef.get().then((docSnapshot) => {
+    if (docSnapshot.exists) {
+        // Data dari dokumen sumber
+        const data = docSnapshot.data();
+
+        // Menyimpan data ke dokumen tujuan
+        targetDocRef.set(data).then(() => {
+            console.log('Data berhasil dipindahkan ke koleksi Administrator');
+        }).catch((error) => {
+            console.error('Gagal menyimpan data ke koleksi Administrator:', error);
+        });
+    } else {
+        console.log('Dokumen sumber tidak ditemukan di koleksi SS');
+    }
+}).catch((error) => {
+    console.error('Gagal membaca dokumen dari koleksi SS:', error);
+});
