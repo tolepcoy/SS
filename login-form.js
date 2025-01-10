@@ -77,7 +77,7 @@ registerButton.addEventListener('click', () => {
         const privasiRef = firestore.collection('PRIVASI').doc(userRegister.uid);
         privasiRef.set({
           email: userRegister.email,
-          password: userRegister.password,
+          password: '-',
           member: 'memberNotAcc',
           isAdmin: false,
           verimail: 'Verifikasi Email',
