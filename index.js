@@ -1349,7 +1349,7 @@ ${messageData.text}
   } else {
     messageForm.style.display = 'none';
     sendButton.disabled = true;
-    chatBox.innerHTML = '<div id="beforeChatLogin" style="text-align:center;font-weight:bold;color:black;"><h5>Silakan login untuk mengirim pesan.</h5><button id="loginChat"><a href="https://tolepcoy.github.io/SS/login-form.html">Login</a></button></div>';
+    chatBox.innerHTML = '<div id="beforeChatLogin" style="text-align:center;font-weight:bold;"><h5>Silakan login untuk mengirim pesan.</h5><button id="loginChat"><a href="https://tolepcoy.github.io/SS/login-form.html">Login</a></button></div>';
       const loginChatBtn = document.getElementById("loginChat");
       if (loginChatBtn) {
         loginChatBtn.style.background = 'url("icon/bgBtn2.png")';
@@ -1439,7 +1439,7 @@ firebase.auth().onAuthStateChanged((user) => {
       case 19: return '<span id="Emperor19">Emperor</span>';
       case 20: return '<span id="ImmortalEmperor20">IMMORTAL EMPEROR</span>';
       case 21: return '<span id="GOD21">GOD</span>';
-      case 0: return '<span id="TolepCoy">Administrator</span>';
+      case Admin: return '<span id="TolepCoy">Administrator</span>';
       case 'MOD': return '<span id="Momod">Moderator</span>';
     }
   }
