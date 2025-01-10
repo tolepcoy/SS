@@ -62,6 +62,7 @@ registerButton.addEventListener('click', () => {
           gender: 'cewok',
           requestRate: 'belum request',
           email: userRegister.email,
+          member: 'memberNotAcc',
           rate: '&nbsp;No Rating',
           bergabung: new Date().toLocaleString('id-ID', { month: 'long', year: 'numeric' }),
         }).then(() => {
@@ -74,7 +75,6 @@ registerButton.addEventListener('click', () => {
         const privasiRef = firestore.collection('PRIVASI').doc(userRegister.uid);
         privasiRef.set({
           email: userRegister.email,
-          member: 'memberNotAcc',
           verimail: 'Verifikasi Email',
         }).then(() => {
           showAlert('Registrasi berhasil! Silahkan Login dulu');

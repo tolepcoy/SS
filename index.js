@@ -183,7 +183,6 @@ firebase.auth().onAuthStateChanged(user => {
 // Fungsi untuk memperbarui UI profil
 function updateProfilePrivasi(dataPrivasi, kategori) {
   document.getElementById('email').innerHTML = dataPrivasi.email;
-  document.getElementById('member').src = `icon/${data.member}.png`;
   document.getElementById('verimail').innerHTML = dataPrivasi.verimail;
 
   console.log(`Profil berhasil diperbarui untuk ${kategori}`);
@@ -817,7 +816,6 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 // STATUS VERIFIKASI EMAIL
-// STATUS VERIFIKASI EMAIL
 const statusVerifikasiEl = document.getElementById('verimail');
 const statusMember = document.getElementById('member');
 
@@ -826,31 +824,44 @@ function cekStatusVerifikasi() {
   // Pastikan user login
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
-      user.reload() // Reload data user untuk memastikan data terbaru
+      // Reload data user untuk memastikan data terbaru
+      user.reload()
         .then(() => {
           if (user.emailVerified) {
+            // Jika email terverifikasi
             statusVerifikasiEl.textContent = 'Verifikasi √';
             statusVerifikasiEl.style.color = '#0f0';
             statusVerifikasiEl.style.cursor = 'default';
             statusMember.textContent = 'memberAcc';
-            
-            // Update status verifikasi di Firestore jika status berubah
-            const userDoc = firestore.collection('PRIVASI').doc(user.uid);
-            userDoc.update({
-              verimail: 'Verifikasi √',
+
+            // Update status verifikasi di Firestore (koleksi PRIVASI)
+            const privasiDoc = firestore.collection('PRIVASI').doc(user.uid);
+            privasiDoc.update({
+              verimail: 'Verifikasi √'
+            }).then(() => {
+              console.log('Status verifikasi diperbarui di Firestore (PRIVASI).');
+            }).catch(error => {
+              console.error('Gagal mengupdate Firestore (PRIVASI):', error);
+            });
+
+            // Update status member di Firestore (koleksi SS)
+            const memberDoc = firestore.collection('SS').doc(user.uid);
+            memberDoc.update({
               member: 'memberAcc'
             }).then(() => {
-              console.log('Status verifikasi diperbarui di Firestore.');
+              console.log('Status member diperbarui di Firestore (SS).');
             }).catch(error => {
-              console.error('Gagal mengupdate Firestore:', error);
+              console.error('Gagal mengupdate Firestore (SS):', error);
             });
+
           } else {
+            // Jika email belum terverifikasi
             statusVerifikasiEl.textContent = 'Verifikasi Email';
             statusVerifikasiEl.style.color = '#f55';
             statusVerifikasiEl.style.cursor = 'pointer';
             statusMember.textContent = 'memberNotAcc';
 
-            // Event untuk mengirim email verifikasi
+            // Event mengirim email verifikasi
             statusVerifikasiEl.onclick = () => {
               const konfirmasi = confirm('Kirim aktifasi ke email?');
               if (konfirmasi) {
@@ -862,12 +873,23 @@ function cekStatusVerifikasi() {
                   });
               }
             };
+
+            // Update status member di Firestore (koleksi SS) sebagai memberNotAcc
+            const memberDoc = firestore.collection('SS').doc(user.uid);
+            memberDoc.update({
+              member: 'memberNotAcc'
+            }).then(() => {
+              console.log('Status member diperbarui ke Firestore sebagai memberNotAcc (SS).');
+            }).catch(error => {
+              console.error('Gagal mengupdate Firestore (SS):', error);
+            });
           }
         })
         .catch(error => {
           console.error('Gagal memuat ulang status user:', error);
         });
     } else {
+      // Jika user belum login
       statusVerifikasiEl.textContent = 'User belum login';
       statusVerifikasiEl.style.color = 'orange';
       statusVerifikasiEl.style.cursor = 'default';
@@ -1252,8 +1274,8 @@ firebase.auth().onAuthStateChanged((user) => {
         const level = doc.data().level;
         const levelIcon = doc.data().level;
         const gender = doc.data().gender;
-        const isAdmin = doc.data().isAdmin || false;  // Ambil isAdmin
-        const isModerator = doc.data().isModerator || false;  // Ambil isModerator
+        const isAdmin = doc.data().isAdmin || true;  // Ambil isAdmin
+        const isModerator = doc.data().isModerator || true;  // Ambil isModerator
 
         messageForm.addEventListener('submit', (e) => {
           e.preventDefault();
@@ -1285,10 +1307,10 @@ firebase.auth().onAuthStateChanged((user) => {
               const messageData = doc.data();
               const messageElement = document.createElement('div');
               
-              // Cek apakah user admin atau moderator
+// Cek user admin atau moderator
               let userClass = '';
               if (messageData.isAdmin) {
-                userClass = 'admin';  // Class untuk admin
+userClass = 'admin';  // Class untuk admin
               } else if (messageData.isModerator) {
                 userClass = 'moderator';  // Class untuk moderator
               }
