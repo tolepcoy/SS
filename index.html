@@ -2,259 +2,54 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Secret Server Chat</title>
-  <link rel="stylesheet" href="index.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=yes">
+  <title>Tolep Secret Server</title>
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="font/tolepfonts.css">
 </head>
 <body>
-  <!-- Sidebar Navbar -->
-  <div id="sidebar">
-    
-    <div class="icon" id="userProfile">
-      <img src="icon/profile-icon.png" alt="User Profile">
-    </div>
-    
-    <div class="icon" id="settings">
-      <img style="opacity:0.6" src="icon/setting-icon.png" alt="Settings">
-    </div>
-    
-    <div class="icon" id="secretSide">
-      <img style="opacity:0.6" src="icon/ss-icon.png" alt="Secret Side">
-    </div>
-    
-    <div class="icon" id="logout">
-      <img src="icon/logout-icon.png" alt="Logout">
-      </div>
-      
-  </div>
-<!-- ADMIN WAS ONLINE -->
-<div id="Halo"></div>
-<!-- ADMIN END -->
-
-  <!-- Chat Container -->
-  <div id="chatContainer">
-    <div style="text-align:center;margin-top:5px;"><b>SECRET SERVER</b></div>
-      
-    <div id="chatBox">
-      <!-- Chat muncul disini -->
-    </div>
-    
-    <form id="messageForm">
-      <textarea id="messageInput" placeholder="Type your message..." required></textarea>
-      <button type="submit" id="sendButton">Kirim</button>
-    </form>
-  </div>
-
-  <!-- Panel Profil -->
-<div id="profile" class="sidePanel">
-
-  <div class="nama">
-<h2 id="nama"></h2>
-<span class="icon-pencil" id="edit-nama">&#x270E;</span></div>
-
+<div class="blink">Tolep server<span id="blink">_</span>
+</div>
+  
+<div id="chatBox">
+Tolep Coy
 <div class="line-break"></div>
-  
-  <div class="prof">
-<img id="member" src="icon/memberNotAcc.png" />
-<img class="avatar" id="avatar" src="icon/default_avatar.png">
-<span class="icon-pencil" id="edit-avatar">&#x270E;</span>
-</div>
-  
-  <div id="levelParent">
-<span class="parentLV">
-<span id="LVL"></span><span id="level"></span></span><span id="role"></span>
-<img id="levelIcon" src="level/1.png">
+  Oi..hallo bro apa kabar nih gimana kabar ente?
 </div>
 
+<div id="chatbox-tolep">
+Tolep Coy
 <div class="line-break"></div>
-  
-  <div class="prof">
-<div id="detail"></div>
-<span class="icon-pencil" id="edit-detail">&#x270E;</span></div>
+  Oi..hallo bro apa kabar nih gimana kabar ente?
+</div>
 
+<form id="messageForm">
+<textarea id="messageInput" placeholder="Kirim pesen ke Tolep..." required></textarea>
+<button type="submit" id="sendButton">Kirim</button>
+</form>
+
+
+
+
+
+<div id="user-online">
+User Online
 <div class="line-break"></div>
-
-  <div class="prof">
-<div id="lokasi"></div>
-<span class="icon-pencil" id="edit-lokasi">&#x270E;</span>
+Tolep Coy &bull;<br>
+Royen &bull;
 </div>
-  
-  <div class="prof">
-<div id="umur"></div>
-<span class="icon-pencil" id="edit-umur">&#x270E;</span>
-</div>
-  
-  <div class="prof">
-<div><img id="gender" src="icon/cewok.png"></div>
-<span class="icon-pencil" id="edit-gender">&#x270E;</span>
-</div>
-  
-    <div id="Bgrate">Rate :<span id="rate"></span></div>
-    
-    <div id="Bgbergabung">Bergabung &nbsp;: <span id="bergabung"></span></div>
-    
-  <button class="closeBtnPnl" onclick="closePanel('profile')">Close</button>
-
-</div>
-
-<!-- setting -->
-  <!-- Panel Settings -->
-<div id="settingsPanel" class="sidePanel">
-  <h2>Settings</h2>
-<div class="line-break"></div>
-
-<div class="childPanel">
-<div>ID User : </div>
-<div id="uniqueID"></div>
-</div>
-
-<div class="childPanel">
-<div>Email : </div>
-<div id="email"></div>
-<div id="verimail"></div>
-</div>
-
-<div class="line-break"></div>
-
-<!-- ubah email -->
-<div class="centerFlex">
-  <button id="ubah-email" class="edulFull">Ubah Email</button>
-  </div>
-  
-<div id="email-input-wrapper" style="display: none;">
-    <input type="email" id="email-baru" placeholder="Masukkan email baru" />
-    <input type="password" id="password" placeholder="Masukkan password" /><br>
-      
-      <div class="buttonWrap">
-<button id="batal-kirim" class="edul">Batal</button> 
-    <button id="kirim-email" class="edul">Kirim</button>
-    </div>
-  </div>
-
-<!-- ubah password -->
-<div class="centerFlex">
-  <button id="ubah-password" class="edulFull">Ubah Password</button>
-  </div>
-  
-<div id="password-input-wrapper" style="display: none;">
-    <input type="password" id="password-lama" placeholder="Masukkan password lama" />
-    <input type="password" id="password-baru" placeholder="Masukkan password baru" /><br>
-      
-      <div class="buttonWrap">
-<button id="batalkan" class="edul">Batal</button> 
-    <button id="ubah" class="edul">Ubah</button>
-    </div>
-  </div>
-
-<div class="line-break"></div>
-
-<div id="reqRate">
-  <h3>REQUEST RATE & ETC</h3>
-  <input id="minInput"> - 
-  <input id="maxInput">
-    <button id="request-rate">REQUEST RATE</button>
-    <button id="closeReq">x</button>
-</div>
-
-<div class="centerFlex">
-<button id="r2">R²</button>
-</div>
+<button id="look">&bull;</button>
 
 
-  <button class="closeBtnPnl" onclick="closePanel('settingsPanel')">Tutup</button>
-</div>
 
-<!-- PANEL PROFIL-LAIN -->
-<div id="profile-lain" class="nyelip">
 
-  <div class="nama">
-<h2 id="nama-lain"></h2>
-</div>
 
-<div class="line-break"></div>
-  
-  <div class="prof">
-<img id="member-lain" src="icon/memberNotAcc.png" />
-<img class="avatar" id="avatar-lain" src="icon/default_avatar.png">
-</div>
-  
-  <div id="levelParent-lain">
-<span class="parentLV"><span id="LVL-lain"></span><span id="level-lain"></span></span><span id="role-lain"></span>
-<img id="levelIcon-lain" src="level/1.png">
-</div>
 
-<div class="line-break"></div>
-  
-  <div class="prof">
-<div id="detail-lain"></div>
-</div>
-
-<div class="line-break"></div>
-
-  <div class="prof">
-<div id="lokasi-lain"></div>
-</div>
-  
-  <div class="prof">
-<div id="umur-lain"></div>
-</div>
-  
-  <div class="prof">
-<div><img id="gender-lain" src="icon/cewok.png"></div>
-</div>
-  
-    <div id="Bgrate-lain">Rate :<span id="rate-lain"></span></div>
-    
-    <div>Bergabung &nbsp;: <span id="bergabung-lain"></span></div>
-    
-  <button class="closeBtnPnl" id="tutup-nyelip">Close</button>
-  
-  <div id="OLstate-lain"></div>
-
-</div>
-
-<!-- SECRET SIDE -->
-  <div id="secretSidePanel" class="sidePanel">
-    
-<div id="cewok">
-<div class="userCewek">
-  <div class="headerProfCewek">User Cewek</div>
-</div>
-
-<div class="userCowok">
-  <div class="headerProfCowok">User Cowok</div>
-</div>
-</div>
-    
-    <button class="closeBtnPnl" onclick="closePanel('secretSidePanel')">Close</button>
-  </div>
-
-<!-- KUMPULAN FUNGSI ELEMEN 999999 -->
-<div id="custom-logout-dialog" class="custom-dialog" style="display: none;">
-  <div class="custom-dialog-content">
-    <p>Logout dari server?</p>
-    <div class="custom-dialog-buttons">
-      <button id="confirm-logout" class="btn-confirm">Logout</button>
-      <button id="cancel-logout" class="btn-cancel">Batal</button>
-    </div>
-  </div>
-</div>
-
-<!-- alert global -->
-<div class="custom-alert">
-  <div class="alert-box">
-    <span class="alert-message"></span>
-    <button class="alert-ok">OK</button>
-  </div>
-</div>
-<!-- END 99999 -->
-<!-- SCRIPT BAWAH -->
 <script src="tolepfirebaseapp.js"></script>
-  <script src="tolepfirebaseauth.js"></script>
-  <script src="tolepfirestore.js"></script>
-  <script src='tolepjquery364.js'></script>
-  <script src="tolepcrypto.js"></script>
-  <script src="index.js"></script>
+<script src="tolepfirebaseauth.js"></script>
+<script src="tolepfirestore.js"></script>
+<script src='tolepjquery364.js'></script>
+<script src="tolepcrypto.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

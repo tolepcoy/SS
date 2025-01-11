@@ -63,3 +63,9 @@
   font-family: 'Tolep Courgette';
   src: url(./tolepcourgette.woff2) format('woff2');
 }
+
+/* ######### TOLEP LINUX ##### */
+@font-face {
+  font-family: 'Tolep Linux';
+  src: url(./toleplinux.woff2) format('woff2');
+}
