@@ -1393,15 +1393,21 @@ firebase.auth().onAuthStateChanged((user) => {
             const levelnya = data.level;
             const role = getRoleText(levelnya);
 
-            firestore.collection('SS').doc(uid).update({
-              level: levelnya,
-              levelIcon: levelnya,
-              role: role
-            }).then(() => {
-              console.log(`Role untuk user dengan UID ${uid} berhasil diubah.`);
-            }).catch((error) => {
-              console.error(`Gagal mengubah role untuk user dengan UID ${uid}:`, error);
-            });
+// Kondisi cek admin atau moderator
+  const isAdmin = doc.data().isAdmin;
+  const isModerator = doc.data().isModerator;
+
+            if (!isAdmin && !isModerator) {
+              firestore.collection('SS').doc(uid).update({
+                level: levelnya,
+                levelIcon: levelnya,
+                role: role
+              }).then(() => {
+                console.log(`Role untuk user dengan UID ${uid} berhasil diubah.`);
+              }).catch((error) => {
+                console.error(`Gagal mengubah role untuk user dengan UID ${uid}:`, error);
+              });
+            }
           });
         }).catch((error) => {
           console.error('Error mengambil data pengguna:', error);
@@ -1415,6 +1421,9 @@ firebase.auth().onAuthStateChanged((user) => {
   } else {
     console.log('Tidak ada user yang login.');
   }
+});
+
+// Fungsi untuk mengubah level ke teks role
 
   function getRoleText(level) {
     switch (level) {
@@ -1439,8 +1448,5 @@ firebase.auth().onAuthStateChanged((user) => {
       case 19: return '<span id="Emperor19">Emperor</span>';
       case 20: return '<span id="ImmortalEmperor20">IMMORTAL EMPEROR</span>';
       case 21: return '<span id="GOD21">GOD</span>';
-      case '<span id="Admin">Owner & Founder</span>': return '<span class="TolepCoy">Administrator</span>';
-      case '<span id="Momod">MODERATOR</span>': return '<span class="Momod">Moderator</span>';
     }
   }
-});
