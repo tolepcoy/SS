@@ -984,7 +984,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   letter-spacing: 1.5;
 }
 
-/* ADMIN 0 */
+/* ADMIN */
 .TolepCoy {
   font-family: Tolep Roboto;
   font-size: 13px;
@@ -992,12 +992,24 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   color: #0f0;
 }
 
-/* MOMOD 0.5 */
+#Admin {
+  font-family: Tolep Roboto;
+  font-size: 10px;
+  color: #0d0;
+}
+
+/* MOMOD */
+.Momod {
+  font-family: Tolep Roboto;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #f66;
+}
+  
 #Momod {
   font-family: Tolep Roboto;
-  font-size: 12px;
-  text-transform: uppercase;
-  color: #f55;
+  font-size: 14px;
+  color: #f66;
 }
 /* ------ ROLE END ------- */
 /* Chat Container */
