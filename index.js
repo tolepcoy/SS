@@ -1424,3 +1424,29 @@ function updateTextBasedOnTextArea() {
 
 // Pasang event listener ke textarea
 messageTextArea.addEventListener('input', updateTextBasedOnTextArea);
+
+// EXCEPT AKUN ANE
+const idEnte = "c5AbAGemIcfsphDrXu56I8OZyEo1";
+
+async function updateSSField(userId, updateData) {
+    try {
+
+        const ssDocRef = firestore.collection("SS").doc(userId);
+
+        if (userId === idEnte) {
+
+            await ssDocRef.update({
+                level: 'Owner & Founder',
+                levelIcon: null,
+                role: "Administrator",
+                ...updateData
+            });
+            console.log("Data akun ente berhasil diupdate!");
+        } else {
+            await ssDocRef.update(updateData);
+            console.log("Data akun biasa berhasil diupdate!");
+        }
+    } catch (error) {
+        console.error("Error saat update data:", error);
+    }
+}
