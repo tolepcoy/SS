@@ -993,28 +993,28 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 /* ADMIN */
-.Admin {
+#Admin {
   font-family: Tolep Roboto;
   font-size: 13px;
   text-transform: uppercase;
   color: #0f0;
 }
 
-#Admin {
+.Admin {
   font-family: Tolep Roboto;
   font-size: 10px;
   color: #0d0;
 }
 
 /* MOMOD */
-.Momod {
+#Momod {
   font-family: Tolep Roboto;
   font-size: 10px;
   text-transform: uppercase;
   color: #f66;
 }
   
-#Momod {
+.Momod {
   font-family: Tolep Roboto;
   font-size: 14px;
   color: #f66;

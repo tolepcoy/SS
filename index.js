@@ -1465,7 +1465,7 @@ firestore.collection('SS').doc(uid).update({
       case 19: return '<span id="Emperor19">Emperor</span>';
       case 20: return '<span id="ImmortalEmperor20">IMMORTAL EMPEROR</span>';
       case 21: return '<span id="GOD21">GOD</span>';
-      case '<span id="Admin">Owner & Founder</span>': return '<span class="Admin">ADMINISTRATOR</span>';
+      case 1000: return '<span id="Admin">ADMINISTRATOR</span>';
     }
   }
 
