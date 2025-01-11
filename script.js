@@ -59,7 +59,9 @@ const messageForm = document.getElementById('messageForm');
 const messageInput = document.getElementById('messageInput');
 const chatBox = document.getElementById('chatBox');
 const chatBoxTolep = document.getElementById('chatbox-tolep');
+const blink = document.getElementById('blink');
 const sendButton = document.getElementById('sendButton');
+
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
@@ -95,6 +97,7 @@ firebase.auth().onAuthStateChanged((user) => {
         firestore.collection('CHATBOX')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
+            blink.innerHTML = '_';
             chatBox.innerHTML = '';
 
             snapshot.forEach((doc) => {
@@ -115,6 +118,7 @@ firebase.auth().onAuthStateChanged((user) => {
         firestore.collection('CHATBOX-TOLEP')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
+            blink.innerHTML = '_';
             chatBoxTolep.innerHTML = '';
 
             snapshot.forEach((doc) => {
@@ -122,8 +126,8 @@ firebase.auth().onAuthStateChanged((user) => {
               const messageElement = document.createElement('div');
 
               messageElement.innerHTML = `
-                <div id="sender">${messageData.nama}</div>
-                <div id="text-chat">${messageData.text}</div>
+                <div id="sender-tolep">${messageData.nama}</div>
+                <div id="text-chat-tolep">${messageData.text}</div>
               `;
               chatBoxTolep.appendChild(messageElement);
             });
@@ -142,11 +146,17 @@ firebase.auth().onAuthStateChanged((user) => {
     sendButton.disabled = true;
     chatBox.innerHTML = `
       <div id="beforeChatLogin" style="text-align:center;font-weight:bold;">
-        <h5>Ente belum login!</h5>
+        <h5 style="color:#f55;">Ente belum login!</h5>
         <button id="loginChat">
           <a href="https://tolepcoy.github.io/SS/login-form.html">Login</a>
         </button>
       </div>
+    `;
+    chatBoxTolep.innerHTML = `
+      <span style="color:#f55;">Tolep sedang Offline!</span>
+    `;
+    blink.innerHTML = `
+      <span style="color:#f55;vertical-align: -1px;font-size:10px;">Offline</span>
     `;
   }
 });

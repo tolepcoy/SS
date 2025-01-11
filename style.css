@@ -153,13 +153,15 @@ textarea:hover {
   color: #0f0;
 }
 
-#sender {
+#sender,
+#sender-tolep {
   font-weight: bold;
   color: #0f0;
 }
 
-#text-chat {
-  color: #0c0;
+#text-chat,
+#text-chat-tolep {
+  color: #0d0;
 }
 
 #look {
