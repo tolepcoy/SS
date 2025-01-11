@@ -153,6 +153,15 @@ textarea:hover {
   color: #0f0;
 }
 
+#sender {
+  font-weight: bold;
+  color: #0f0;
+}
+
+#text-chat {
+  color: #0c0;
+}
+
 #look {
   position: absolute;
   right: 17px;

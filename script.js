@@ -63,7 +63,8 @@ const sendButton = document.getElementById('sendButton');
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    messageForm.style.display = 'flex';
+    messageForm.style.visibility = 'visible';
+    messageForm.style.pointerEvents = 'auto';
     sendButton.disabled = false;
 
     firestore.collection('SS').doc(user.uid).get().then((doc) => {
@@ -78,7 +79,7 @@ firebase.auth().onAuthStateChanged((user) => {
           if (message === '') return;
 
           // Jika UID cocok dengan ente, simpan di CHATBOX-TOLEP
-          const collection = user.uid === "UID_ENTE" ? 'CHATBOX-TOLEP' : 'CHATBOX';
+          const collection = user.uid === "c5AbAGemIcfsphDrXu56I8OZyEo1" ? 'CHATBOX-TOLEP' : 'CHATBOX';
 
           firestore.collection(collection).add({
             nama: userName,
@@ -136,7 +137,8 @@ firebase.auth().onAuthStateChanged((user) => {
 
   } else {
     // Kondisi user belum login
-    messageForm.style.display = 'none';
+    messageForm.style.visibility = 'hidden';
+    messageForm.style.pointerEvents = 'none';
     sendButton.disabled = true;
     chatBox.innerHTML = `
       <div id="beforeChatLogin" style="text-align:center;font-weight:bold;">
@@ -148,3 +150,38 @@ firebase.auth().onAuthStateChanged((user) => {
     `;
   }
 });
+// -- end chatbox
+
+// CLEAR CHAT ADMIN
+function bersihkanChatboxLama() {
+  const now = new Date();
+  const cutoff = new Date(now.getTime() - 1 * 60 * 1000);
+  
+  const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
+
+  firestore.collection("CHATBOX")
+    .where("timestamp", "<", cutoffTimestamp)
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        doc.ref.delete()
+      });
+    })
+}
+
+// Listener untuk cek user login
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    firestore.collection('Administrator').doc(user.uid).get().then((doc) => {
+      if (doc.exists) {
+        const userData = doc.data();
+
+        // Cek apakah user adalah admin
+        if (userData.isAdmin) {
+          bersihkanChatboxLama();
+        }
+      }
+    })
+  }
+});
+// -- end clear chat by admin
