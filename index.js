@@ -1416,12 +1416,7 @@ firebase.auth().onAuthStateChanged((user) => {
             const levelIconnya = data.levelIcon;
             const role = getRoleText(levelnya);
 
-// Kondisi cek admin atau moderator
-  const isAdmin = doc.data().isAdmin;
-  const isModerator = doc.data().isModerator;
-
-            if (!isAdmin && !isModerator) {
-              firestore.collection('SS').doc(uid).update({
+firestore.collection('SS').doc(uid).update({
                 level: levelnya,
                 levelIcon: levelIconnya,
                 role: role
@@ -1430,7 +1425,6 @@ firebase.auth().onAuthStateChanged((user) => {
               }).catch((error) => {
                 console.error(`Gagal mengubah role untuk user dengan UID ${uid}:`, error);
               });
-            }
           });
         }).catch((error) => {
           console.error('Error mengambil data pengguna:', error);
