@@ -1439,7 +1439,7 @@ firebase.auth().onAuthStateChanged((user) => {
       case 19: return '<span id="Emperor19">Emperor</span>';
       case 20: return '<span id="ImmortalEmperor20">IMMORTAL EMPEROR</span>';
       case 21: return '<span id="GOD21">GOD</span>';
-      case Admin: return '<span id="TolepCoy">Administrator</span>';
+      case Admin: return '<span class="TolepCoy">Administrator</span>';
       case 'MOD': return '<span id="Momod">Moderator</span>';
     }
   }

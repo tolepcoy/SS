@@ -985,7 +985,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 /* ADMIN 0 */
-#TolepCoy {
+.TolepCoy {
   font-family: Tolep Roboto;
   font-size: 13px;
   text-transform: uppercase;
@@ -997,7 +997,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   font-family: Tolep Roboto;
   font-size: 12px;
   text-transform: uppercase;
-  color: #f00;
+  color: #f55;
 }
 /* ------ ROLE END ------- */
 /* Chat Container */
@@ -1069,6 +1069,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  padding-left: 5px;
 }
 
 .ic-avatar {
@@ -1079,20 +1080,19 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 .sender {
-  font-family: "Tolep Default";
   font-weight: bold;
   margin-right: 10px;
   font-size: 14px;
 }
 
 .LVL {
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .ic-level {
   margin-right: 10px;
   width: auto;
-  height: 15px;
+  height: 14px;
   font-weight: bold;
 }
 
