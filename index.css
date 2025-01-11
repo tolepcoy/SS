@@ -216,7 +216,7 @@ a {
 }
 
 #LVL, #LVL-lain {
-  font-size: 9px;
+  font-size: 10px;
 }
 
 #level,
@@ -715,7 +715,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 #LVLUser {
-  
+  font-size: 10px;
 }
 
 #levelUser {
@@ -1106,7 +1106,7 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
 }
 
 .ic-LVL {
-  font-size: 9px;
+  font-size: 10px;
 }
 
 .ic-level {
