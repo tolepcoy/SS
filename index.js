@@ -1475,30 +1475,30 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 
 // TESTING REGEX DAN SANITASI
-const messageInputChat = document.getElementById('messageInput');
+const messageTextArea = document.getElementById('messageInput');
 const textChat = document.getElementById('text-chat');
 
-// Fungsi sanitasi dan REGEX
-function sanitizeInput(input) {
-
-  const sanitizedInput = input.replace(/<[^>]*>/g, ''); // Menghapus semua tag HTML
-  return sanitizedInput;
+// Fungsi sanitasi untuk menghapus tag HTML
+function sanitizeTextArea(textarea) {
+  const sanitizedTextArea = textarea.replace(/<[^>]*>/g, ''); // Hapus tag HTML
+  return sanitizedTextArea; // Kembalikan hasil sanitasi
 }
 
-// Fungsi untuk update tampilan berdasarkan input
-function updateTextBasedOnInput() {
-  // Ambil nilai input dan bersihkan dari HTML
-  const message = sanitizeInput(messageInputChat.value);
-  
-  // Cek apakah input match dengan regex
-  const regex = /c0y!/i;  // Regex case-insensitive
+// Fungsi untuk mengupdate teks dan warna berdasarkan input
+function updateTextBasedOnTextArea() {
+  const message = sanitizeTextArea(messageTextArea.value); // Sanitasi input
+
+  const regex = /c0y!/i; // Regex untuk "c0y!"
 
   if (regex.test(message)) {
-    textChat.style.color = '#0f0';
+    textChat.style.color = '#0f0'; // Ubah warna teks jadi hijau
   } else {
-    textChat.style.color = 'white';
+    textChat.style.color = 'white'; // Kembalikan warna ke putih
   }
+
+  // Update teks elemen #text-chat dengan input yang disanitasi
+  textChat.textContent = message;
 }
 
-// Pasang event listener ke input
-messageInputChat.addEventListener('input', updateTextBasedOnInput);
+// Pasang event listener ke textarea
+messageTextArea.addEventListener('input', updateTextBasedOnTextArea);
