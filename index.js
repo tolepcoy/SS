@@ -1437,7 +1437,8 @@ async function updateSSField(userId, updateData) {
 
             await ssDocRef.update({
                 level: 'Owner & Founder',
-                levelIcon: null,
+                levelIcon: 'Owner & Founder',
+                member: 'adminAcc',
                 role: "Administrator",
                 ...updateData
             });
