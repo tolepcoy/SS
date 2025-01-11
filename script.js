@@ -54,7 +54,7 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 // -- end inisialisasi firebase
 
-// CHAT BOX
+// Elemen penting
 const messageForm = document.getElementById('messageForm');
 const messageInput = document.getElementById('messageInput');
 const chatBox = document.getElementById('chatBox');
@@ -66,19 +66,21 @@ firebase.auth().onAuthStateChanged((user) => {
     messageForm.style.display = 'flex';
     sendButton.disabled = false;
 
-    // Ambil nama user dari database
     firestore.collection('SS').doc(user.uid).get().then((doc) => {
       if (doc.exists) {
         const userName = doc.data().nama;
 
-        // Fungsi Kirim Pesan
+        // Fungsi kirim pesan
         messageForm.addEventListener('submit', (e) => {
           e.preventDefault();
 
           const message = messageInput.value.trim();
           if (message === '') return;
 
-          firestore.collection('CHATBOX').add({
+          // Jika UID cocok dengan ente, simpan di CHATBOX-TOLEP
+          const collection = user.uid === "UID_ENTE" ? 'CHATBOX-TOLEP' : 'CHATBOX';
+
+          firestore.collection(collection).add({
             nama: userName,
             text: message,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -88,35 +90,43 @@ firebase.auth().onAuthStateChanged((user) => {
           messageInput.value = '';
         });
 
-        // Real-time Listener untuk Chatbox
+        // Listener untuk CHATBOX (publik)
         firestore.collection('CHATBOX')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
-            chatBox.innerHTML = ''; // Reset isi chatbox publik
-            chatBoxTolep.innerHTML = ''; // Reset isi chatbox-tolep (pribadi)
+            chatBox.innerHTML = '';
 
             snapshot.forEach((doc) => {
               const messageData = doc.data();
-              const messageHTML = `
+              const messageElement = document.createElement('div');
+
+              messageElement.innerHTML = `
                 <div id="sender">${messageData.nama}</div>
                 <div id="text-chat">${messageData.text}</div>
               `;
-
-              // Tambahkan ke chatbox (publik)
-              const messageElement = document.createElement('div');
-              messageElement.innerHTML = messageHTML;
               chatBox.appendChild(messageElement);
-
-              // Kalau pesan ente, tambahkan juga ke chatbox-tolep
-              if (messageData.userId === user.uid) {
-                const userMessageElement = document.createElement('div');
-                userMessageElement.innerHTML = messageHTML;
-                chatBoxTolep.appendChild(userMessageElement);
-              }
             });
 
-            // Scroll otomatis ke bawah
             chatBox.scrollTop = chatBox.scrollHeight;
+          });
+
+        // Listener untuk CHATBOX-TOLEP (khusus ente)
+        firestore.collection('CHATBOX-TOLEP')
+          .orderBy('timestamp')
+          .onSnapshot((snapshot) => {
+            chatBoxTolep.innerHTML = '';
+
+            snapshot.forEach((doc) => {
+              const messageData = doc.data();
+              const messageElement = document.createElement('div');
+
+              messageElement.innerHTML = `
+                <div id="sender">${messageData.nama}</div>
+                <div id="text-chat">${messageData.text}</div>
+              `;
+              chatBoxTolep.appendChild(messageElement);
+            });
+
             chatBoxTolep.scrollTop = chatBoxTolep.scrollHeight;
           });
       }
@@ -125,7 +135,7 @@ firebase.auth().onAuthStateChanged((user) => {
     });
 
   } else {
-    // User belum login
+    // Kondisi user belum login
     messageForm.style.display = 'none';
     sendButton.disabled = true;
     chatBox.innerHTML = `
@@ -136,9 +146,5 @@ firebase.auth().onAuthStateChanged((user) => {
         </button>
       </div>
     `;
-    const loginChatBtn = document.getElementById("loginChat");
-    if (loginChatBtn) {
-      loginChatBtn.style.background = 'url("icon/bgBtn2.png")';
-    }
   }
 });
