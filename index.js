@@ -27,12 +27,8 @@ function bersihkanChatboxLama() {
     .then((snapshot) => {
       snapshot.forEach((doc) => {
         doc.ref.delete()
-          .then(() => console.log(`Dokumen ${doc.id} berhasil dihapus.`))
-          .catch((error) => console.error("Error deleting document:", error));
       });
-      console.log("Semua dokumen lama berhasil dihapus.");
     })
-    .catch((error) => console.error("Error fetching documents:", error));
 }
 
 // Listener untuk cek user login
@@ -44,17 +40,10 @@ firebase.auth().onAuthStateChanged((user) => {
 
         // Cek apakah user adalah admin
         if (userData.isAdmin) {
-          console.log('Admin login terdeteksi. Memulai pembersihan chat lama...');
           bersihkanChatboxLama();
-        } else {
-          console.log('Bukan admin, pembersihan tidak dilakukan.');
         }
-      } else {
-        console.error("Data user tidak ditemukan.");
       }
-    }).catch((error) => console.error("Error getting user data:", error));
-  } else {
-    console.log("Tidak ada user yang login.");
+    })
   }
 });
 
@@ -104,9 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(() => {
         window.location.replace("https://tolepcoy.github.io/SS/login-form.html");
       })
-      .catch(error => {
-        console.error("Error saat logout:", error);
-      });
   });
 
   // Tombol batal logout
@@ -133,12 +119,8 @@ firebase.auth().onAuthStateChanged(user => {
       if (doc.exists) {
         const data = doc.data();
         updateProfile(data, 'User'); 
-      } else {
-        console.log("Data user tidak ditemukan di koleksi SS.");
       }
     }, error => console.error("Error listening to user data:", error));
-  } else {
-    console.log("User not logged in");
   }
 });
 
@@ -157,8 +139,6 @@ document.getElementById('levelIcon').src = `level/${data.level}.png`;
   document.getElementById('gender').src = `icon/${data.gender}.png`;
   document.getElementById('rate').innerHTML = data.rate;
   document.getElementById('bergabung').innerHTML = data.bergabung;
-
-  console.log(`Profil berhasil diperbarui untuk ${kategori}`);
 }
 });
 
@@ -172,12 +152,8 @@ firebase.auth().onAuthStateChanged(user => {
       if (doc.exists) {
         const dataPrivasi = doc.data();
         updateProfilePrivasi(dataPrivasi, 'User'); 
-      } else {
-        console.log("Data user tidak ditemukan di koleksi PRIVASI.");
       }
     }, error => console.error("Error listening to user data:", error));
-  } else {
-    console.log("User not logged in");
   }
 });
 
@@ -289,22 +265,17 @@ newNama = sanitizeInput(newNama);
               namaEl.textContent = newNama;
               editNamaBtn.style.display = 'block';
             } catch (error) {
-              console.error("Gagal update nama:", error);
               showAlert("Gagal menyimpan nama baru, coba lagi.");
             }
           });
         } else {
-          console.error("Dokumen user tidak ditemukan.");
           showAlert("Terjadi kesalahan, coba lagi.");
           editNamaBtn.style.display = 'block';
         }
       }).catch(error => {
-        console.error("Gagal mengambil data user:", error);
         showAlert("Terjadi kesalahan, coba lagi.");
         editNamaBtn.style.display = 'block';
       });
-    } else {
-      console.log("User not logged in");
     }
   });
 });
@@ -405,12 +376,9 @@ editAvatarBtn.addEventListener('click', () => {
             showAlert("Gagal upload gambar, coba lagi.");
           }
         } catch (avatarError) {
-          console.error("Gagal upload gambar:", avatarError);
           showAlert("Terjadi kesalahan, coba lagi.");
         }
       });
-    } else {
-      console.log("User not logged in");
     }
   });
 });
@@ -484,12 +452,9 @@ editDetailBtn.addEventListener('click', () => {
           // Tampilkan kembali tombol edit-detail
           editDetailBtn.style.display = 'block';
         } catch (error) {
-          console.error("Gagal update biodata:", error);
           showAlert("Gagal menyimpan biodata baru, coba lagi.");
         }
       });
-    } else {
-      console.log("User not logged in");
     }
   });
 });
@@ -589,12 +554,9 @@ editLokasiBtn.addEventListener('click', () => {
           cancelLokasiBtn.remove();
           saveLokasiBtn.remove();
         } catch (error) {
-          console.error("Gagal update lokasi:", error);
           showAlert("Terjadi kesalahan, coba lagi.");
         }
       });
-    } else {
-      console.log("User not logged in");
     }
   });
 });
@@ -668,12 +630,9 @@ const cancelUmurBtn = document.createElement('button');
           cancelUmurBtn.remove();
           saveUmurBtn.remove();
         } catch (error) {
-          console.error("Gagal update umur:", error);
           showAlert("Terjadi kesalahan, coba lagi.");
         }
       });
-    } else {
-      console.log("User not logged in");
     }
   });
 });
@@ -709,11 +668,8 @@ editGenderBtn.addEventListener('click', () => {
         // Jika gender masih "cewok", lanjut tampilkan dropdown untuk edit
         tampilkanDropdownEdit();
       }).catch(error => {
-        console.error("Gagal mendapatkan data user:", error);
         showAlert("Terjadi kesalahan, coba lagi.");
       });
-    } else {
-      console.log("User not logged in");
     }
   });
 });
@@ -780,7 +736,6 @@ function tampilkanDropdownEdit() {
       cancelGenderBtn.remove();
       saveGenderBtn.remove();
     } catch (error) {
-      console.error("Gagal update gender:", error);
       showAlert("Terjadi kesalahan, coba lagi.");
     }
   });
@@ -800,8 +755,6 @@ firebase.auth().onAuthStateChanged(user => {
 
     const uniqueIDEl = document.getElementById('uniqueID');
     uniqueIDEl.textContent = user.uid;
-  } else {
-    console.log("User belum login");
   }
 });
 
@@ -811,8 +764,6 @@ firebase.auth().onAuthStateChanged(user => {
   if (user) {
     const email = document.getElementById('email');
     email.textContent = user.email;
-  } else {
-    console.log("User belum login");
   }
 });
 
@@ -829,20 +780,17 @@ function cekStatusVerifikasi() {
       user.reload()
         .then(() => {
           if (user.emailVerified) {
-            // Jika email terverifikasi
             statusVerifikasiEl.textContent = 'Verifikasi √';
             statusVerifikasiEl.style.color = '#0f0';
             statusVerifikasiEl.style.cursor = 'default';
             statusMember.textContent = 'memberAcc';
 
-            // Update status verifikasi di Firestore (koleksi PRIVASI)
+ // Update status verifikasi di Firestore (koleksi PRIVASI)
             const privasiDoc = firestore.collection('PRIVASI').doc(user.uid);
             privasiDoc.update({
               verimail: 'Verifikasi √'
             }).then(() => {
-              console.log('Status verifikasi diperbarui di Firestore (PRIVASI).');
             }).catch(error => {
-              console.error('Gagal mengupdate Firestore (PRIVASI):', error);
             });
 
             // Update status member di Firestore (koleksi SS)
@@ -850,44 +798,38 @@ function cekStatusVerifikasi() {
             memberDoc.update({
               member: 'memberAcc'
             }).then(() => {
-              console.log('Status member diperbarui di Firestore (SS).');
             }).catch(error => {
-              console.error('Gagal mengupdate Firestore (SS):', error);
             });
 
           } else {
-            // Jika email belum terverifikasi
+// Jika email belum terverifikasi
             statusVerifikasiEl.textContent = 'Verifikasi Email';
             statusVerifikasiEl.style.color = '#f55';
             statusVerifikasiEl.style.cursor = 'pointer';
             statusMember.textContent = 'memberNotAcc';
 
-            // Event mengirim email verifikasi
+// Event mengirim email verifikasi
             statusVerifikasiEl.onclick = () => {
               const konfirmasi = confirm('Kirim aktifasi ke email?');
               if (konfirmasi) {
                 user.sendEmailVerification()
                   .then(() => showAlert('Email verifikasi berhasil dikirim. Cek inbox email!'))
                   .catch(error => {
-                    console.error('Gagal kirim email verifikasi:', error);
                     showAlert('Gagal mengirim email verifikasi.');
                   });
               }
             };
 
-            // Update status member di Firestore (koleksi SS) sebagai memberNotAcc
+// Update status member di Firestore (koleksi SS) sebagai memberNotAcc
             const memberDoc = firestore.collection('SS').doc(user.uid);
             memberDoc.update({
               member: 'memberNotAcc'
             }).then(() => {
-              console.log('Status member diperbarui ke Firestore sebagai memberNotAcc (SS).');
             }).catch(error => {
-              console.error('Gagal mengupdate Firestore (SS):', error);
             });
           }
         })
         .catch(error => {
-          console.error('Gagal memuat ulang status user:', error);
         });
     } else {
       // Jika user belum login
@@ -925,27 +867,21 @@ const sendVerificationLink = (currentPassword, newEmail) => {
           userRefzSS.update({
             email: newEmail
           }).then(() => {
-            console.log("Email berhasil diperbarui di Firestore");
           }).catch((error) => {
-            console.error("Gagal memperbarui email di Firestore: ", error);
           });
           
           const userRefz = firebase.firestore().collection("PRIVASI").doc(userUpdate.uid);
           userRefz.update({
             email: newEmail
           }).then(() => {
-            console.log("Email berhasil diperbarui di Firestore");
           }).catch((error) => {
-            console.error("Gagal memperbarui email di Firestore: ", error);
           });
         })
         .catch((error) => {
-          console.error("Error mengirim email verifikasi:", error);
           showAlert("Gagal mengirim email verifikasi: " + error.message);
         });
     })
     .catch((error) => {
-      console.error("Error reauthenticate:", error);
       showAlert("Gagal reauthenticate: " + error.message);
     });
 };
@@ -997,12 +933,10 @@ const updatePassword = (currentPassword, newPassword) => {
           document.getElementById("password-input-wrapper").style.display = "none";
         })
         .catch((error) => {
-          console.error("Error mengubah password:", error);
           showAlert("Gagal mengubah password: " + error.message);
         });
     })
     .catch((error) => {
-      console.error("Error reauthenticate:", error);
       showAlert("Gagal reauthenticate: " + error.message);
     });
 };
@@ -1077,7 +1011,6 @@ requestRateBtnEl.addEventListener('click', () => {
       reqRateDivEl.classList.remove('active');
     })
     .catch((error) => {
-      console.error('Terjadi kesalahan saat Request Rate:', error);
     });
   } else {
     showAlert('User tidak terautentikasi.');
@@ -1207,11 +1140,9 @@ if (bergabungLain) {
 bergabungLain.innerHTML = userDetails.bergabung;
 }
       } else {
-        console.log('User tidak ditemukan');
       }
     })
     .catch((error) => {
-      console.error("Error getting user details: ", error);
     });
 }
 
@@ -1427,16 +1358,12 @@ firestore.collection('SS').doc(uid).update({
               });
           });
         }).catch((error) => {
-          console.error('Error mengambil data pengguna:', error);
         });
       } else {
-        console.log('User bukan admin, tidak ada tindakan.');
       }
     }).catch((error) => {
-      console.error('Error mengambil data user:', error);
     });
   } else {
-    console.log('Tidak ada user yang login.');
   }
 });
 
