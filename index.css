@@ -215,6 +215,10 @@ a {
   margin-bottom: 2px;
 }
 
+#LVL, #LVL-lain {
+  font-size: 9px;
+}
+
 #level,
 #level-lain {
   font-weight: bold;
@@ -710,6 +714,10 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   margin-top: 4px;
 }
 
+#LVLUser {
+  
+}
+
 #levelUser {
   font-weight: bold;
 }
@@ -1097,8 +1105,8 @@ background: linear-gradient(to right, transparent, rgba(170, 152, 255, 0.3), tra
   font-size: 14px;
 }
 
-.LVL {
-  font-size: 10px;
+.ic-LVL {
+  font-size: 9px;
 }
 
 .ic-level {

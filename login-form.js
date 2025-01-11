@@ -53,6 +53,7 @@ registerButton.addEventListener('click', () => {
         userSSRef.set({
           nama: 'userSS',
           avatar: 'icon/default_avatar.png',
+          LVL: 'Lv. ',
           level: 1,
           role: 1,
           levelIcon: 1,

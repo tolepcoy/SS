@@ -147,6 +147,7 @@ function updateProfile(data, kategori) {
   document.getElementById('nama').innerHTML = data.nama;
   document.getElementById('avatar').src = data.avatar;
   document.getElementById('member').src = `icon/${data.member}.png`;
+  document.getElementById('LVL').innerHTML = data.LVL;
   document.getElementById('level').innerHTML = data.level;
   document.getElementById('role').innerHTML = data.role;
 document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
@@ -920,6 +921,15 @@ const sendVerificationLink = (currentPassword, newEmail) => {
           document.getElementById("email-input-wrapper").style.display = "none";
 
           // Update email baru di Firestore
+          const userRefzSS = firebase.firestore().collection("SS").doc(userUpdate.uid);
+          userRefzSS.update({
+            email: newEmail
+          }).then(() => {
+            console.log("Email berhasil diperbarui di Firestore");
+          }).catch((error) => {
+            console.error("Gagal memperbarui email di Firestore: ", error);
+          });
+          
           const userRefz = firebase.firestore().collection("PRIVASI").doc(userUpdate.uid);
           userRefz.update({
             email: newEmail
@@ -1095,7 +1105,8 @@ function generateUserProfile(user, container) {
     <img id="avatarUser" src="${user.avatar}" alt="Avatar">
     <div class="icUserWrapper">
       <span id="namaUser" class="namaUser">${user.nama}</span>
-      <span class="smallest">Lv. &nbsp;<span id="levelUser">${user.level}</span>&nbsp;&nbsp;
+      <span class="smallest">
+<span id="LVLUser">${user.LVL} &nbsp;</span><span id="levelUser">${user.level}</span>&nbsp;&nbsp;
       <img id="levelIconUser" src="level/${user.levelIcon}.png" alt="Level Icon"></span>
     </div>
   `;
@@ -1144,6 +1155,11 @@ avatarLain.src = userDetails.avatar;
 const memberLain = document.getElementById('member-lain');
 if (memberLain) {
 memberLain.src = `icon/${userDetails.member}.png`;
+}
+
+const LVLLain = document.getElementById('LVL-lain');
+if (LVLLain) {
+LVLLain.innerHTML = userDetails.LVL;
 }
 
 const levelLain = document.getElementById('level-lain');
@@ -1213,6 +1229,7 @@ function updateUserProfile(user) {
   // Update data user di elemen yang ada
   userDiv.querySelector('#avatarUser').src = user.avatar;
   userDiv.querySelector('#namaUser').textContent = user.nama;
+  userDiv.querySelector('#LVLUser').textContent = user.LVL;
   userDiv.querySelector('#levelUser').textContent = user.level;
   userDiv.querySelector('#levelIconUser').src = `level/${user.levelIcon}.png`;
 }
@@ -1224,6 +1241,7 @@ firestore.collection('SS').onSnapshot((snapshot) => {
     const userWoy = {
       id: change.doc.id,
       nama: userData.nama,
+      LVL: userData.LVL,
       level: userData.level,
       avatar: userData.avatar,
       levelIcon: userData.levelIcon,
@@ -1271,6 +1289,7 @@ firebase.auth().onAuthStateChanged((user) => {
       if (doc.exists) {
         const avatar = doc.data().avatar;
         const userName = doc.data().nama;
+        const LVL = doc.data().LVL;
         const level = doc.data().level;
         const levelIcon = doc.data().levelIcon;
         const gender = doc.data().gender;
@@ -1285,6 +1304,7 @@ firebase.auth().onAuthStateChanged((user) => {
           firestore.collection('CHATBOX').add({
             nama: userName,
             avatar: avatar,
+            LVL: LVL,
             level: level,
             levelIcon: levelIcon,
             gender: gender,
@@ -1325,13 +1345,15 @@ userClass = 'moderator';
 <img class="ic-gender" src="icon/${messageData.gender}.png" />
 </div>
 <div>
-<span id="LVL">Lv. <span class="ic-level">${messageData.level}</span></span>
+<span>
+<span id="ic-LVL">${messageData.LVL} &nbsp;</span><span class="ic-level">${messageData.level}</span>
+</span>
 <img class="ic-levelIcon" src="level/${messageData.levelIcon}.png" />
 </div>
 </div>
 </div>
 
-<div class="text-chat">
+<div id="text-chat">
 ${messageData.text}
 </div>
 
@@ -1451,3 +1473,32 @@ firebase.auth().onAuthStateChanged((user) => {
       case 21: return '<span id="GOD21">GOD</span>';
     }
   }
+
+// TESTING REGEX DAN SANITASI
+const messageInputChat = document.getElementById('messageInput');
+const textChat = document.getElementById('text-chat');
+
+// Fungsi sanitasi dan REGEX
+function sanitizeInput(input) {
+
+  const sanitizedInput = input.replace(/<[^>]*>/g, ''); // Menghapus semua tag HTML
+  return sanitizedInput;
+}
+
+// Fungsi untuk update tampilan berdasarkan input
+function updateTextBasedOnInput() {
+  // Ambil nilai input dan bersihkan dari HTML
+  const message = sanitizeInput(messageInputChat.value);
+  
+  // Cek apakah input match dengan regex
+  const regex = /c0y!/i;  // Regex case-insensitive
+
+  if (regex.test(message)) {
+    textChat.style.color = '#0f0';
+  } else {
+    textChat.style.color = 'white';
+  }
+}
+
+// Pasang event listener ke input
+messageInputChat.addEventListener('input', updateTextBasedOnInput);
