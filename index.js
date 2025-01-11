@@ -150,7 +150,7 @@ function updateProfile(data, kategori) {
   document.getElementById('LVL').innerHTML = data.LVL;
   document.getElementById('level').innerHTML = data.level;
   document.getElementById('role').innerHTML = data.role;
-document.getElementById('levelIcon').src = `level/${data.levelIcon}.png`;
+document.getElementById('levelIcon').src = `level/${data.level}.png`;
   document.getElementById('detail').innerHTML = data.detail;
   document.getElementById('lokasi').innerHTML = data.lokasi;
   document.getElementById('umur').innerHTML = data.umur;
@@ -1107,7 +1107,7 @@ function generateUserProfile(user, container) {
       <span id="namaUser" class="namaUser">${user.nama}</span>
       <span class="smallest">
 <span id="LVLUser">${user.LVL} &nbsp;</span><span id="levelUser">${user.level}</span>&nbsp;&nbsp;
-      <img id="levelIconUser" src="level/${user.levelIcon}.png" alt="Level Icon"></span>
+      <img id="levelIconUser" src="level/${user.level}.png" alt="Level Icon"></span>
     </div>
   `;
 
@@ -1169,7 +1169,7 @@ levelLain.innerHTML = userDetails.level;
 
 const levelIconLain = document.getElementById('levelIcon-lain');
 if (levelIconLain) {
-levelIconLain.src = `level/${userDetails.levelIcon}.png`;
+levelIconLain.src = `level/${userDetails.level}.png`;
 }
 
  const roleLain = document.getElementById('role-lain');
@@ -1231,7 +1231,7 @@ function updateUserProfile(user) {
   userDiv.querySelector('#namaUser').textContent = user.nama;
   userDiv.querySelector('#LVLUser').textContent = user.LVL;
   userDiv.querySelector('#levelUser').textContent = user.level;
-  userDiv.querySelector('#levelIconUser').src = `level/${user.levelIcon}.png`;
+  userDiv.querySelector('#levelIconUser').src = `level/${user.level}.png`;
 }
 
 // Real-time listener dari Firestore
@@ -1244,7 +1244,7 @@ firestore.collection('SS').onSnapshot((snapshot) => {
       LVL: userData.LVL,
       level: userData.level,
       avatar: userData.avatar,
-      levelIcon: userData.levelIcon,
+      levelIcon: userData.level,
       gender: userData.gender,
     };
 
@@ -1291,7 +1291,7 @@ firebase.auth().onAuthStateChanged((user) => {
         const userName = doc.data().nama;
         const LVL = doc.data().LVL;
         const level = doc.data().level;
-        const levelIcon = doc.data().levelIcon;
+        const levelIcon = doc.data().level;
         const gender = doc.data().gender;
         const isAdmin = doc.data().isAdmin || true;
         const isModerator = doc.data().isModerator || true;
@@ -1306,7 +1306,7 @@ firebase.auth().onAuthStateChanged((user) => {
             avatar: avatar,
             LVL: LVL,
             level: level,
-            levelIcon: levelIcon,
+            levelIcon: level,
             gender: gender,
             text: message,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -1348,7 +1348,7 @@ userClass = 'moderator';
 <span>
 <span id="ic-LVL">${messageData.LVL} &nbsp;</span><span class="ic-level">${messageData.level}</span>
 </span>
-<img class="ic-levelIcon" src="level/${messageData.levelIcon}.png" />
+<img class="ic-levelIcon" src="level/${messageData.level}.png" />
 </div>
 </div>
 </div>
@@ -1413,12 +1413,12 @@ firebase.auth().onAuthStateChanged((user) => {
             const data = doc.data();
             const uid = doc.id;
             const levelnya = data.level;
-            const levelIconnya = data.levelIcon;
+            const levelIconnya = data.level;
             const role = getRoleText(levelnya);
 
 firestore.collection('SS').doc(uid).update({
                 level: levelnya,
-                levelIcon: levelIconnya,
+                levelIcon: levelnya,
                 role: role
               }).then(() => {
                 console.log(`Role untuk user dengan UID ${uid} berhasil diubah.`);
