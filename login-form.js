@@ -14,6 +14,7 @@
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
+/*
 // CEK STATUS LOGIN SAAT PERTAMA LOAD
 const RegChecker = document.getElementById('registerButton');
 const LogChecker = document.getElementById('loginButton');
@@ -32,6 +33,7 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 });
 // -- cek load login end
+*/
 
 // FUNGSI REGISTER
 const registerButton = document.getElementById('registerButton');
