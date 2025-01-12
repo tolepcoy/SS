@@ -158,13 +158,13 @@ ${messageData.nama}
     chatBox.innerHTML = `
       <div id="beforeChatLogin" style="text-align:center;font-weight:bold;">
         <h5 style="color:#f55;">Ente belum login!</h5>
-        <button id="loginChat">
+        <button id="loginChat" style="color:#0b0">
           <a href="https://tolepcoy.github.io/SS/login-form.html">Login</a>
         </button>
       </div>
     `;
     chatBoxTolep.innerHTML = `
-      <span style="color:#f55;">Tolep sedang Offline!</span>
+      <span style="color:#9d0;">Tolep sedang Offline!</span>
     `;
     blink.innerHTML = `
       <span style="color:#f55;vertical-align: -1px;font-size:10px;">Offline</span>

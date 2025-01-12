@@ -1,15 +1,14 @@
 * {
   font-family: Tolep Linux;
-  color: #0f0;
   letter-spacing: 0.5px;
   font-size: 13px;
   font-weight: 100;
-  color: #0c0;
   box-sizing: border-box;
 }
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 
 .line-break {
@@ -183,12 +182,12 @@ textarea:hover {
 }
 
 #text-chat {
-  color: #0b0;
-  margin-top: -12px;
+  color: #090;
+  margin-top: -15px;
 }
 
 #text-chat-tolep {
-  color: #0d0;
+  color: #7d0;
 }
 
 #headerTolep {
@@ -206,6 +205,7 @@ textarea:hover {
 
 #timetrex {
   position: absolute;
+  top: 5px;
   right: 5px;
   color: #0f0;
   font-style: italic;
