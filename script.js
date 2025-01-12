@@ -257,7 +257,7 @@ function cekStatusOnline(uid) {
     .onSnapshot((doc) => {
       if (doc.exists) {
         const data = doc.data();
-        const yangOnlineElement = document.getElementById('yangOnline');
+        const yangOnlineElement = document.getElementById('yang-online');
 
         if (data.online) {
           yangOnlineElement.innerHTML = `<div style="font-weight:bold;color: #0e0;">${data.nama} &nbsp;&#9673;</div>`;

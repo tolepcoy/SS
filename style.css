@@ -230,6 +230,7 @@ textarea:hover {
 }
 
 #user-online {
+  background: black;
   display: flex;
   flex-direction: column;
   position: fixed;
