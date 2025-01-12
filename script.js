@@ -117,7 +117,7 @@ firebase.auth().onAuthStateChanged((user) => {
 ${messageData.nama}
 <div id="timetrex" style="color: #0d0;">${timestamp}</div>
 </div>
-<div id="text-chat" style="color: #080;margin-top:-15px;">${messageData.text}</div>
+<div id="text-chat" style="color: #090;margin-top:-15px;">${messageData.text}</div>
 `;
   chatBox.appendChild(messageElement);
 });
@@ -217,3 +217,36 @@ firebase.auth().onAuthStateChanged((user) => {
 // -- end clear chat by admin
 
 // YANG ONLINE
+const yangOnlineElement = document.getElementById('yang-online');
+
+// Fungsi untuk cek status online dan update elemen
+function cekStatusOnline(uid) {
+  firestore.collection('SS').doc(uid)
+    .onSnapshot((doc) => {
+      if (doc.exists) {
+        const data = doc.data();
+        
+        // Cek status online dan tampilkan nama jika online
+        if (data.online) {
+          yangOnlineElement.innerHTML = `<div style="font-weight:bold;color: #0e0;">${data.nama} &nbsp;&#9673;</div>`;
+        } else {
+          // Kosongkan elemen jika user offline
+          yangOnlineElement.innerHTML = '';
+        }
+      }
+    });
+}
+
+// Cek status online user yang sedang login
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    // Ambil nama user dari koleksi SS
+    firestore.collection('SS').doc(user.uid).get().then((doc) => {
+      if (doc.exists) {
+        const userData = doc.data();
+        // Simpan nama user dan update status online
+        cekStatusOnline(user.uid);
+      }
+    });
+  }
+});
