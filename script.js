@@ -217,36 +217,56 @@ firebase.auth().onAuthStateChanged((user) => {
 // -- end clear chat by admin
 
 // YANG ONLINE
-const yangOnlineElement = document.getElementById('yang-online');
+function updateStatusOnline(uid) {
+  // Update status ke online
+  firestore.collection('SS').doc(uid).update({
+    online: true,
+    lastSeen: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
 
-// Fungsi untuk cek status online dan update elemen
+// Event untuk mendeteksi aktivitas user (misalnya saat mengetik di chat)
+const inputChat = document.getElementById('input-chat');
+inputChat.addEventListener('input', () => {
+  const user = firebase.auth().currentUser;
+  if (user) {
+    updateStatusOnline(user.uid);
+  }
+});
+
+let offlineTimer;
+
+function startOfflineTimer(uid) {
+  // Timer untuk set status offline setelah 1 menit (60000 ms)
+  offlineTimer = setTimeout(() => {
+    firestore.collection('SS').doc(uid).update({
+      online: false,
+      lastSeen: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  }, 60000); // 1 menit
+}
+
+// Reset timer jika ada aktivitas
+inputChat.addEventListener('input', () => {
+  const user = firebase.auth().currentUser;
+  if (user) {
+    clearTimeout(offlineTimer); // Reset timer
+    startOfflineTimer(user.uid); // Start timer baru
+  }
+});
+
 function cekStatusOnline(uid) {
   firestore.collection('SS').doc(uid)
     .onSnapshot((doc) => {
       if (doc.exists) {
         const data = doc.data();
-        
+
         // Cek status online dan tampilkan nama jika online
         if (data.online) {
           yangOnlineElement.innerHTML = `<div style="font-weight:bold;color: #0e0;">${data.nama} &nbsp;&#9673;</div>`;
         } else {
-          // Kosongkan elemen jika user offline
           yangOnlineElement.innerHTML = '';
         }
       }
     });
 }
-
-// Cek status online user yang sedang login
-firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    // Ambil nama user dari koleksi SS
-    firestore.collection('SS').doc(user.uid).get().then((doc) => {
-      if (doc.exists) {
-        const userData = doc.data();
-        // Simpan nama user dan update status online
-        cekStatusOnline(user.uid);
-      }
-    });
-  }
-});
