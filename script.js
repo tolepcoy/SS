@@ -88,7 +88,7 @@ firebase.auth().onAuthStateChanged((user) => {
           firestore.collection(collection).add({
             nama: userName,
             text: message,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            timestamp: new Date(),
             userId: user.uid,
           });
 
@@ -104,16 +104,16 @@ firebase.auth().onAuthStateChanged((user) => {
 
             snapshot.forEach((doc) => {
               const messageData = doc.data();
-              const messageTime = messageData.timestamp ? messageData.timestamp.toDate() : null;
+              const messageTime = messageData.timestamp ? new Date(messageData.timestamp) : null;
   const timeString = messageTime 
-    ? `${messageTime.getHours().toString().padStart(2, '0')}:${messageTime.getMinutes().toString().padStart(2, '0')}` 
+    ? messageTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) 
     : '';
               const messageElement = document.createElement('div');
 
               messageElement.innerHTML = `
 <div id="sender">
 ${messageData.nama} &nbsp;
-<span class="timestrex">${timeString}</span>
+<span class="timetrex">${timeString}</span>
 </div>
 <div id="text-chat">${messageData.text}</div>
 `;
