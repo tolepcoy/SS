@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           snapshot.forEach((doc) => {
             const data = doc.data();
-            onlineUsers += `<div style="font-weight:bold;color: #0e0;font-size:12px;">${data.nama} &nbsp;&#9673;</div>`;
+            onlineUsers += `<div style="font-weight:bold;color: #0e0;font-size:12px;"><li>${data.nama}</li></div>`;
           });
 
           // Tampilkan semua user yang online

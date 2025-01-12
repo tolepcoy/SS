@@ -245,6 +245,8 @@ textarea:hover {
   flex-shrink: 0;
   flex-grow: 0;
   transform: translateX(-100%);
+  overflow-x: hidden;
+  overflow-y: auto;
   transition: transform 0.4s linear;
 }
 
