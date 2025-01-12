@@ -60,6 +60,7 @@ const messageInput = document.getElementById('messageInput');
 const chatBox = document.getElementById('chatBox');
 const chatBoxTolep = document.getElementById('chatbox-tolep');
 const blink = document.getElementById('blink');
+const lookBtn = document.getElementById('look');
 const sendButton = document.getElementById('sendButton');
 
 
@@ -68,6 +69,7 @@ firebase.auth().onAuthStateChanged((user) => {
     messageForm.style.visibility = 'visible';
     messageForm.style.pointerEvents = 'auto';
     sendButton.disabled = false;
+    lookBtn.disabled = false;
 
     firestore.collection('SS').doc(user.uid).get().then((doc) => {
       if (doc.exists) {
@@ -126,8 +128,7 @@ firebase.auth().onAuthStateChanged((user) => {
               const messageElement = document.createElement('div');
 
               messageElement.innerHTML = `
-                <div id="sender-tolep">${messageData.nama}</div>
-                <div id="text-chat-tolep">${messageData.text}</div>
+<div id="text-chat-tolep">${messageData.text}</div>
               `;
               chatBoxTolep.appendChild(messageElement);
             });
@@ -144,6 +145,7 @@ firebase.auth().onAuthStateChanged((user) => {
     messageForm.style.visibility = 'hidden';
     messageForm.style.pointerEvents = 'none';
     sendButton.disabled = true;
+    lookBtn.disabled = true;
     chatBox.innerHTML = `
       <div id="beforeChatLogin" style="text-align:center;font-weight:bold;">
         <h5 style="color:#f55;">Ente belum login!</h5>
@@ -170,6 +172,15 @@ function bersihkanChatboxLama() {
   const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
 
   firestore.collection("CHATBOX")
+    .where("timestamp", "<", cutoffTimestamp)
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        doc.ref.delete()
+      });
+    })
+    
+    firestore.collection("CHATBOX-TOLEP")
     .where("timestamp", "<", cutoffTimestamp)
     .get()
     .then((snapshot) => {
