@@ -176,7 +176,7 @@ ${messageData.nama}
 // CLEAR CHAT ADMIN
 function bersihkanChatboxLama() {
   const now = new Date();
-  const cutoff = new Date(now.getTime() - 1 * 60 * 1000);
+  const cutoff = new Date(now.getTime() - 24 * 60 * 1000);
   
   const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
 
@@ -238,7 +238,7 @@ function startOfflineTimer(uid) {
     }).catch((error) => {
       console.error("Error setting status offline:", error);
     });
-  }, 60000); // 1 menit
+  }, 1800000); // 3 menit
 }
 
 // DOM Ready
@@ -286,4 +286,122 @@ document.addEventListener('DOMContentLoaded', () => {
       cekStatusSemuaOnline(); // Tampilkan daftar online
     }
   });
+});
+
+//TERMINAL
+const terminal = document.getElementById("terminal");
+const wow = document.getElementById("wow");
+const blinkTerminal = document.querySelector(".blinkTerminal");
+
+const commands = [
+            { text: "$ Load Tolep server ...", dots: 3, delay: 2, isGold: true },
+            { text: "$ Request permission", dots: 4, delay: 2 },
+            { text: "$ Get data from tolepserver_ ...", delay: 2 },
+            { text: "$ Enable Node.js & Script ... /Done.", delay: 2 },
+            { text: "$ Enabling encryption ... /Done.", delay: 2 },
+            { text: "$ Getting sign-in ...", delay: 2 },
+            { text: "$ Requested!", delay: 2, isGreen: true },
+            { text: "$ Get in profile ... /Done.", delay: 2 },
+            { text: "$ Encrypting chat ... /Done.", delay: 2 },
+            { text: "$ Converting to base64 -REGEX ../Done.", delay: 2 },
+            { text: "$ Run Script for chating ... /Done.", delay: 2, isGreen: true },
+            { text: "$ Administrator Tolep Coy was checking!", delay: 10, blinkTerminal: true },
+            { text: "$ Security locked ..../Done.", delay: 1 },
+            { text: "$ Credential keys created .../Done.", delay: 1 },
+            { text: "$ Loaded.", delay: 1, isGreen: true },
+            { text: "$ Copying to server", dots: 1, delay: 1 },
+            { text: "$ Get in to room server ...", delay: 1 },
+            { text: "$ Enable JQuery for encrypting ... /Done.", delay: 1, isGold: true },
+            { text: "$ Enable cascading style ...", delay: 1 },
+            { text: "$ Enable AJAX script .... /Done.", delay: 1, isGold: true },
+            { text: "$ Extract encryption to Html ... /Done.", delay: 1 },
+            { text: "$ Script ... /Loaded.", delay: 1, isGreen: true },
+            { text: "$ Cascading Style Sheet ... /Loaded.", delay: 1, isGreen: true },
+            { text: "$ Html ... /Loaded.", delay: 1, isGreen: true },
+            { text: "$ Managing file server.", delay: 1 },
+            { text: "$ Syncronize external script.", delay: 1 },
+            { text: "$ Syncronized!.", delay: 1, isGold: true },
+            { text: "$ Getting started ...", delay: 1 },
+            { text: "$ Done.", delay: 2, isGreen: true },
+            { text: "        ", delay: 1 },
+            { text: "        ", delay: 1 },
+            { text: "                                                  OK!   ", delay: 1 },
+            { text: "$ Run!", delay: 1, isGreen: true }
+        ];
+
+let isCommandRunning = false;
+
+function typeEffect({ text, dots = 0, delay = 100, isRed = false, isGreen = false, isGold = false, blinkTerminal = false }, callback) {
+    let i = 0;
+    const line = document.createElement("div");
+    // Deteksi spasi kosong atau baris kosong
+    if (text.trim() === "") {
+        line.innerHTML = "&nbsp;";
+        terminal.appendChild(line);
+        setTimeout(callback, delay);
+        return;
+    }
+
+    terminal.appendChild(line);
+
+    function type() {
+        if (i < text.length) {
+            line.innerHTML += text[i++];
+            setTimeout(type, delay);
+        } else if (dots > 0) {
+            typeDots(dots, callback);
+        } else {
+            finalize(line, isRed, isGreen, isGold, blinkTerminal, callback);
+        }
+    }
+
+    function typeDots(dots, callback) {
+        let dotCount = 0;
+        function addDot() {
+            if (dotCount < dots) {
+                line.innerHTML += ".";
+                dotCount++;
+                setTimeout(addDot, delay);
+            } else {
+                finalize(line, isRed, isGreen, isGold, blinkTerminal, callback);
+            }
+        }
+        addDot();
+    }
+
+    function finalize(line, isRed, isGreen, isGold, blinkTerminal, callback) {
+        if (isRed) line.classList.add("red");
+        if (isGreen) line.classList.add("green");
+        if (isGold) line.classList.add("gold");
+        if (blinkTerminal) line.classList.add("blinkTerminal");
+        if (callback) callback();
+    }
+
+    type();
+}
+
+function runCommands() {
+    let i = 0;
+
+    function nextCommand() {
+        if (i < commands.length) {
+            typeEffect(commands[i++], nextCommand);
+        } else {
+            terminal.style.display = "none";
+            terminal.style.pointerEvents = "none";
+            blinkTerminal.style.display = "none";
+            blinkTerminal.style.animation = "none";
+        }
+    }
+    nextCommand();
+}
+
+wow.addEventListener("click", () => {
+    if (!isCommandRunning) {
+      wow.style.display = 'none';
+      wow.style.pointerEvents = 'none';
+      terminal.style.background = 'black';
+        isCommandRunning = true; 
+        runCommands(); 
+    }
 });
