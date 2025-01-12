@@ -175,10 +175,18 @@ textarea:hover {
   color: #0f0;
 }
 
-#sender,
-#sender-tolep {
+#sender {
   font-weight: bold;
   color: #0f0;
+}
+
+#text-chat {
+  color: #0d0;
+  margin-top: -5px;
+}
+
+#text-chat-tolep {
+  color: #0d0;
 }
 
 #headerTolep {
@@ -194,9 +202,10 @@ textarea:hover {
   height: 100%;
 }
 
-#text-chat,
-#text-chat-tolep {
-  color: #0d0;
+.timetrex {
+  margin-left: auto;
+  float: right;
+  color: #363;
 }
 
 #look {
@@ -242,6 +251,10 @@ textarea:hover {
 
 #user-online.active {
   transform: translateX(0%);
+}
+
+#yang-online {
+  font-weight: bold;
 }
 
 #loginChat {

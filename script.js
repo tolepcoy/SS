@@ -107,16 +107,19 @@ firebase.auth().onAuthStateChanged((user) => {
               const messageElement = document.createElement('div');
 
               messageElement.innerHTML = `
-                <div id="sender">${messageData.nama}</div>
-                <div id="text-chat">${messageData.text}</div>
-              `;
-              chatBox.appendChild(messageElement);
-            });
+<div id="sender">
+${messageData.nama} &nbsp;
+<span class="timestrex">${messageData.timestamp}</span>
+</div>
+<div id="text-chat">${messageData.text}</div>
+`;
+  chatBox.appendChild(messageElement);
+});
 
             chatBox.scrollTop = chatBox.scrollHeight;
           });
 
-        // Listener untuk CHATBOX-TOLEP (khusus ente)
+        // CHATBOX-TOLEP (khusus ente)
         firestore.collection('CHATBOX-TOLEP')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
@@ -129,7 +132,7 @@ firebase.auth().onAuthStateChanged((user) => {
 
               messageElement.innerHTML = `
 <div id="text-chat-tolep">${messageData.text}</div>
-              `;
+`;
               chatBoxTolep.appendChild(messageElement);
             });
 
@@ -145,7 +148,7 @@ firebase.auth().onAuthStateChanged((user) => {
     messageForm.style.visibility = 'hidden';
     messageForm.style.pointerEvents = 'none';
     sendButton.disabled = true;
-    lookBtn.disabled = true;
+    lookBtn.disabled = false;
     chatBox.innerHTML = `
       <div id="beforeChatLogin" style="text-align:center;font-weight:bold;">
         <h5 style="color:#f55;">Ente belum login!</h5>
@@ -206,3 +209,5 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 });
 // -- end clear chat by admin
+
+// YANG ONLINE
