@@ -104,16 +104,18 @@ firebase.auth().onAuthStateChanged((user) => {
 
             snapshot.forEach((doc) => {
               const messageData = doc.data();
-              const messageTime = messageData.timestamp ? messageData.timestamp.toDate() : null;
-  const timeString = messageTime 
-    ? `${messageTime.getHours().toString().padStart(2, '0')}:${messageTime.getMinutes().toString().padStart(2, '0')}` 
-    : '';
+              const timestamp = messageData.timestamp 
+        ? new Date(messageData.timestamp.toMillis()).toLocaleTimeString('id-ID', {
+            hour: '2-digit',
+            minute: '2-digit',
+          })
+        : 'Zonk';
               const messageElement = document.createElement('div');
 
               messageElement.innerHTML = `
 <div id="sender">
 ${messageData.nama} &nbsp;
-<span class="timetrex">${timeString}</span>
+<span class="timetrex">${timestamp}</span>
 </div>
 <div id="text-chat">${messageData.text}</div>
 `;
