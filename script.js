@@ -251,28 +251,30 @@ inputChat.addEventListener('input', () => {
   }
 });
 
-// Fungsi cek status online
-function cekStatusOnline(uid) {
-  firestore.collection('SS').doc(uid)
-    .onSnapshot((doc) => {
-      if (doc.exists) {
-        const data = doc.data();
-        const yangOnlineElement = document.getElementById('yang-online');
+// Fungsi cek semua user yang online
+function cekStatusSemuaOnline() {
+  firestore.collection('SS')
+    .where('online', '==', true) // Ambil user yang statusnya online
+    .onSnapshot((snapshot) => {
+      const yangOnlineElement = document.getElementById('yang-online');
+      let onlineUsers = '';
 
-        if (data.online) {
-          yangOnlineElement.innerHTML = `<div style="font-weight:bold;color: #0e0;">${data.nama} &nbsp;&#9673;</div>`;
-        } else {
-          yangOnlineElement.innerHTML = '';
-        }
-      }
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        onlineUsers += `<div style="font-weight:bold;color: #0e0;">${data.nama} &nbsp;&#9673;</div>`;
+      });
+
+      // Tampilkan semua user yang online
+      yangOnlineElement.innerHTML = onlineUsers || '<div>Belum ada yang online.</div>';
     }, (error) => {
-      console.error("Error fetching online status:", error);
+      console.error("Error fetching online users:", error);
     });
 }
 
-// Mulai cek status online
+// Mulai cek semua user online saat user login
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    cekStatusOnline(user.uid);
+    updateStatusOnline(user.uid);
+    cekStatusSemuaOnline();
   }
 });
