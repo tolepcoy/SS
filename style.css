@@ -176,13 +176,15 @@ textarea:hover {
 }
 
 #sender {
+  position: relative;
+  width: 100%;
   font-weight: bold;
   color: #0f0;
 }
 
 #text-chat {
   color: #0d0;
-  margin-top: -5px;
+  margin-top: -25px;
 }
 
 #text-chat-tolep {
@@ -203,9 +205,12 @@ textarea:hover {
 }
 
 .timetrex {
-  margin-left: auto;
-  float: right;
-  color: #363;
+  position: absolute;
+  right: 2px;
+  color: #383;
+  font-style: italic;
+  font-family: Arial;
+  font-size: 10px;
 }
 
 #look {
