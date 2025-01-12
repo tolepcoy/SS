@@ -59,10 +59,10 @@ const wowElement = document.getElementById('wow');
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    wowElement.style.pointerEvents = 'none';
+    wowElement.style.pointerEvents = 'auto';
     console.log('User sudah login:', user);
   } else {
-    window.location.href = 'login-form.html';
+    window.location.href = './login-form.html';
   }
 });
 // -- cek load login end

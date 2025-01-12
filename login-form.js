@@ -29,7 +29,7 @@ firebase.auth().onAuthStateChanged((user) => {
     PassChecker.disabled = true;
     console.log('User sudah login:', user);
   } else {
-    window.location.href = 'index.html';
+    window.location.href = './index.html';
   }
 });
 // -- cek load login end
@@ -170,7 +170,7 @@ loginButton.addEventListener('click', () => {
                 firebase.auth().signOut();
               } else {
                 showAlertZ('Login berhasil');
-                window.location.href = "index.html";
+                window.location.href = "./index.html";
               }
             }
           })
