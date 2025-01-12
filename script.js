@@ -114,8 +114,8 @@ firebase.auth().onAuthStateChanged((user) => {
 
               messageElement.innerHTML = `
 <div id="sender">
-${messageData.nama} &nbsp;
-<span class="timetrex">${timestamp}</span>
+${messageData.nama}
+<div id="timetrex">${timestamp}</div>
 </div>
 <div id="text-chat">${messageData.text}</div>
 `;

@@ -183,8 +183,8 @@ textarea:hover {
 }
 
 #text-chat {
-  color: #0d0;
-  margin-top: -9px;
+  color: #0b0;
+  margin-top: -12px;
 }
 
 #text-chat-tolep {
@@ -204,7 +204,7 @@ textarea:hover {
   height: 100%;
 }
 
-.timetrex {
+#timetrex {
   position: absolute;
   right: 5px;
   color: #0f0;
