@@ -241,40 +241,49 @@ function startOfflineTimer(uid) {
   }, 60000); // 1 menit
 }
 
-// Deteksi aktivitas user
-const inputChat = document.getElementById('messageInput');
-inputChat.addEventListener('input', () => {
-  const user = firebase.auth().currentUser;
-  if (user) {
-    updateStatusOnline(user.uid);
-    startOfflineTimer(user.uid);
-  }
-});
+// DOM Ready
+document.addEventListener('DOMContentLoaded', () => {
+  const inputChat = document.getElementById('messageInput');
+  const yangOnlineElement = document.getElementById('yang-online');
 
-// Fungsi cek semua user yang online
-function cekStatusSemuaOnline() {
-  firestore.collection('SS')
-    .where('online', '==', true) // Ambil user yang statusnya online
-    .onSnapshot((snapshot) => {
-      const yangOnlineElement = document.getElementById('yang-online');
-      let onlineUsers = '';
-
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        onlineUsers += `<div style="font-weight:bold;color: #0e0;">${data.nama} &nbsp;&#9673;</div>`;
-      });
-
-      // Tampilkan semua user yang online
-      yangOnlineElement.innerHTML = onlineUsers || '<div>Belum ada yang online.</div>';
-    }, (error) => {
-      console.error("Error fetching online users:", error);
+  // Deteksi aktivitas user
+  if (inputChat) {
+    inputChat.addEventListener('input', () => {
+      const user = firebase.auth().currentUser;
+      if (user) {
+        updateStatusOnline(user.uid); // Set online saat ada aktivitas
+        startOfflineTimer(user.uid); // Timer untuk set offline
+      }
     });
-}
-
-// Mulai cek semua user online saat user login
-firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    updateStatusOnline(user.uid);
-    cekStatusSemuaOnline();
   }
+
+  // Fungsi cek semua user yang online
+  function cekStatusSemuaOnline() {
+    firestore.collection('SS')
+      .where('online', '==', true) // Ambil user yang statusnya online
+      .onSnapshot((snapshot) => {
+        if (yangOnlineElement) {
+          let onlineUsers = '';
+
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            onlineUsers += `<div style="font-weight:bold;color: #0e0;font-size:12px;">${data.nama} &nbsp;&#9673;</div>`;
+          });
+
+          // Tampilkan semua user yang online
+          yangOnlineElement.innerHTML = onlineUsers || '';
+        }
+      }, (error) => {
+        console.error("Error fetching online users:", error);
+      });
+  }
+
+  // Mulai cek semua user online saat halaman aktif
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      updateStatusOnline(user.uid); // Set online saat user terdeteksi
+      startOfflineTimer(user.uid); // Mulai timer offline
+      cekStatusSemuaOnline(); // Tampilkan daftar online
+    }
+  });
 });
