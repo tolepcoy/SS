@@ -104,9 +104,9 @@ firebase.auth().onAuthStateChanged((user) => {
 
             snapshot.forEach((doc) => {
               const messageData = doc.data();
-              const messageTime = messageData.timestamp ? new Date(messageData.timestamp) : null;
+              const messageTime = messageData.timestamp ? messageData.timestamp.toDate() : null;
   const timeString = messageTime 
-    ? messageTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) 
+    ? `${messageTime.getHours().toString().padStart(2, '0')}:${messageTime.getMinutes().toString().padStart(2, '0')}` 
     : '';
               const messageElement = document.createElement('div');
 
