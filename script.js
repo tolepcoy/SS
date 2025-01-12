@@ -115,9 +115,9 @@ firebase.auth().onAuthStateChanged((user) => {
               messageElement.innerHTML = `
 <div id="sender">
 ${messageData.nama}
-<div id="timetrex">${timestamp}</div>
+<div id="timetrex" style="color: #0d0;">${timestamp}</div>
 </div>
-<div id="text-chat">${messageData.text}</div>
+<div id="text-chat" style="color: #080;margin-top:-15px;">${messageData.text}</div>
 `;
   chatBox.appendChild(messageElement);
 });
@@ -137,7 +137,7 @@ ${messageData.nama}
               const messageElement = document.createElement('div');
 
               messageElement.innerHTML = `
-<div id="text-chat-tolep">${messageData.text}</div>
+<div style="color:#9d0" id="text-chat-tolep">${messageData.text}</div>
 `;
               chatBoxTolep.appendChild(messageElement);
             });
@@ -164,7 +164,7 @@ ${messageData.nama}
       </div>
     `;
     chatBoxTolep.innerHTML = `
-      <span style="color:#9d0;">Tolep sedang Offline!</span>
+      <span style="color:#f55;">Tolep sedang Offline!</span>
     `;
     blink.innerHTML = `
       <span style="color:#f55;vertical-align: -1px;font-size:10px;">Offline</span>

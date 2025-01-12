@@ -181,15 +181,6 @@ textarea:hover {
   color: #0f0;
 }
 
-#text-chat {
-  color: #090;
-  margin-top: -15px;
-}
-
-#text-chat-tolep {
-  color: #7d0;
-}
-
 #headerTolep {
   font-weight: bold;
   color: #0f0;
@@ -207,7 +198,6 @@ textarea:hover {
   position: absolute;
   top: 5px;
   right: 5px;
-  color: #0f0;
   font-style: italic;
   font-family: Arial;
   font-size: 10px;
