@@ -62,7 +62,7 @@ firebase.auth().onAuthStateChanged((user) => {
     wowElement.style.pointerEvents = 'none';
     console.log('User sudah login:', user);
   } else {
-    window.location.replace('login-form.html');
+    window.location.href = 'login-form.html';
   }
 });
 // -- cek load login end
@@ -426,7 +426,7 @@ document.getElementById('keluar').addEventListener('click', () => {
   document.getElementById('confirm-logout').addEventListener('click', () => {
     auth.signOut()
       .then(() => {
-        window.location.replace("login-form.html");
+        window.location.href = "login-form.html";
       })
   });
 
