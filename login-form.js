@@ -28,7 +28,7 @@ firebase.auth().onAuthStateChanged((user) => {
     PassChecker.disabled = true;
     console.log('User sudah login:', user);
   } else {
-    window.location.replace('https://tolepcoy.github.io/SS/index.html');
+    window.location.replace('index.html');
   }
 });
 // -- cek load login end
@@ -99,7 +99,7 @@ registerButton.addEventListener('click', () => {
           email: userRegister.email,
           verimail: 'Verifikasi Email',
         }).then(() => {
-          showAlert('Registrasi berhasil! Silahkan Login dulu');
+          showAlert('Registrasi berhasil! Menunggu persetujuan Tolep Coy');
           console.log('User privasi berhasil disimpan ke koleksi PRIVASI.');
         }).catch((error) => {
           console.error('Error saving privasi data to Firestore:', error);
@@ -168,7 +168,7 @@ loginButton.addEventListener('click', () => {
                 firebase.auth().signOut();
               } else {
                 showAlertZ('Login berhasil');
-                window.location.replace("https://tolepcoy.github.io/SS/index.html");
+                window.location.replace("index.html");
               }
             }
           })

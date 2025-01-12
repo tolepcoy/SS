@@ -54,7 +54,6 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 // -- end inisialisasi firebase
 
-/*
 // CEK STATUS LOGIN SAAT PERTAMA LOAD
 const wowElement = document.getElementById('wow');
 
@@ -63,11 +62,10 @@ firebase.auth().onAuthStateChanged((user) => {
     wowElement.style.pointerEvents = 'none';
     console.log('User sudah login:', user);
   } else {
-    window.location.replace('https://tolepcoy.github.io/SS/login-form.html');
+    window.location.replace('login-form.html');
   }
 });
 // -- cek load login end
-*/
 
 // Elemen penting
 const messageForm = document.getElementById('messageForm');
@@ -428,7 +426,7 @@ document.getElementById('keluar').addEventListener('click', () => {
   document.getElementById('confirm-logout').addEventListener('click', () => {
     auth.signOut()
       .then(() => {
-        window.location.replace("https://tolepcoy.github.io/SS/login-form.html");
+        window.location.replace("login-form.html");
       })
   });
 
