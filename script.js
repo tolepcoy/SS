@@ -226,7 +226,7 @@ function updateStatusOnline(uid) {
 }
 
 // Event untuk mendeteksi aktivitas user (misalnya saat mengetik di chat)
-const inputChat = document.getElementById('input-chat');
+const inputChat = document.getElementById('messageInput');
 inputChat.addEventListener('input', () => {
   const user = firebase.auth().currentUser;
   if (user) {
