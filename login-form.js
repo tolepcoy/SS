@@ -14,6 +14,25 @@
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
+// CEK STATUS LOGIN SAAT PERTAMA LOAD
+const RegChecker = document.getElementById('registerButton');
+const LogChecker = document.getElementById('loginButton');
+const EmChecker = document.getElementById('email');
+const PassChecker = document.getElementById('password');
+
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    RegChecker.style.pointerEvents = 'none';
+    LogChecker.style.pointerEvents = 'none';
+    EmChecker.disabled = true;
+    PassChecker.disabled = true;
+    console.log('User sudah login:', user);
+  } else {
+    window.location.replace('https://tolepcoy.github.io/SS/index.html');
+  }
+});
+// -- cek load login end
+
 // FUNGSI REGISTER
 const registerButton = document.getElementById('registerButton');
 
@@ -55,6 +74,7 @@ registerButton.addEventListener('click', () => {
           avatar: 'icon/default_avatar.png',
           LVL: 'Lv. ',
           level: 1,
+          online: false,
           role: 1,
           levelIcon: 1,
           detail: 'Bio',
@@ -75,6 +95,7 @@ registerButton.addEventListener('click', () => {
         // Simpan data ke koleksi PRIVASI
         const privasiRef = firestore.collection('PRIVASI').doc(userRegister.uid);
         privasiRef.set({
+          disabled: true,
           email: userRegister.email,
           verimail: 'Verifikasi Email',
         }).then(() => {
@@ -100,28 +121,28 @@ const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 
 // CUSTOM ALERT LOGIN
-  function showAlertZ(message) {
-    const alertBoxZ = document.createElement('div');
-    alertBoxZ.classList.add('custom-alert');
-    alertBoxZ.innerHTML = `
-      <div class="alert-box">
-        <span class="alert-message">${message}</span>
-        <button class="alert-ok">OK</button>
-      </div>
-    `;
+function showAlertZ(message) {
+  const alertBoxZ = document.createElement('div');
+  alertBoxZ.classList.add('custom-alert');
+  alertBoxZ.innerHTML = `
+    <div class="alert-box">
+      <span class="alert-message">${message}</span>
+      <button class="alert-ok">OK</button>
+    </div>
+  `;
 
-    // Tambahkan alert ke body
-    document.body.appendChild(alertBoxZ);
+  // Tambahkan alert ke body
+  document.body.appendChild(alertBoxZ);
 
-    // Menampilkan alert
-    alertBoxZ.style.display = 'flex';
+  // Menampilkan alert
+  alertBoxZ.style.display = 'flex';
 
-    // Close alert saat tombol OK diklik
-    alertBoxZ.querySelector('.alert-ok').addEventListener('click', () => {
-      alertBoxZ.style.display = 'none';
-      document.body.removeChild(alertBoxZ);
-    });
-  }
+  // Close alert saat tombol OK diklik
+  alertBoxZ.querySelector('.alert-ok').addEventListener('click', () => {
+    alertBoxZ.style.display = 'none';
+    document.body.removeChild(alertBoxZ);
+  });
+}
 // CUSTOM ALERT Z END
 
 // Fungsi untuk login
@@ -134,9 +155,27 @@ loginButton.addEventListener('click', () => {
       .then(userCredential => {
         const user = userCredential.user;
         console.log('Login berhasil:', user);
-     showAlertZ('Login berhasil');
-     
-        window.location.href = 'https://tolepcoy.github.io/SS/index.html';
+
+        // Cek status disabled dari koleksi PRIVASI
+        const userPrivasiRef = firestore.collection('PRIVASI').doc(user.uid);
+        userPrivasiRef.get()
+          .then(doc => {
+            if (doc.exists) {
+              const userData = doc.data();
+              if (userData.disabled && userData.disabled === true) {
+
+                showAlertZ('Akun Anda belum aktif, tidak dapat login.');
+                firebase.auth().signOut();
+              } else {
+                showAlertZ('Login berhasil');
+                window.location.replace("https://tolepcoy.github.io/SS/index.html");
+              }
+            }
+          })
+          .catch(error => {
+            console.error("Error getting user data:", error);
+            showAlertZ('Terjadi kesalahan saat memeriksa status akun.');
+          });
       })
       .catch(error => {
         console.error('Login gagal:', error);

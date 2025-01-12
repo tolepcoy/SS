@@ -54,6 +54,21 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 // -- end inisialisasi firebase
 
+/*
+// CEK STATUS LOGIN SAAT PERTAMA LOAD
+const wowElement = document.getElementById('wow');
+
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    wowElement.style.pointerEvents = 'none';
+    console.log('User sudah login:', user);
+  } else {
+    window.location.replace('https://tolepcoy.github.io/SS/login-form.html');
+  }
+});
+// -- cek load login end
+*/
+
 // Elemen penting
 const messageForm = document.getElementById('messageForm');
 const messageInput = document.getElementById('messageInput');
@@ -238,7 +253,7 @@ function startOfflineTimer(uid) {
     }).catch((error) => {
       console.error("Error setting status offline:", error);
     });
-  }, 1800000); // 3 menit
+  }, 180000); // 3 menit
 }
 
 // DOM Ready
@@ -291,7 +306,6 @@ document.addEventListener('DOMContentLoaded', () => {
 //TERMINAL
 const terminal = document.getElementById("terminal");
 const wow = document.getElementById("wow");
-const blinkTerminal = document.querySelector(".blinkTerminal");
 
 const commands = [
             { text: "$ Load Tolep server ...", dots: 3, delay: 2, isGold: true },
@@ -389,8 +403,6 @@ function runCommands() {
         } else {
             terminal.style.display = "none";
             terminal.style.pointerEvents = "none";
-            blinkTerminal.style.display = "none";
-            blinkTerminal.style.animation = "none";
         }
     }
     nextCommand();
@@ -405,3 +417,26 @@ wow.addEventListener("click", () => {
         runCommands(); 
     }
 });
+
+// CUSTOM DIALOG LOGOUT
+document.getElementById('keluar').addEventListener('click', () => {
+  const dialog = document.getElementById('custom-logout-dialog');
+  const dialogBlur = document.querySelector(".custom-dialog");
+  dialog.style.display = 'flex';
+  dialogBlur.style.backdropFilter = 'blur(4px) saturate(200%)';
+
+  document.getElementById('confirm-logout').addEventListener('click', () => {
+    auth.signOut()
+      .then(() => {
+        window.location.replace("https://tolepcoy.github.io/SS/login-form.html");
+      })
+  });
+
+  // Tombol batal logout
+  document.getElementById('cancel-logout').addEventListener('click', () => {
+    dialog.style.display = 'none';
+    dialogBlur.style.display = 'none';
+    dialogBlur.style.backdropFilter = 'none';
+  });
+});
+/* kustom dialog end */

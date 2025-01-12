@@ -13,6 +13,18 @@
 <div class="terminal" id="terminal">
 <div id="wow">MASUK</div></div>
   
+<!-- CUSTOM DIALOG LOGOUT -->
+<div id="custom-logout-dialog" class="custom-dialog" style="display: none;">
+  <div class="custom-dialog-content">
+    <p>Logout dari server?</p>
+    <div class="custom-dialog-buttons">
+      <button id="confirm-logout" class="btn-confirm">Logout</button>
+      <button id="cancel-logout" class="btn-cancel">Batal</button>
+    </div>
+  </div>
+</div>
+<!-- END CUSTOM DIALOG -->
+  
   <div id="chatbox-wrapper">
 <div id="chatBox">
 <!-- disini -->
@@ -35,13 +47,15 @@
 </form>
 
 <div id="user-online">
+<button id="keluar"></button>
 <b style="text-align:center;">Lagi Online</b>
 <div class="line-break"></div>
 <div id="yang-online">
 </div>
 </div>
 <button id="look">&#9673;</button>
-<!-- Script -->
+
+<!-- script inti -->
 <script src="tolepfirebaseapp.js"></script>
 <script src="tolepfirebaseauth.js"></script>
 <script src="tolepfirestore.js"></script>
