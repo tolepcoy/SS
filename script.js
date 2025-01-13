@@ -135,9 +135,7 @@ ${messageData.nama}
 });
 // dari sini
 const observer = new MutationObserver(() => {
-     setTimeout(() => {
    chatBox.scrollTop = chatBox.scrollHeight;
-  }, 100);
 });
 observer.observe(chatBox, { childList: true });
 // disini tadi
@@ -161,9 +159,7 @@ observer.observe(chatBox, { childList: true });
             });
  // dari sini
 const observer = new MutationObserver(() => {
-     setTimeout(() => {
    chatBoxTolep.scrollTop = chatBoxTolep.scrollHeight;
-  }, 100);
 });
 observer.observe(chatBoxTolep, { childList: true });
 // disini tadi disini tadi
