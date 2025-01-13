@@ -14,7 +14,6 @@
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
-/*
 // CEK STATUS LOGIN SAAT PERTAMA LOAD
 const RegChecker = document.getElementById('registerButton');
 const LogChecker = document.getElementById('loginButton');
@@ -29,11 +28,10 @@ firebase.auth().onAuthStateChanged((user) => {
     PassChecker.disabled = true;
     console.log('User sudah login:', user);
   } else {
-    window.location.href = './index.html';
+    window.location.replace('https://tolepcoy.github.io/SS/index.html');
   }
 });
 // -- cek load login end
-*/
 
 // FUNGSI REGISTER
 const registerButton = document.getElementById('registerButton');

@@ -59,6 +59,7 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 // -- end inisialisasi firebase
 
+/*
 // CEK STATUS LOGIN SAAT PERTAMA LOAD
 const wowElement = document.getElementById('wow');
 
@@ -70,6 +71,8 @@ firebase.auth().onAuthStateChanged((user) => {
     window.location.href = './login-form.html';
   }
 });
+*/
+
 // -- cek load login end
 
 // SHOW PROF USER NAMA
