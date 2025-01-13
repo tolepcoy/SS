@@ -66,6 +66,26 @@ firebase.auth().onAuthStateChanged((user) => {
 });
 // -- cek load login end
 
+// SHOW PROF USER NAMA
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    const userRef = firestore.collection('SS').doc(user.uid);
+
+    userRef.onSnapshot(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+        updateProfile(data, 'User'); 
+      }
+    }, error => console.error("Error listening to user data:", error));
+  }
+});
+
+// Fungsi untuk memperbarui UI profil
+function updateProfile(data, kategori) {
+  document.getElementById('nama').innerHTML = data.nama;
+}
+// -- lihat prof end
+
 // CHATBOX & CHATBOX-TOLEP
 const messageForm = document.getElementById('messageForm');
 const messageInput = document.getElementById('messageInput');
@@ -309,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-
+/*
 //TERMINAL
 const terminal = document.getElementById("terminal");
 const wow = document.getElementById("wow");
@@ -423,7 +443,7 @@ wow.addEventListener("click", () => {
         isCommandRunning = true; 
         runCommands(); 
     }
-});
+}); */
 
 // CUSTOM DIALOG LOGOUT
 document.getElementById('keluar').addEventListener('click', () => {
@@ -447,3 +467,105 @@ document.getElementById('keluar').addEventListener('click', () => {
   });
 });
 /* kustom dialog end */
+
+// EDIT NAMA
+const namaEl = document.getElementById('nama');
+const editNamaBtn = document.getElementById('edit-nama');
+const kenoKeluar = document.getElementById('keluar');
+
+// Fungsi untuk handle klik tombol edit
+editNamaBtn.addEventListener('click', () => {
+  editNamaBtn.style.display = 'none';
+  kenoKeluar.style.display = 'none';
+
+  // Menunggu user login terlebih dahulu
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      const userDef = firestore.collection('SS').doc(user.uid);
+
+      // Ambil data terakhir update nama
+      userDef.get().then(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          const lastUpdate = data.lastNamaUpdate?.toDate() || null;
+          const now = new Date();
+
+          if (lastUpdate && (now - lastUpdate) / (1000 * 60 * 60 * 24) < 30) {
+            const remainingDays = 30 - Math.floor((now - lastUpdate) / (1000 * 60 * 60 * 24));
+            alert(`Ente cuman biso ngubah namo setiap 30 hari. Siso waktu: ${remainingDays} hari.`);
+            editNamaBtn.style.display = 'block';
+            return;
+          }
+
+          // Simpan value lama
+          const currentNama = namaEl.textContent.trim();
+
+// Ubah elemen nama menjadi input
+          namaEl.innerHTML = `
+            <input type="text" id="nama-input" value="${currentNama}" maxlength="15" /><br>
+            <button id="cancel-nama">X</button>
+            <button id="save-nama">√</button>
+          `;
+
+          // Ambil elemen input dan tombol
+          const namaInput = document.getElementById('nama-input');
+          const saveBtnNama = document.getElementById('save-nama');
+          const cancelBtnNama = document.getElementById('cancel-nama');
+
+          // Fokuskan input
+          namaInput.focus();
+
+          // Handle klik tombol batal
+          cancelBtnNama.addEventListener('click', () => {
+            namaEl.textContent = currentNama;
+            editNamaBtn.style.display = 'block';
+            kenoKeluar.style.display = 'block';
+          });
+
+          // Handle klik tombol save
+          saveBtnNama.addEventListener('click', async () => {
+            let newNama = namaInput.value.trim();
+            
+// sanitasi start
+function sanitizeInput(input) {
+  const docXSS = new DOMParser().parseFromString(input, 'text/html');
+  return docXSS.body.textContent || "";
+} // sanitasi end
+
+            // Validasi nama
+            if (!/^[a-zA-Z\s]{3,15}$/.test(newNama)) {
+              alert("Namo cuman boleh huruf samo spasi, 3 - 15 karakter.");
+              return;
+            }
+            
+// sanitasi start
+newNama = sanitizeInput(newNama);
+// sanitasi end
+
+            // Simpan ke Firestore
+            try {
+              await userDef.update({
+                nama: newNama,
+                lastNamaUpdate: firebase.firestore.Timestamp.now() // Simpan waktu update terakhir
+              });
+
+              // Kembalikan tampilan awal
+              namaEl.textContent = newNama;
+              editNamaBtn.style.display = 'block';
+              kenoKeluar.style.display = 'block';
+            } catch (error) {
+              alert("Gagal nyimpen namo baru, cubo lagi.");
+            }
+          });
+        } else {
+          alert("Terjadi kesalahan, coba lagi.");
+          editNamaBtn.style.display = 'block';
+        }
+      }).catch(error => {
+        alert("Ado yang error!, cubo lagi.");
+        editNamaBtn.style.display = 'block';
+      });
+    }
+  });
+});
+// -- end edit nama
