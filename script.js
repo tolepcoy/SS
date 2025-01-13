@@ -19,18 +19,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Toggle active saat button diklik
   lookBtn.addEventListener("click", function (e) {
-    e.stopPropagation(); // Supaya klik button nggak dianggap klik di luar
+    e.stopPropagation();
     userOnline.classList.toggle("active");
     lookBtn.classList.toggle("active");
   });
 
-  // Remove active kalau klik di mana aja
+// Remove active klik di mana aja
   document.addEventListener("click", function () {
     userOnline.classList.remove("active");
     lookBtn.classList.remove("active");
   });
 
-  // Mencegah close saat klik di dalam user-online
   userOnline.addEventListener("click", function (e) {
     e.stopPropagation();
   });
@@ -170,7 +169,9 @@ ${messageData.nama}
     lookBtn.disabled = false;
     chatBox.innerHTML = `
       <div id="beforeChatLogin" style="text-align:center;font-weight:bold;">
-        <h5 style="color:#f55;">Ente belum login!</h5>
+        <h5 style="color:#f55;">Sesi aktif Ente sudah expired<br>
+atau Ente belum login!<br>
+Silahkan login kembali</h5>
         <button id="loginChat" style="color:#0b0">
           <a href="https://tolepcoy.github.io/SS/login-form.html">Login</a>
         </button>
@@ -264,8 +265,8 @@ document.addEventListener('DOMContentLoaded', () => {
     inputChat.addEventListener('input', () => {
       const user = firebase.auth().currentUser;
       if (user) {
-        updateStatusOnline(user.uid); // Set online saat ada aktivitas
-        startOfflineTimer(user.uid); // Timer untuk set offline
+        updateStatusOnline(user.uid);
+        startOfflineTimer(user.uid);
       }
     });
   }
@@ -291,12 +292,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
-  // Mulai cek semua user online saat halaman aktif
+  // cek semua user online
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-      updateStatusOnline(user.uid); // Set online saat user terdeteksi
-      startOfflineTimer(user.uid); // Mulai timer offline
-      cekStatusSemuaOnline(); // Tampilkan daftar online
+      updateStatusOnline(user.uid);
+      startOfflineTimer(user.uid);
+      cekStatusSemuaOnline();
     }
   });
 });
@@ -317,7 +318,7 @@ const commands = [
             { text: "$ Encrypting chat ... /Done.", delay: 2 },
             { text: "$ Converting to base64 -REGEX ../Done.", delay: 2 },
             { text: "$ Run Script for chating ... /Done.", delay: 2, isGreen: true },
-            { text: "$ Administrator Tolep Coy was checking!", delay: 10, blinkTerminal: true },
+            { text: "$ Assistant Bot-AI Tolep Coy was checking!", delay: 10, blinkTerminal: true },
             { text: "$ Security locked ..../Done.", delay: 1 },
             { text: "$ Credential keys created .../Done.", delay: 1 },
             { text: "$ Loaded.", delay: 1, isGreen: true },
