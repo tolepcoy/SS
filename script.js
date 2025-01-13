@@ -473,6 +473,23 @@ const namaEl = document.getElementById('nama');
 const editNamaBtn = document.getElementById('edit-nama');
 const kenoKeluar = document.getElementById('keluar');
 
+// CUSTOM ALERT
+function showAlert(message) {
+  const alertBox2 = document.createElement('div');
+  alertBox2.classList.add('custom-alert');
+  alertBox2.innerHTML = `
+<div class="alert-box">
+<span class="alert-message">${message}</span>
+<button class="alert-ok">OK</button>
+</div>`;
+    document.body.appendChild(alertBox2);
+    alertBox2.style.display = 'flex';
+    alertBox2.querySelector('.alert-ok').addEventListener('click', () => {
+      alertBox2.style.display = 'none';
+      document.body.removeChild(alertBox2);
+});}
+// END CUSTOM ALERT
+
 // Fungsi untuk handle klik tombol edit
 editNamaBtn.addEventListener('click', () => {
   editNamaBtn.style.display = 'none';
@@ -492,8 +509,9 @@ editNamaBtn.addEventListener('click', () => {
 
           if (lastUpdate && (now - lastUpdate) / (1000 * 60 * 60 * 24) < 30) {
             const remainingDays = 30 - Math.floor((now - lastUpdate) / (1000 * 60 * 60 * 24));
-            alert(`Ente cuman biso ngubah namo setiap 30 hari. Siso waktu: ${remainingDays} hari.`);
+            showAlert(`Ente cuman biso ngubah namo setiap 30 hari. Siso waktu: ${remainingDays} hari.`);
             editNamaBtn.style.display = 'block';
+            kenoKeluar.style.display = 'block';
             return;
           }
 
@@ -503,8 +521,8 @@ editNamaBtn.addEventListener('click', () => {
 // Ubah elemen nama menjadi input
           namaEl.innerHTML = `
             <input type="text" id="nama-input" value="${currentNama}" maxlength="15" /><br>
-            <button id="cancel-nama">X</button>
-            <button id="save-nama">√</button>
+            <button id="cancel-nama">Batal</button>
+            <button id="save-nama">Simpen</button>
           `;
 
           // Ambil elemen input dan tombol
@@ -534,7 +552,7 @@ function sanitizeInput(input) {
 
             // Validasi nama
             if (!/^[a-zA-Z\s]{3,15}$/.test(newNama)) {
-              alert("Namo cuman boleh huruf samo spasi, 3 - 15 karakter.");
+              showAlert("Namo cuman boleh huruf samo spasi, 3 - 15 karakter.");
               return;
             }
             
@@ -549,21 +567,23 @@ newNama = sanitizeInput(newNama);
                 lastNamaUpdate: firebase.firestore.Timestamp.now() // Simpan waktu update terakhir
               });
 
-              // Kembalikan tampilan awal
+  // Kembalikan tampilan awal
               namaEl.textContent = newNama;
               editNamaBtn.style.display = 'block';
               kenoKeluar.style.display = 'block';
             } catch (error) {
-              alert("Gagal nyimpen namo baru, cubo lagi.");
+              showAlert("Gagal nyimpen namo baru, cubo lagi.");
             }
           });
         } else {
-          alert("Terjadi kesalahan, coba lagi.");
+          showAlert("Terjadi kesalahan, coba lagi.");
           editNamaBtn.style.display = 'block';
+          kenoKeluar.style.display = 'block';
         }
       }).catch(error => {
-        alert("Ado yang error!, cubo lagi.");
+        showAlert("Ado yang error!, cubo lagi.");
         editNamaBtn.style.display = 'block';
+        kenoKeluar.style.display = 'block';
       });
     }
   });
