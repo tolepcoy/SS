@@ -59,6 +59,16 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 // -- end inisialisasi firebase
 
+// Simpan login
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    localStorage.setItem('userLoggedIn', 'true');  // Set status login
+    console.log('User sudah login:', user);
+  } else {
+    localStorage.removeItem('userLoggedIn');
+  }
+});
+
 /*
 // CEK STATUS LOGIN SAAT PERTAMA LOAD
 const wowElement = document.getElementById('wow');

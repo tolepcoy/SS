@@ -48,8 +48,9 @@
   // Fungsi cek user login
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
+      localStorage.setItem("isLoggedIn", "true");
       // User sudah login
-      window.location.replace('https://tolepcoy.github.io/SS/index.html');
+      window.location.href = "https://tolepcoy.github.io/SS/index.html";
     } else {
       loadingParent.style.display = 'none';
       loadingCircle.style.display = 'none';

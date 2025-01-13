@@ -14,6 +14,16 @@
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
+// Simpan login
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    localStorage.setItem('userLoggedIn', 'true');
+    console.log('User sudah login:', user);
+  } else {
+    localStorage.removeItem('userLoggedIn');
+  }
+});
+
 // CEK STATUS LOGIN SAAT PERTAMA LOAD
 const RegChecker = document.getElementById('registerButton');
 const LogChecker = document.getElementById('loginButton');
@@ -28,7 +38,7 @@ firebase.auth().onAuthStateChanged((user) => {
     PassChecker.disabled = true;
     console.log('User sudah login:', user);
   } else {
-    window.location.replace('https://tolepcoy.github.io/SS/index.html');
+    window.location.href = 'https://tolepcoy.github.io/SS/index.html';
   }
 });
 // -- cek load login end
@@ -168,7 +178,7 @@ loginButton.addEventListener('click', () => {
                 firebase.auth().signOut();
               } else {
                 showAlertZ('Login berhasil');
-                window.location.href = "./index.html";
+                window.location.href = "https://tolepcoy.github.io/SS/index.html";
               }
             }
           })
