@@ -125,7 +125,7 @@ body {
   height: 530px;
   margin: 0;
   padding: 2px 5px 2px 8px;
-  overflow-y: auto;
+  overflow: hidden;
   box-sizing: border-box;
   border-right: 0.9px dashed #080;
   flex-shrink: 0;
@@ -134,6 +134,12 @@ body {
 
 #chatbox-wrapper div {
  margin-bottom: 15px;
+}
+
+#chatbox {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 #chatbox-tolep-wrapper {
@@ -152,6 +158,12 @@ body {
 
 #chatbox-tolep-wrapper div {
   margin-bottom: 10px;
+}
+
+#chatbox-tolep {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 #messageForm {
@@ -238,11 +250,6 @@ textarea:hover {
   top: 2px;
 }
 
-.coy {
-  overflow-y: auto;
-  height: 100%;
-}
-
 #timetrex {
   position: absolute;
   top: 5px;
@@ -250,6 +257,7 @@ textarea:hover {
   font-style: italic;
   font-family: Arial;
   font-size: 10px;
+  color: #0f0;
 }
 
 #look {

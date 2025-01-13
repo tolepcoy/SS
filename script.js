@@ -153,18 +153,14 @@ firebase.auth().onAuthStateChanged((user) => {
               messageElement.innerHTML = `
 <div id="sender">
 ${messageData.nama}
-<div id="timetrex" style="color: #0d0;">${timestamp}</div>
+<div id="timetrex">${timestamp}</div>
 </div>
 <div id="text-chat" style="color: #090;margin-top:-15px;">${messageData.text}</div>
 `;
   chatBox.appendChild(messageElement);
 });
-// dari sini
-const observer = new MutationObserver(() => {
+
    chatBox.scrollTop = chatBox.scrollHeight;
-});
-observer.observe(chatBox, { childList: true });
-// disini tadi
 });
 
  // CHATBOX-TOLEP (khusus ente)
@@ -183,12 +179,8 @@ observer.observe(chatBox, { childList: true });
 `;
               chatBoxTolep.appendChild(messageElement);
             });
- // dari sini
-const observer = new MutationObserver(() => {
+
    chatBoxTolep.scrollTop = chatBoxTolep.scrollHeight;
-});
-observer.observe(chatBoxTolep, { childList: true });
-// disini tadi disini tadi
 });
       }
     });
