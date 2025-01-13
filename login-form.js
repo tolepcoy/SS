@@ -13,26 +13,7 @@
     firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
-/*
-// CEK STATUS LOGIN SAAT PERTAMA LOAD
-const RegChecker = document.getElementById('registerButton');
-const LogChecker = document.getElementById('loginButton');
-const EmChecker = document.getElementById('email');
-const PassChecker = document.getElementById('password');
 
-firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    RegChecker.style.pointerEvents = 'none';
-    LogChecker.style.pointerEvents = 'none';
-    EmChecker.disabled = true;
-    PassChecker.disabled = true;
-    console.log('User sudah login:', user);
-  } else {
-    window.location.href = 'https://tolepcoy.github.io/SS/index.html';
-  }
-});
-// -- cek load login end
-*/
 // FUNGSI REGISTER
 const registerButton = document.getElementById('registerButton');
 
@@ -92,7 +73,7 @@ registerButton.addEventListener('click', () => {
           console.error('Error saving user data to Firestore:', error);
         });
 
-        // Simpan data ke koleksi PRIVASI
+ // Simpan data ke koleksi PRIVASI
         const privasiRef = firestore.collection('PRIVASI').doc(userRegister.uid);
         privasiRef.set({
           disabled: true,

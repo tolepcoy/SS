@@ -59,6 +59,24 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 // -- end inisialisasi firebase
 
+// ADUH
+  document.addEventListener("DOMContentLoaded", function () {
+    const wowButton = document.getElementById("wow");
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+  console.log("User sudah login:", user.email);
+  wowButton.disabled = false;
+      } else {
+  console.log("User belum login, mengarahkan ke login-form.html...");
+  wowButton.disabled = true;
+  window.location.href = "https://tolepcoy.github.io/SS/login-form.html";
+      }
+    });
+  });
+
+// ADUH
+
 // SHOW PROF USER NAMA
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
@@ -84,18 +102,20 @@ const messageForm = document.getElementById('messageForm');
 const messageInput = document.getElementById('messageInput');
 const chatBox = document.getElementById('chatBox');
 const chatBoxTolep = document.getElementById('chatbox-tolep');
+/*
 const blink = document.getElementById('blink');
 const lookBtn = document.getElementById('look');
+*/
 const sendButton = document.getElementById('sendButton');
 
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    messageForm.style.visibility = 'visible';
+/*    messageForm.style.visibility = 'visible';
     messageForm.style.pointerEvents = 'auto';
     sendButton.disabled = false;
     lookBtn.disabled = false;
-
+*/
     firestore.collection('SS').doc(user.uid).onSnapshot((doc) => {
       if (doc.exists) {
         const userName = doc.data().nama;
@@ -110,7 +130,7 @@ firebase.auth().onAuthStateChanged((user) => {
  // Jika UID cocok dengan ente, simpan di CHATBOX-TOLEP
     const collection = user.uid === "c5AbAGemIcfsphDrXu56I8OZyEo1" ? 'CHATBOX-TOLEP' : 'CHATBOX';
 
-          firestore.collection(collection).add({
+firestore.collection(collection).add({
             nama: userName,
             text: message,
             timestamp: new Date(),
@@ -124,7 +144,6 @@ firebase.auth().onAuthStateChanged((user) => {
         firestore.collection('CHATBOX')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
-            blink.innerHTML = '_';
             chatBox.innerHTML = '';
 
             snapshot.forEach((doc) => {
@@ -135,9 +154,9 @@ firebase.auth().onAuthStateChanged((user) => {
             minute: '2-digit',
           })
         : 'Zonk';
-              const messageElement = document.createElement('div');
+const messageElement = document.createElement('div');
 
-              messageElement.innerHTML = `
+messageElement.innerHTML = `
 <div id="sender">
 ${messageData.nama}
 <div id="timetrex">${timestamp}</div>
@@ -154,14 +173,13 @@ ${messageData.nama}
         firestore.collection('CHATBOX-TOLEP')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
-            blink.innerHTML = '_';
-            chatBoxTolep.innerHTML = '';
+      chatBoxTolep.innerHTML = '';
 
-            snapshot.forEach((doc) => {
-              const messageData = doc.data();
-              const messageElement = document.createElement('div');
+    snapshot.forEach((doc) => {
+  const messageData = doc.data();
+  const messageElement = document.createElement('div');
 
-              messageElement.innerHTML = `
+messageElement.innerHTML = `
 <div style="color:#9d0" id="text-chat-tolep">${messageData.text}</div>
 `;
               chatBoxTolep.appendChild(messageElement);
@@ -172,7 +190,8 @@ ${messageData.nama}
       }
     });
 
-  } else {
+  }
+/* else {
     // Kondisi user belum login
     messageForm.style.visibility = 'hidden';
     messageForm.style.pointerEvents = 'none';
@@ -195,6 +214,7 @@ Silahkan login kembali</h5>
       <span style="color:#f55;vertical-align: -1px;font-size:10px;">Offline</span>
     `;
   }
+*/
 });
 // -- end chatbox
 
@@ -231,7 +251,7 @@ firebase.auth().onAuthStateChanged((user) => {
       if (doc.exists) {
         const userData = doc.data();
 
-        // Cek apakah user adalah admin
+ // Cek apakah user adalah admin
         if (userData.isAdmin) {
           bersihkanChatboxLama();
         }
@@ -285,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fungsi cek semua user yang online
   function cekStatusSemuaOnline() {
     firestore.collection('SS')
-      .where('online', '==', true) // Ambil user yang statusnya online
+      .where('online', '==', true)
       .onSnapshot((snapshot) => {
         if (yangOnlineElement) {
           let onlineUsers = '';
@@ -295,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
             onlineUsers += `<div style="font-weight:bold;color: #0e0;font-size:12px;"><li>${data.nama}</li></div>`;
           });
 
-          // Tampilkan semua user yang online
+// Tampilkan semua user yang online
           yangOnlineElement.innerHTML = onlineUsers || '';
         }
       }, (error) => {
@@ -493,8 +513,8 @@ editNamaBtn.addEventListener('click', () => {
           if (lastUpdate && (now - lastUpdate) / (1000 * 60 * 60 * 24) < 30) {
             const remainingDays = 30 - Math.floor((now - lastUpdate) / (1000 * 60 * 60 * 24));
             showAlert(`Ente cuman biso ngubah namo setiap 30 hari. Siso waktu: ${remainingDays} hari.`);
-            editNamaBtn.style.display = 'block';
-            kenoKeluar.style.display = 'block';
+  editNamaBtn.style.display = 'block';
+  kenoKeluar.style.display = 'block';
             return;
           }
 
@@ -560,8 +580,8 @@ newNama = sanitizeInput(newNama);
           });
         } else {
           showAlert("Terjadi kesalahan, coba lagi.");
-          editNamaBtn.style.display = 'block';
-          kenoKeluar.style.display = 'block';
+ editNamaBtn.style.display = 'block';
+ kenoKeluar.style.display = 'block';
         }
       }).catch(error => {
         showAlert("Ado yang error!, cubo lagi.");
