@@ -66,7 +66,7 @@ firebase.auth().onAuthStateChanged((user) => {
 });
 // -- cek load login end
 
-// Elemen penting
+// CHATBOX & CHATBOX-TOLEP
 const messageForm = document.getElementById('messageForm');
 const messageInput = document.getElementById('messageInput');
 const chatBox = document.getElementById('chatBox');
@@ -83,7 +83,7 @@ firebase.auth().onAuthStateChanged((user) => {
     sendButton.disabled = false;
     lookBtn.disabled = false;
 
-    firestore.collection('SS').doc(user.uid).get().then((doc) => {
+    firestore.collection('SS').doc(user.uid).onSnapshot((doc) => {
       if (doc.exists) {
         const userName = doc.data().nama;
 
@@ -94,8 +94,8 @@ firebase.auth().onAuthStateChanged((user) => {
           const message = messageInput.value.trim();
           if (message === '') return;
 
-          // Jika UID cocok dengan ente, simpan di CHATBOX-TOLEP
-          const collection = user.uid === "c5AbAGemIcfsphDrXu56I8OZyEo1" ? 'CHATBOX-TOLEP' : 'CHATBOX';
+ // Jika UID cocok dengan ente, simpan di CHATBOX-TOLEP
+    const collection = user.uid === "c5AbAGemIcfsphDrXu56I8OZyEo1" ? 'CHATBOX-TOLEP' : 'CHATBOX';
 
           firestore.collection(collection).add({
             nama: userName,
@@ -133,11 +133,17 @@ ${messageData.nama}
 `;
   chatBox.appendChild(messageElement);
 });
+// dari sini
+const observer = new MutationObserver(() => {
+     setTimeout(() => {
+   chatBox.scrollTop = chatBox.scrollHeight;
+  }, 100);
+});
+observer.observe(chatBox, { childList: true });
+// disini tadi
+});
 
-            chatBox.scrollTop = chatBox.scrollHeight;
-          });
-
-        // CHATBOX-TOLEP (khusus ente)
+ // CHATBOX-TOLEP (khusus ente)
         firestore.collection('CHATBOX-TOLEP')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
@@ -153,9 +159,15 @@ ${messageData.nama}
 `;
               chatBoxTolep.appendChild(messageElement);
             });
-
-            chatBoxTolep.scrollTop = chatBoxTolep.scrollHeight;
-          });
+ // dari sini
+const observer = new MutationObserver(() => {
+     setTimeout(() => {
+   chatBoxTolep.scrollTop = chatBoxTolep.scrollHeight;
+  }, 100);
+});
+observer.observe(chatBoxTolep, { childList: true });
+// disini tadi disini tadi
+});
       }
     }).catch((error) => {
       console.error('Error getting document: ', error);

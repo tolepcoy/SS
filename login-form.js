@@ -72,7 +72,7 @@ registerButton.addEventListener('click', () => {
         // Simpan data ke koleksi SS
         const userSSRef = firestore.collection('SS').doc(userRegister.uid);
         userSSRef.set({
-          nama: 'userSS',
+          nama: 'User Baru',
           avatar: 'icon/default_avatar.png',
           LVL: 'Lv. ',
           level: 1,
