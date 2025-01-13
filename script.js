@@ -16,21 +16,27 @@ textarea.addEventListener('blur', () => {
 document.addEventListener("DOMContentLoaded", function () {
   const lookBtn = document.getElementById("look");
   const userOnline = document.getElementById("user-online");
+  const userProf = document.getElementById("prof");
 
   // Toggle active saat button diklik
   lookBtn.addEventListener("click", function (e) {
     e.stopPropagation();
     userOnline.classList.toggle("active");
     lookBtn.classList.toggle("active");
+    userProf.classList.toggle("active");
   });
 
 // Remove active klik di mana aja
   document.addEventListener("click", function () {
     userOnline.classList.remove("active");
     lookBtn.classList.remove("active");
+    userProf.classList.remove("active");
   });
 
   userOnline.addEventListener("click", function (e) {
+    e.stopPropagation();
+  });
+  userProf.addEventListener("click", function (e) {
     e.stopPropagation();
   });
 });
