@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-/*
+
 //TERMINAL
 const terminal = document.getElementById("terminal");
 const wow = document.getElementById("wow");
@@ -447,7 +447,7 @@ wow.addEventListener("click", () => {
         isCommandRunning = true; 
         runCommands(); 
     }
-}); */
+});
 
 // CUSTOM DIALOG LOGOUT
 document.getElementById('keluar').addEventListener('click', () => {
