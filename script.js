@@ -191,8 +191,6 @@ observer.observe(chatBoxTolep, { childList: true });
 // disini tadi disini tadi
 });
       }
-    }).catch((error) => {
-      console.error('Error getting document: ', error);
     });
 
   } else {
