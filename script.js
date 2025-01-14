@@ -322,6 +322,8 @@ document.addEventListener('DOMContentLoaded', () => {
 const terminal = document.getElementById("terminal");
 const wow = document.getElementById("wow");
 const meong = document.getElementById("meong");
+const meong2 = document.getElementById("meong2");
+const meong3 = document.getElementById("meong3");
 const blinkJugo = document.getElementById("blink-jugo");
 
 const commands = [
@@ -365,7 +367,7 @@ let isCommandRunning = false;
 function typeEffect({ text, dots = 0, delay = 100, isRed = false, isGreen = false, isGold = false, blinkTerminal = false }, callback) {
     let i = 0;
     const line = document.createElement("div");
-    // Deteksi spasi kosong atau baris kosong
+    // Deteksi spasi kosong
     if (text.trim() === "") {
         line.innerHTML = "&nbsp;";
         terminal.appendChild(line);
@@ -427,11 +429,13 @@ function runCommands() {
 
 wow.addEventListener("click", () => {
     if (!isCommandRunning) {
-      wow.style.display = 'none';
-      wow.style.pointerEvents = 'none';
-      meong.style.display = "none";
-      blinkJugo.style.animation = 'none';
-      terminal.style.background = 'black';
+  wow.style.display = 'none';
+  wow.style.pointerEvents = 'none';
+  meong.style.display = "none";
+  meong2.style.display = "none";
+  meong3.style.display = "none";
+  blinkJugo.style.animation = 'none';
+  terminal.style.background = 'black';
         isCommandRunning = true; 
         runCommands(); 
     }
