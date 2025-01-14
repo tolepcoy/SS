@@ -125,11 +125,9 @@ const showQuoteImg = document.getElementById('show-quote-img');
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-
     firestore.collection('SS').doc(user.uid).onSnapshot((doc) => {
       if (doc.exists) {
-        const userName = doc.data().nama;
-        const testingData = doc.data().testing;
+        const testingData = doc.data(); // Ambil objek data Firestore
 
         // Fungsi kirim pesan
         messageForm.addEventListener('submit', (e) => {
@@ -138,16 +136,18 @@ firebase.auth().onAuthStateChanged((user) => {
           const message = messageInput.value.trim();
           if (message === '') return;
 
-// Cek format @SQI= dalam pesan
+   // Cek format @SQI= dalam pesan
           const sqiMatch = message.match(/@SQI=\s*(\S+)/);
           if (sqiMatch) {
             const imageUrl = sqiMatch[1];
-
- // Update gambar di elemen <img>
             showQuoteImg.src = imageUrl;
- 
- // tambahkan class active
-            showSQI.classList.add(testingData.testing);
+
+     if (testingData.testing) {
+ console.log("Menambahkan class:", testingData.testing);
+              showSQI.classList.add(testingData.testing);
+            } else {
+              console.log("Field 'testing' tidak ditemukan!");
+            }
 
  // Update field SQI di Firestore
             firestore.collection('QUOTE').doc('docQUOTE').set({
