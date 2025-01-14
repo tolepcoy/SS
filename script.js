@@ -147,7 +147,7 @@ firebase.auth().onAuthStateChanged((user) => {
             showQuoteImg.src = imageUrl;
  
  // tambahkan class active
-            showSQI.classList.add('${testingData.testing}');
+            showSQI.classList.add(testingData.testing);
 
  // Update field SQI di Firestore
             firestore.collection('QUOTE').doc('docQUOTE').set({
