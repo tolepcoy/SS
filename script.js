@@ -120,7 +120,7 @@ const messageInput = document.getElementById('messageInput');
 const chatBox = document.getElementById('chatBox');
 const chatBoxTolep = document.getElementById('chatbox-tolep');
 const sendButton = document.getElementById('sendButton');
-
+const showQuoteImg = document.getElementById('show-quote-img'); // Elemen gambar
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
@@ -136,17 +136,37 @@ firebase.auth().onAuthStateChanged((user) => {
           const message = messageInput.value.trim();
           if (message === '') return;
 
- // Jika UID cocok dengan ente, simpan di CHATBOX-TOLEP
-    const collection = user.uid === "c5AbAGemIcfsphDrXu56I8OZyEo1" ? 'CHATBOX-TOLEP' : 'CHATBOX';
+          // Cek apakah ada format @SQI= dalam pesan
+          const sqiMatch = message.match(/@SQI=\s*(\S+)/);
+          if (sqiMatch) {
+            const imageUrl = sqiMatch[1];
 
-firestore.collection(collection).add({
+            // Update gambar di elemen <img>
+            showQuoteImg.src = imageUrl;
+
+            // Update field SQI di Firestore
+            firestore.collection('QUOTE').doc('docQUOTE').set({
+              SQI: imageUrl
+            }, { merge: true })
+            .then(() => {
+              console.log("Image URL updated in Firestore");
+            })
+            .catch((error) => {
+              console.error("Error updating Firestore:", error);
+            });
+          }
+
+          // Simpan pesan di koleksi yang sesuai
+          const collection = user.uid === "c5AbAGemIcfsphDrXu56I8OZyEo1" ? 'CHATBOX-TOLEP' : 'CHATBOX';
+
+          firestore.collection(collection).add({
             nama: userName,
             text: message,
             timestamp: new Date(),
             userId: user.uid,
           });
 
-          messageInput.value = '';
+          messageInput.value = ''; // Reset input setelah pesan terkirim
         });
 
         // Listener untuk CHATBOX (publik)
@@ -163,42 +183,41 @@ firestore.collection(collection).add({
             minute: '2-digit',
           })
         : 'Zonk';
-const messageElement = document.createElement('div');
+              const messageElement = document.createElement('div');
 
-messageElement.innerHTML = `
-<div id="sender">
-${messageData.nama}
-<div id="timetrex">${timestamp}</div>
-</div>
-<div id="text-chat" style="color: #090;margin-top:-15px;">${messageData.text}</div>
-`;
-  chatBox.appendChild(messageElement);
-});
+              messageElement.innerHTML = `
+                <div id="sender">
+                  ${messageData.nama}
+                  <div id="timetrex">${timestamp}</div>
+                </div>
+                <div id="text-chat" style="color: #090;margin-top:-15px;">${messageData.text}</div>
+              `;
+              chatBox.appendChild(messageElement);
+            });
 
-   chatBox.scrollTop = chatBox.scrollHeight;
-});
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
 
- // CHATBOX-TOLEP (khusus ente)
+        // CHATBOX-TOLEP (khusus ente)
         firestore.collection('CHATBOX-TOLEP')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
-      chatBoxTolep.innerHTML = '';
+            chatBoxTolep.innerHTML = '';
 
-    snapshot.forEach((doc) => {
-  const messageData = doc.data();
-  const messageElement = document.createElement('div');
+            snapshot.forEach((doc) => {
+              const messageData = doc.data();
+              const messageElement = document.createElement('div');
 
-messageElement.innerHTML = `
-<div style="color:#9d0" id="text-chat-tolep">${messageData.text}</div>
-`;
+              messageElement.innerHTML = `
+                <div style="color:#9d0" id="text-chat-tolep">${messageData.text}</div>
+              `;
               chatBoxTolep.appendChild(messageElement);
             });
 
-   chatBoxTolep.scrollTop = chatBoxTolep.scrollHeight;
-});
+            chatBoxTolep.scrollTop = chatBoxTolep.scrollHeight;
+          });
       }
     });
-
   }
 });
 // -- end chatbox
@@ -626,4 +645,12 @@ async function removeAllChats() {
 // Tambahkan event listener untuk tombol remove-chat
 removeChatBtn.addEventListener('click', () => {
   removeAllChats();
+});
+
+// TOMBOL CLOSE QUOTE IMG
+document.getElementById('close-quote').addEventListener('click', function() {
+    var quoteImg = document.querySelector('.showQuoteImg');
+    if (quoteImg.classList.contains('active')) {
+        quoteImg.classList.remove('active');
+    }
 });
