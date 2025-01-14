@@ -593,3 +593,32 @@ document.addEventListener('DOMContentLoaded', () => {
         namaEl.textContent = 'Guest'; // Default kalo belum ada nama
     }
 });
+
+/*! REMOVE CHAT KHUSUS APP ANE */
+const removeChatBtn = document.getElementById('headerTolep');
+
+async function removeAllChats() {
+  try {
+// Hapus di koleksi CHATBOX
+    const chatboxSnapshot = await firestore.collection('CHATBOX').get();
+    chatboxSnapshot.forEach(async (doc) => {
+      await firestore.collection('CHATBOX').doc(doc.id).delete();
+    });
+
+// Hapus di koleksi CHATBOX-TOLEP
+    const chatboxTolepSnapshot = await firestore.collection('CHATBOX-TOLEP').get();
+    chatboxTolepSnapshot.forEach(async (doc) => {
+      await firestore.collection('CHATBOX-TOLEP').doc(doc.id).delete();
+    });
+
+    // Tampilkan pesan sukses
+    showAlert("Chat sudah dihapus.");
+  } catch(error) {
+  showAlert("Ado yang error mang!");
+  }
+}
+
+// Tambahkan event listener untuk tombol remove-chat
+removeChatBtn.addEventListener('click', () => {
+  removeAllChats();
+});
