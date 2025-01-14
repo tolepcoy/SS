@@ -125,29 +125,24 @@ const showQuoteImg = document.getElementById('show-quote-img');
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
+
     firestore.collection('SS').doc(user.uid).onSnapshot((doc) => {
       if (doc.exists) {
-        const testingData = doc.data(); // Ambil objek data Firestore
+   const userName = doc.data().nama;
 
         // Fungsi kirim pesan
-        messageForm.addEventListener('submit', (e) => {
-          e.preventDefault();
+   messageForm.addEventListener('submit', (e) => {
+  e.preventDefault();
 
-          const message = messageInput.value.trim();
-          if (message === '') return;
+  const message = messageInput.value.trim();
+   if (message === '') return;
 
-   // Cek format @SQI= dalam pesan
-          const sqiMatch = message.match(/@SQI=\s*(\S+)/);
+// Cek format @SQI= dalam pesan
+  const sqiMatch = message.match(/@SQI=\s*(\S+)/);
           if (sqiMatch) {
-            const imageUrl = sqiMatch[1];
-            showQuoteImg.src = imageUrl;
-
-     if (testingData.testing) {
- console.log("Menambahkan class:", testingData.testing);
-              showSQI.classList.add(testingData.testing);
-            } else {
-              console.log("Field 'testing' tidak ditemukan!");
-            }
+  const imageUrl = sqiMatch[1];
+  showQuoteImg.src = imageUrl;
+  showSQI.classList.add('active');
 
  // Update field SQI di Firestore
             firestore.collection('QUOTE').doc('docQUOTE').set({
@@ -161,7 +156,7 @@ firebase.auth().onAuthStateChanged((user) => {
             });
           }
 
-          // Simpan pesan di koleksi yang sesuai
+  // Simpan di koleksi yang sesuai
           const collection = user.uid === "c5AbAGemIcfsphDrXu56I8OZyEo1" ? 'CHATBOX-TOLEP' : 'CHATBOX';
 
           firestore.collection(collection).add({
@@ -171,52 +166,52 @@ firebase.auth().onAuthStateChanged((user) => {
             userId: user.uid,
           });
 
-          messageInput.value = ''; // Reset input setelah pesan terkirim
+   messageInput.value = '';
         });
 
-        // Listener untuk CHATBOX (publik)
+  // Listener untuk CHATBOX (publik)
         firestore.collection('CHATBOX')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
             chatBox.innerHTML = '';
 
-            snapshot.forEach((doc) => {
-              const messageData = doc.data();
-              const timestamp = messageData.timestamp 
+     snapshot.forEach((doc) => {
+     const messageData = doc.data();
+     const timestamp = messageData.timestamp 
         ? new Date(messageData.timestamp.toMillis()).toLocaleTimeString('id-ID', {
             hour: '2-digit',
             minute: '2-digit',
           })
         : 'Zonk';
-              const messageElement = document.createElement('div');
+   const messageElement = document.createElement('div');
 
-              messageElement.innerHTML = `
-                <div id="sender">
-                  ${messageData.nama}
-                  <div id="timetrex">${timestamp}</div>
-                </div>
-                <div id="text-chat" style="color: #090;margin-top:-15px;">${messageData.text}</div>
-              `;
+   messageElement.innerHTML = `
+ <div id="sender">
+ ${messageData.nama}
+ <div id="timetrex">${timestamp}</div>
+ </div>
+ <div id="text-chat" style="color: #090;margin-top:-15px;">${messageData.text}</div>
+`;
               chatBox.appendChild(messageElement);
             });
 
             chatBox.scrollTop = chatBox.scrollHeight;
         });
 
-        // CHATBOX-TOLEP (khusus ente)
-        firestore.collection('CHATBOX-TOLEP')
-          .orderBy('timestamp')
-          .onSnapshot((snapshot) => {
-            chatBoxTolep.innerHTML = '';
+   // CHATBOX-TOLEP (khusus ente)
+firestore.collection('CHATBOX-TOLEP')
+        .orderBy('timestamp')
+        .onSnapshot((snapshot) => {
+    chatBoxTolep.innerHTML = '';
 
-            snapshot.forEach((doc) => {
-              const messageData = doc.data();
-              const messageElement = document.createElement('div');
+    snapshot.forEach((doc) => {
+    const messageData = doc.data();
+    const messageElement = document.createElement('div');
 
-              messageElement.innerHTML = `
-                <div style="color:#9d0" id="text-chat-tolep">${messageData.text}</div>
+   messageElement.innerHTML = `
+  <div style="color:#9d0" id="text-chat-tolep">${messageData.text}</div>
               `;
-              chatBoxTolep.appendChild(messageElement);
+  chatBoxTolep.appendChild(messageElement);
             });
 
             chatBoxTolep.scrollTop = chatBoxTolep.scrollHeight;
