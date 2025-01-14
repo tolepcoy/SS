@@ -321,6 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
 //TERMINAL
 const terminal = document.getElementById("terminal");
 const wow = document.getElementById("wow");
+const meong = document.getElementById("meong");
 const blinkJugo = document.getElementById("blink-jugo");
 
 const commands = [
@@ -418,7 +419,6 @@ function runCommands() {
             typeEffect(commands[i++], nextCommand);
         } else {
             terminal.style.display = "none";
-            blinkJugo.style.animation = 'none';
             terminal.style.pointerEvents = "none";
         }
     }
@@ -429,6 +429,7 @@ wow.addEventListener("click", () => {
     if (!isCommandRunning) {
       wow.style.display = 'none';
       wow.style.pointerEvents = 'none';
+      meong.style.display = "none";
       blinkJugo.style.animation = 'none';
       terminal.style.background = 'black';
         isCommandRunning = true; 
