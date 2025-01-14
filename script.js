@@ -58,7 +58,32 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 // -- end inisialisasi firebase
-  
+
+// ADUH
+document.addEventListener("DOMContentLoaded", function () {
+
+const wowAh = document.getElementById("wow");
+const loadingParent = document.getElementById('loading');
+const loadingCircle = document.getElementById('loading-circle');
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+  console.log("User sudah login:", user.email);
+wowAh.style.pointerEvents = 'auto';
+loadingParent.style.display = 'none';
+loadingCircle.style.display = 'none';
+loadingCircle.style.animation = 'none';
+      } else {
+  console.log("User belum login, mengarahkan ke login-form.html...");
+wowAh.style.pointerEvents = 'none';
+loadingParent.style.display = 'flex';
+loadingCircle.style.display = 'block';
+  window.location.href = "https://tolepcoy.github.io/SS/login-form.html";
+      }
+    });
+  });
+// ADUH END
+
 // CACHE
 firebase.firestore().enablePersistence()
   .catch(function(err) {
@@ -94,20 +119,12 @@ const messageForm = document.getElementById('messageForm');
 const messageInput = document.getElementById('messageInput');
 const chatBox = document.getElementById('chatBox');
 const chatBoxTolep = document.getElementById('chatbox-tolep');
-/*
-const blink = document.getElementById('blink');
-const lookBtn = document.getElementById('look');
-*/
 const sendButton = document.getElementById('sendButton');
 
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-/*    messageForm.style.visibility = 'visible';
-    messageForm.style.pointerEvents = 'auto';
-    sendButton.disabled = false;
-    lookBtn.disabled = false;
-*/
+
     firestore.collection('SS').doc(user.uid).onSnapshot((doc) => {
       if (doc.exists) {
         const userName = doc.data().nama;
@@ -183,30 +200,6 @@ messageElement.innerHTML = `
     });
 
   }
-/* else {
-    // Kondisi user belum login
-    messageForm.style.visibility = 'hidden';
-    messageForm.style.pointerEvents = 'none';
-    sendButton.disabled = true;
-    lookBtn.disabled = false;
-    chatBox.innerHTML = `
-      <div id="beforeChatLogin" style="text-align:center;font-weight:bold;">
-        <h5 style="color:#f55;">Sesi aktif Ente sudah expired<br>
-atau Ente belum login!<br>
-Silahkan login kembali</h5>
-        <button id="loginChat" style="color:#0b0">
-          <a href="https://tolepcoy.github.io/SS/login-form.html">Login</a>
-        </button>
-      </div>
-    `;
-    chatBoxTolep.innerHTML = `
-      <span style="color:#f55;">Tolep sedang Offline!</span>
-    `;
-    blink.innerHTML = `
-      <span style="color:#f55;vertical-align: -1px;font-size:10px;">Offline</span>
-    `;
-  }
-*/
 });
 // -- end chatbox
 
@@ -328,6 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
 //TERMINAL
 const terminal = document.getElementById("terminal");
 const wow = document.getElementById("wow");
+const blinkJugo = document.getElementById("blink-jugo");
 
 const commands = [
             { text: "$ Load Tolep server ...", dots: 3, delay: 2, isGold: true },
@@ -424,6 +418,7 @@ function runCommands() {
             typeEffect(commands[i++], nextCommand);
         } else {
             terminal.style.display = "none";
+            blinkJugo.style.animation = 'none';
             terminal.style.pointerEvents = "none";
         }
     }
@@ -434,6 +429,7 @@ wow.addEventListener("click", () => {
     if (!isCommandRunning) {
       wow.style.display = 'none';
       wow.style.pointerEvents = 'none';
+      blinkJugo.style.animation = 'none';
       terminal.style.background = 'black';
         isCommandRunning = true; 
         runCommands(); 
@@ -596,31 +592,4 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         namaEl.textContent = 'Guest'; // Default kalo belum ada nama
     }
-});
-
-/*! REMOVE CHAT KHUSUS APP ANE */
-const removeChatBtn = document.getElementById('headerTolep');
-
-async function removeAllChats() {
-  try {
-// Hapus di koleksi CHATBOX
-    const chatboxSnapshot = await firestore.collection('CHATBOX').get();
-    chatboxSnapshot.forEach(async (doc) => {
-      await firestore.collection('CHATBOX').doc(doc.id).delete();
-    });
-
-// Hapus di koleksi CHATBOX-TOLEP
-    const chatboxTolepSnapshot = await firestore.collection('CHATBOX-TOLEP').get();
-    chatboxTolepSnapshot.forEach(async (doc) => {
-      await firestore.collection('CHATBOX-TOLEP').doc(doc.id).delete();
-    });
-
-    // Tampilkan pesan sukses
-    showAlert("Chat sudah dihapus.");
-  }
-}
-
-// Tambahkan event listener untuk tombol remove-chat
-removeChatBtn.addEventListener('click', () => {
-  removeAllChats();
 });
