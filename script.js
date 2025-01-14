@@ -120,7 +120,8 @@ const messageInput = document.getElementById('messageInput');
 const chatBox = document.getElementById('chatBox');
 const chatBoxTolep = document.getElementById('chatbox-tolep');
 const sendButton = document.getElementById('sendButton');
-const showQuoteImg = document.getElementById('show-quote-img'); // Elemen gambar
+const showSQI = document.querySelector('showQuoteImg');
+const showQuoteImg = document.getElementById('show-quote-img');
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
@@ -136,15 +137,16 @@ firebase.auth().onAuthStateChanged((user) => {
           const message = messageInput.value.trim();
           if (message === '') return;
 
-          // Cek apakah ada format @SQI= dalam pesan
+// Cek format @SQI= dalam pesan
           const sqiMatch = message.match(/@SQI=\s*(\S+)/);
           if (sqiMatch) {
             const imageUrl = sqiMatch[1];
 
-            // Update gambar di elemen <img>
+ // Update gambar di elemen <img>
             showQuoteImg.src = imageUrl;
+            ShowSQI.classList.add('active');
 
-            // Update field SQI di Firestore
+ // Update field SQI di Firestore
             firestore.collection('QUOTE').doc('docQUOTE').set({
               SQI: imageUrl
             }, { merge: true })
