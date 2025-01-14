@@ -74,8 +74,17 @@ const firestore = firebase.firestore();
       }
     });
   });
-
-// ADUH
+// ADUH END
+  
+// CACHE
+firebase.firestore().enablePersistence()
+  .catch(function(err) {
+    if (err.code == 'failed-precondition') {
+      console.log('Offline caching gagal karena multi-tab.');
+    } else if (err.code == 'unimplemented') {
+      console.log('Offline caching tidak didukung di browser ini.');
+    }
+  });
 
 // SHOW PROF USER NAMA
 firebase.auth().onAuthStateChanged(user => {
@@ -283,7 +292,7 @@ function startOfflineTimer(uid) {
     }).catch((error) => {
       console.error("Error setting status offline:", error);
     });
-  }, 180000); // 3 menit
+  }, 120000); // 2 menit
 }
 
 // DOM Ready
@@ -564,18 +573,21 @@ newNama = sanitizeInput(newNama);
 // sanitasi end
 
             // Simpan ke Firestore
-            try {
-              await userDef.update({
-                nama: newNama,
-                lastNamaUpdate: firebase.firestore.Timestamp.now() // Simpan waktu update terakhir
-              });
+try {
+    await userDef.update({
+        nama: newNama,
+        lastNamaUpdate: firebase.firestore.Timestamp.now()
+    });
 
-  // Kembalikan tampilan awal
-              namaEl.textContent = newNama;
-              editNamaBtn.style.display = 'block';
-              kenoKeluar.style.display = 'block';
-            } catch (error) {
-              showAlert("Gagal nyimpen namo baru, cubo lagi.");
+    // Update localStorage
+    localStorage.setItem('userName', newNama);
+
+    // Kembalikan tampilan awal
+    namaEl.textContent = newNama;
+    editNamaBtn.style.display = 'block';
+    kenoKeluar.style.display = 'block';
+} catch (error) {
+    showAlert("Gagal nyimpen namo baru, cubo lagi.");
             }
           });
         } else {
@@ -592,3 +604,13 @@ newNama = sanitizeInput(newNama);
   });
 });
 // -- end edit nama
+
+// Load nama lokal storage
+document.addEventListener('DOMContentLoaded', () => {
+    const storedName = localStorage.getItem('userName');
+    if (storedName) {
+        namaEl.textContent = storedName;
+    } else {
+        namaEl.textContent = 'Guest'; // Default kalo belum ada nama
+    }
+});

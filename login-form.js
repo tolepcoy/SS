@@ -14,6 +14,16 @@
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
+// CACHE
+firebase.firestore().enablePersistence()
+  .catch(function(err) {
+    if (err.code == 'failed-precondition') {
+      console.log('Offline caching gagal karena multi-tab.');
+    } else if (err.code == 'unimplemented') {
+      console.log('Offline caching tidak didukung di browser ini.');
+    }
+  });
+
 // FUNGSI REGISTER
 const registerButton = document.getElementById('registerButton');
 

@@ -74,6 +74,15 @@
   </div>
 </div>
 
+<script>
+const storedName = localStorage.getItem('userName');
+
+if (storedName) {
+    document.getElementById('nama').textContent = storedName;
+} else {
+    document.getElementById('nama').textContent = 'Guest';
+}
+</script>
 <!-- script inti -->
 <script src="tolepfirebaseapp.js"></script>
 <script src="tolepfirebaseauth.js"></script>
