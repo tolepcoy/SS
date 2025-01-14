@@ -8,6 +8,10 @@
   <link rel="stylesheet" href="font/tolepfonts.css">
 </head>
 <body>
+<div id="loading">
+<div id="loading-circle"></div>
+</div>
+
 <div class="blink">Tolep server<span id="blink">_</span>
 </div>
 <div class="terminal" id="terminal">
@@ -74,6 +78,32 @@
   </div>
 </div>
 
+<script>
+// ADUH
+document.addEventListener("DOMContentLoaded", function () {
+
+const wowAh = document.getElementById("wow");
+const loadingParent = document.getElementById('loading');
+const loadingCircle = document.getElementById('loading-circle');
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+  console.log("User sudah login:", user.email);
+wowAh.style.pointerEvents = 'auto';
+loadingParent.style.display = 'none';
+loadingCircle.style.display = 'none';
+loadingCircle.style.animation = 'none';
+      } else {
+  console.log("User belum login, mengarahkan ke login-form.html...");
+wowAh.style.pointerEvents = 'none';
+loadingParent.style.display = 'flex';
+loadingCircle.style.display = 'block';
+  window.location.href = "https://tolepcoy.github.io/SS/login-form.html";
+      }
+    });
+  });
+// ADUH END
+</script>
 <script>
 const storedName = localStorage.getItem('userName');
 
