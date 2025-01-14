@@ -120,7 +120,7 @@ const messageInput = document.getElementById('messageInput');
 const chatBox = document.getElementById('chatBox');
 const chatBoxTolep = document.getElementById('chatbox-tolep');
 const sendButton = document.getElementById('sendButton');
-const showSQI = document.querySelector('showQuoteImg');
+const showSQI = document.querySelector('.showQuoteImg');
 const showQuoteImg = document.getElementById('show-quote-img');
 
 firebase.auth().onAuthStateChanged((user) => {
@@ -144,7 +144,9 @@ firebase.auth().onAuthStateChanged((user) => {
 
  // Update gambar di elemen <img>
             showQuoteImg.src = imageUrl;
-            ShowSQI.classList.add('active');
+ 
+ // tambahkan class active
+            showSQI.classList.add('active');
 
  // Update field SQI di Firestore
             firestore.collection('QUOTE').doc('docQUOTE').set({
