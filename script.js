@@ -129,6 +129,7 @@ firebase.auth().onAuthStateChanged((user) => {
     firestore.collection('SS').doc(user.uid).onSnapshot((doc) => {
       if (doc.exists) {
         const userName = doc.data().nama;
+        const testingData = doc.data().testing;
 
         // Fungsi kirim pesan
         messageForm.addEventListener('submit', (e) => {
@@ -146,7 +147,7 @@ firebase.auth().onAuthStateChanged((user) => {
             showQuoteImg.src = imageUrl;
  
  // tambahkan class active
-            showSQI.classList.add('active');
+            showSQI.classList.add('${testingData.testing}');
 
  // Update field SQI di Firestore
             firestore.collection('QUOTE').doc('docQUOTE').set({
