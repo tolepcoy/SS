@@ -5,7 +5,7 @@
     alertBox.innerHTML = `
       <div class="alert-box">
         <span class="alert-message">${message}</span>
-        <button class="alert-ok">OK</button>
+        <button class="alert-ok">Iyo</button>
       </div>
     `;
 
@@ -62,7 +62,7 @@ window.onload = function () {
 
           if (userData.disabled) {
             // Jika akun disabled
-            showAlert('Akun Ente belum aktif. Silakan tunggu persetujuan admin.');
+            showAlert('Akun Ente belum aktif, nunggu diaktifke Tolep dulu');
             firebase.auth().signOut().then(() => {
               loadingParent.style.display = 'none';
               loadingCircle.style.display = 'none';
@@ -77,7 +77,7 @@ window.onload = function () {
             window.location.href = 'https://tolepcoy.github.io/SS/index.html';
           }
         } else {
-          showAlert('Data Ente tidak ditemukan. Silakan hubungi admin.');
+          showAlert('Data Ente idak katek. Hubungi Tolep!.');
           firebase.auth().signOut().then(() => {
             loadingParent.style.display = 'none';
             loadingCircle.style.display = 'none';
@@ -90,7 +90,7 @@ window.onload = function () {
         }
       }).catch((error) => {
         console.error('Error mengambil data user:', error);
-        showAlert('Terjadi kesalahan saat memeriksa akun. Silakan coba lagi.');
+        showAlert('Erroh nah cubo lagi.');
       });
     } else {
       // Jika user belum login
@@ -131,7 +131,7 @@ registerButton.addEventListener('click', () => {
         // Simpan data ke koleksi SS
         const userSSRef = firestore.collection('SS').doc(userRegister.uid);
         userSSRef.set({
-          nama: 'User Baru',
+          nama: '<span style="color:#bbb;">User Baru</span>',
           avatar: 'icon/default_avatar.png',
           LVL: 'Lv. ',
           level: 1,
@@ -160,11 +160,11 @@ registerButton.addEventListener('click', () => {
           email: userRegister.email,
           verimail: 'Verifikasi Email',
         }).then(() => {
-          showAlert('Registrasi berhasil! Menunggu persetujuan Tolep Coy');
+          showAlert('Registrasi berhasil! Nunggu disetujui Tolep dulu');
           console.log('User privasi berhasil disimpan ke koleksi PRIVASI.');
         }).catch((error) => {
           console.error('Error saving privasi data to Firestore:', error);
-          showAlert('Gagal menyimpan data privasi!');
+          showAlert('Gagal ngirim data!');
         });
       })
       .catch((error) => {
@@ -210,14 +210,14 @@ showAlertZ('Akun Ente belum aktif, nunggu diaktifke Tolep Coy dulu.');
 })
           .catch(error => {
             console.error("Error getting user data:", error);
-    showAlert('Terjadi kesalahan saat memeriksa status akun.');
+    showAlert('Error! status akun dak tau!.');
           });
       })
       .catch(error => {
 console.error('Login gagal:', error);
-        showAlert('Login gagal! Periksa email atau password Anda.');
+        showAlert('Login gagal! Perikso email atau password Ente.');
       });
   } else {
-    showAlert('Isi email dan password dulu!');
+    showAlert('Isi email samo password dulu!');
   }
 });

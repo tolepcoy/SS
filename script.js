@@ -5,7 +5,7 @@ function showAlert(message) {
   alertBox2.innerHTML = `
 <div class="alert-box">
 <span class="alert-message">${message}</span>
-<button class="alert-ok">OK</button>
+<button class="alert-ok">Iyo</button>
 </div>`;
     document.body.appendChild(alertBox2);
     alertBox2.style.display = 'flex';
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Jika akun "disabled"
         if (userData.disabled === true) {
-          showAlert('Akun Ente belum aktif, menunggu persetujuan Tolep Coy');
+          showAlert('Akun Ente belum aktif, nunggu disetujui Tolep dulu');
           wowAh.style.pointerEvents = 'none';
           loadingParent.style.display = 'none';
           loadingCircle.style.display = 'none';
