@@ -646,52 +646,55 @@ textareaMerah.addEventListener('blur', () => {
   }
 });
 */
+
 // CHATBOX-CBC
 const chatboxCenterCBC = document.getElementById('chatbox-center');
 const messageInputCBC = document.getElementById('messageInputCBC');
 const messageFormCBC = document.getElementById('messageFormCBC');
-const sendButtonCBC = document.getElementById('sendButtonCBC');
 
-// Menampilkan chat secara realtime
+// Realtime listener untuk CHATBOX-CBC
 firestore.collection('CHATBOX-CBC').orderBy('timestamp')
     .onSnapshot(snapshot => {
-        chatboxCenterCBC.innerHTML = '';
+        chatboxCenterCBC.innerHTML = ''; // Kosongkan chatbox sebelum diisi ulang
         snapshot.forEach(doc => {
             const data = doc.data();
             const messageDiv = document.createElement('div');
             messageDiv.innerHTML = `
-                <div>${data.user}</div>
+                <div><strong>${data.user}</strong></div>
                 <div>${data.message}</div>
             `;
             chatboxCenterCBC.appendChild(messageDiv);
         });
     });
 
-// Menangani pengiriman pesan
+// Kirim pesan
 messageFormCBC.addEventListener('submit', (e) => {
-    e.preventDefault(); // Cegah reload halaman
+    e.preventDefault();
+    const message = messageInputCBC.value.trim();
 
-    const message = messageInputCBC.value;
-    if (message.trim() !== '') {
-        // Ambil user dari koleksi 'SS'
-        const userRef = firestore.collection('SS').doc('userId'); // Ganti 'userId' sesuai dengan user aktif
-        userRef.get().then((doc) => {
+    if (message !== '') {
+        // Ambil data user dari koleksi SS
+        const userRef = firestore.collection('SS').doc('userId'); // Ganti 'userId' dengan ID user yang sesuai
+        userRef.get().then(doc => {
             if (doc.exists) {
                 const userData = doc.data();
-                const userName = userData.nama; // Pastikan field ini benar di Firestore
+                const userName = userData.nama; // Ambil nama user dari koleksi SS
                 
-                // Simpan pesan ke Firestore
+                // Tambahkan chat ke CHATBOX-CBC
                 firestore.collection('CHATBOX-CBC').add({
                     user: userName,
                     message: message,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    messageInputCBC.value = ''; // Kosongkan input
+                }).catch(error => {
+                    console.error('Gagal menyimpan chat:', error);
                 });
-
-                // Kosongkan input setelah pesan terkirim
-                messageInputCBC.value = '';
             } else {
-                console.log('User tidak ditemukan!');
+                console.log('Data user tidak ditemukan di SS!');
             }
+        }).catch(error => {
+            console.error('Error mengambil data user:', error);
         });
     }
 });
