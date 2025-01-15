@@ -692,7 +692,7 @@ firebase.auth().onAuthStateChanged((user) => {
    const messageElement = document.createElement('div');
    messageElement.innerHTML = `
 
-<span class="action">${messageData.message}</span>
+<img src"${messageData.message}" width="100%"/>
 
 `;
    chatBoxCBC.appendChild(messageElement);
