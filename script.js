@@ -58,7 +58,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 // -- end inisialisasi firebase
-
+/*
 // ADUH
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -83,7 +83,7 @@ loadingCircle.style.display = 'block';
     });
   });
 // ADUH END
-
+*/
 // CACHE
 firebase.firestore().enablePersistence()
   .catch(function(err) {
@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-/*
+
 //TERMINAL
 const terminal = document.getElementById("terminal");
 const wow = document.getElementById("wow");
@@ -440,7 +440,7 @@ wow.addEventListener("click", () => {
         runCommands(); 
     }
 });
-*/
+
 // CUSTOM DIALOG LOGOUT
 document.getElementById('keluar').addEventListener('click', () => {
   const dialog = document.getElementById('custom-logout-dialog');
@@ -627,91 +627,69 @@ async function removeAllChats() {
 removeChatBtn.addEventListener('click', () => {
   removeAllChats();
 });
-/*
+
 // TOMBOL CLOSE Chatbox-Center
 document.getElementById('close-chatbox-container-btn').addEventListener('click', function() {
-document.getElementById('chatbox-center-container').classList.add('closeCBC');
+document.getElementById('chatbox-center-container').classList.add('active');
 });
-*/
 
-// CHATBOX MID
-const messageFormCBC = document.getElementById('messageForm');
-const messageInputCBC = document.getElementById('messageInput');
-const chatBoxCBC = document.getElementById('chatbox-mid-show');
+// CLEAR TEXTAREA ON TOUCH MERAH
+const textareaMerah = document.querySelector('#messageInputCBC');
 
-// Auth listener
-firebase.auth().onAuthStateChanged(async (user) => {
-  if (user) {
-    try {
-      const userDocCBC = await firebase.firestore().collection('SS').doc(user.uid).get();
-      if (userDocCBC.exists) {
-        const userNameCBC = userDocCBC.data().nama;
+textareaMerah.addEventListener('focus', () => {
+  textareaMerah.setAttribute('placeholder', '');
+});
 
-// Event listener untuk mengirim pesan
-        messageFormCBC.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const textCBC = messageInputCBC.value.trim();
-          if (textCBC === '') return;
-
-   // Validasi dengan regex +cbc
-          const regex = /^\+cbc(.+)/;
-          const match = textCBC.match(regex);
-
-          if (match) {
-            const cleanText = match[1].trim();
-            const messageDataCBC = {
-              pesen: cleanText,
-              nama: userNameCBC,
-              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-              userId: user.uid,
-            };
-
-// Simpan pesan ke koleksi CHATBOX-CBC
-            await firebase.firestore().collection('CHATBOX-CBC').add(messageDataCBC);
-  messageInputCBC.value = '';
-
-          } else {
-            showAlert('Pesen dak dikirim!');
-          }
-        });
-
-// Ambil data dari koleksi CHATBOX-CBC
-        firebase.firestore().collection('CHATBOX-CBC')
-          .orderBy('timestamp')
-          .onSnapshot((snapshot) => {
-            snapshot.docChanges().forEach((change) => {
-   if (change.type === 'added') {
-  const messageCBC = change.doc.data();
-                displayMessageCBC(messageCBC.pesen, messageCBC.nama);
-              }
-            });
-          });
-
-      } else {
-        showAlert('Data user dak katek di koleksi SS.');
-      }
-    } catch (error) {
-      console.error('Error ngembek data user:', error);
-      showAlert('Error mang, cubo lagi nanti.');
-    }
+textareaMerah.addEventListener('blur', () => {
+  if (textareaMerah.value === '') {
+    textareaMerah.setAttribute('placeholder', 'Isi...');
   }
 });
 
-// Fungsi untuk menampilkan pesan
-function displayMessageCBC(pesen, user) {
-  const messageElementCBC = document.createElement('div');
-  messageElementCBC.innerHTML = `
-<div id="chatbox-center-container">
-    <div id="chatbox-center-wrapper">
-    <div id="chatbox-center">
-${pesen}
-    </div>
-    </div>
-  <button id="close-chatbox-container-btn">x</button>
-     </div>
-`;
+// CHATBOX-CBC
+const chatboxCenterCBC = document.getElementById('chatbox-center');
+const messageInputCBC = document.getElementById('messageInputCBC');
+const messageFormCBC = document.getElementById('messageFormCBC');
+const sendButtonCBC = document.getElementById('sendButtonCBC');
 
-  chatBoxCBC.appendChild(messageElementCBC);
-  chatBoxCBC.scrollTop = chatBoxCBC.scrollHeight;
-}
-// end chatbox center
+firestore.collection('CHATBOX-CBC').orderBy('timestamp')
+    .onSnapshot(snapshot => {
+    chatboxCenterCBC.innerHTML = '';
+        snapshot.forEach(doc => {
+    const data = doc.data();
+    const messageDiv = document.createElement('div');
+    messageDiv.innerHTML = `
+<div>${data.user}</div>
+<div>${data.message}</div>
+`;
+    chatboxCenterCBC.appendChild(messageDiv);
+        });
+    });
+
+messageFormCBC.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const message = messageInputCBC.value;
+    if (message.trim() !== '') {
+
+        const userRef = firestore.collection('SS').doc('userId');
+        userRef.get().then((doc) => {
+            if (doc.exists) {
+  const userData = doc.data();
+  const userName = userData.nama;
+                
+ // Menyimpan pesan di Firestore
+   fitestore.collection('CHATBOX-CBC').add({
+   user: userName,
+   message: message,
+   timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                
+  messageInputCBC.value = '';
+      } else {
+console.log('User tidak ditemukan!');
+            }
+        });
+    }
+});
