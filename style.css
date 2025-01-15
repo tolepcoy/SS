@@ -628,14 +628,9 @@ color: #f44;
   text-align: center;
   color: #0F0;
   font-weight: bold;
-  display: block;
 }
 
 #chatbox-center::-webkit-scrollbar {
-  display: none;
-}
-
-#chatbox-center.action {
   display: none;
 }
 

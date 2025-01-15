@@ -634,11 +634,6 @@ removeChatBtn.addEventListener('click', () => {
   removeAllChats();
 });
 
-// TOMBOL opacity Chatbox-Center
-document.getElementById('chatbox-center').addEventListener('click', function() {
-    this.classList.add('action');
-});
-
 // CLEAR TEXTAREA ON TOUCH MERAH
 const textareaMerah = document.querySelector('#messageInputCBC');
 
@@ -657,60 +652,90 @@ const messageFormCBC = document.getElementById('messageFormCBC');
 const messageInputCBC = document.getElementById('messageInputCBC');
 const chatBoxCBC = document.getElementById('chatbox-center');
 
+// Regex Match
+const regexPatterns = [
+  { pattern: /@bk\b/, replace: '<img src="gambar/besakkelakar.png">' },
+  { pattern: /@rx\b/, replace: '<img src="gambar/rx.jpg">' },
+];
+
 // Firebase Auth Listener
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    // Query ke koleksi SS berdasarkan UID
+ // Query koleksi SS berdasarkan UID
     firestore.collection('SS').doc(user.uid).onSnapshot((doc) => {
       if (doc.exists) {
-        const userName = doc.data().nama;
+   const userName = doc.data().nama;
 
         // Fungsi kirim pesan
         messageFormCBC.addEventListener('submit', (e) => {
           e.preventDefault();
-          const message = messageInputCBC.value.trim();
+          let message = messageInputCBC.value.trim();
           if (message === '') return;
 
- // Tambahkan pesan ke CHATBOX-CBC
-          firestore.collection('CHATBOX-CBC').add({
-            user: userName,
-            message: message,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            userId: user.uid,
+          // Cek pesan dengan regex
+          let validMessage = false;
+          regexPatterns.forEach((regex) => {
+            if (regex.pattern.test(message)) {
+              message = message.replace(regex.pattern, regex.replace); // Ganti sesuai regex
+              validMessage = true;
+            }
           });
 
-          messageInputCBC.value = '';
+          if (validMessage) {
+    // Tambahkan pesan ke CHATBOX-CBC
+            firestore.collection('CHATBOX-CBC').add({
+              user: userName,
+              message: message,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+              userId: user.uid,
+            });
+
+       messageInputCBC.value = '';
+          } else {
+   showAlert('Dak pacak!');
+          }
         });
 
    // Listener untuk CHATBOX-CBC
-  firestore.collection('CHATBOX-CBC')
+ firestore.collection('CHATBOX-CBC')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
-       chatBoxCBC.innerHTML = '';
-     snapshot.forEach((doc) => {
+         chatBoxCBC.innerHTML = '';
+    snapshot.forEach((doc) => {
    const messageData = doc.data();
-   const timestamp = messageData.timestamp
- ? new Date(messageData.timestamp.toMillis()).toLocaleTimeString('id-ID', {
-      hour: '2-digit',
-      minute: '2-digit',
- })
-          : 'Zonk';
-   const messageElement = document.createElement('div');
-   messageElement.innerHTML = `
-
+              const timestamp = messageData.timestamp
+                ? new Date(messageData.timestamp.toMillis()).toLocaleTimeString('id-ID', {
+        hour: '2-digit',
+           minute: '2-digit',
+         })
+       : 'Zonk';
+              
+      // Buat elemen pesan
+              const messageElement = document.createElement('div');
+  messageElement.innerHTML = `
+                
 ${messageData.message}
+<span style="display:none">${timestamp}</span>
 
 `;
-   chatBoxCBC.appendChild(messageElement);
-});
+              chatBoxCBC.appendChild(messageElement);
 
- chatBoxCBC.scrollTop = chatBoxCBC.scrollHeight;
+  // Hapus pesan setelah 5 detik
+              const messageTimestamp = messageData.timestamp ? messageData.timestamp.toMillis() : 0;
+              const currentTime = new Date().getTime();
+              if (currentTime - messageTimestamp > 5000) { // 5 detik
+                firestore.collection('CHATBOX-CBC').doc(doc.id).delete();
+              }
+            });
+
+// Scroll to bottom otomatis
+            chatBoxCBC.scrollTop = chatBoxCBC.scrollHeight;
           });
-} else {
+      } else {
         console.log('Data user tidak ditemukan di SS!');
       }
     });
-} else {
-  console.log('User belum login!');
+  } else {
+    console.log('User belum login!');
   }
 });
