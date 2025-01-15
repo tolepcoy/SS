@@ -703,7 +703,7 @@ firebase.auth().onAuthStateChanged((user) => {
    const timestamp = messageData.timestamp
                 ? new Date(messageData.timestamp.toMillis()).toLocaleTimeString('id-ID', {
         hour: '2-digit',
-           minute: '2-digit',
+        minute: '2-digit',
          })
        : 'Zonk';
               
@@ -717,12 +717,13 @@ ${messageData.message}
 `;
               chatBoxCBC.appendChild(messageElement);
 
-  // Hapus pesan setelah 5 detik
-    const messageTimestamp = messageData.timestamp ? messageData.timestamp.toMillis() : 0;
-              const currentTime = new Date().getTime();
-              if (currentTime - messageTimestamp > 15000) { // 5 detik
-                firestore.collection('CHATBOX-CBC').doc(doc.id).delete();
-  }
+// Hapus pesan setelah 5 detik
+const messageTimestamp = messageData.timestamp ? messageData.timestamp.toMillis() : 0;
+const currentTime = new Date().getTime();
+const timeDifference = currentTime - messageTimestamp;
+if (timeDifference > 5000) { // 5 detik
+  firestore.collection('CHATBOX-CBC').doc(doc.id).delete();
+}
 });
 
 // Scroll to bottom otomatis
