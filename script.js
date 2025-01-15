@@ -58,7 +58,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 // -- end inisialisasi firebase
-/*
+
 // ADUH
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -83,7 +83,7 @@ loadingCircle.style.display = 'block';
     });
   });
 // ADUH END
-*/
+
 // CACHE
 firebase.firestore().enablePersistence()
   .catch(function(err) {
@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-/*
+
 //TERMINAL
 const terminal = document.getElementById("terminal");
 const wow = document.getElementById("wow");
@@ -440,7 +440,7 @@ wow.addEventListener("click", () => {
         runCommands(); 
     }
 });
-*/
+
 // CUSTOM DIALOG LOGOUT
 document.getElementById('keluar').addEventListener('click', () => {
   const dialog = document.getElementById('custom-logout-dialog');
@@ -627,12 +627,12 @@ async function removeAllChats() {
 removeChatBtn.addEventListener('click', () => {
   removeAllChats();
 });
-
+/*
 // TOMBOL CLOSE Chatbox-Center
 document.getElementById('close-chatbox-container-btn').addEventListener('click', function() {
 document.getElementById('chatbox-center-container').classList.add('closeCBC');
 });
-
+*/
 // CHATBOX MID
 const messageFormCBC = document.getElementById('messageForm');
 const messageInputCBC = document.getElementById('messageInput');
