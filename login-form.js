@@ -147,7 +147,7 @@ loginButton.addEventListener('click', () => {
         const user = userCredential.user;
         console.log('Login berhasil:', user);
 
-        // Cek status disabled dari koleksi PRIVASI
+  // Cek status disabled di koleksi PRIVASI
         const userPrivasiRef = firestore.collection('PRIVASI').doc(user.uid);
         userPrivasiRef.get()
           .then(doc => {
@@ -155,10 +155,10 @@ loginButton.addEventListener('click', () => {
               const userData = doc.data();
               if (userData.disabled && userData.disabled === true) {
 
-                showAlertZ('Akun Anda belum aktif, tidak dapat login.');
-                firebase.auth().signOut();
-              } else {
-                showAlertZ('Login berhasil');
+showAlertZ('Akun Anda belum aktif, tidak dapat login.');
+   firebase.auth().signOut();
+     } else {
+  showAlertZ('Login berhasil');
                 window.location.href = "https://tolepcoy.github.io/SS/index.html";
               }
             }

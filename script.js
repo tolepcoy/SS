@@ -1,3 +1,20 @@
+// CUSTOM ALERT
+function showAlert(message) {
+  const alertBox2 = document.createElement('div');
+  alertBox2.classList.add('custom-alert');
+  alertBox2.innerHTML = `
+<div class="alert-box">
+<span class="alert-message">${message}</span>
+<button class="alert-ok">OK</button>
+</div>`;
+    document.body.appendChild(alertBox2);
+    alertBox2.style.display = 'flex';
+    alertBox2.querySelector('.alert-ok').addEventListener('click', () => {
+      alertBox2.style.display = 'none';
+      document.body.removeChild(alertBox2);
+});}
+// END CUSTOM ALERT
+
 // CLEAR TEXTAREA ON TOUCH
 const textarea = document.querySelector('textarea');
 
@@ -58,6 +75,47 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 // -- end inisialisasi firebase
+
+// Firebase Auth Listener Check
+window.onload = function () {
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      const userId = user.uid;
+
+      // Cek koleksi "PRIVASI"
+      firestore.collection('PRIVASI').doc(userId).get().then((doc) => {
+        if (doc.exists) {
+          const userData = doc.data();
+
+          // Jika akun "disabled"
+          if (userData.disabled === true) {
+            showAlert('Akun Ente belum aktif, menunggu persetujuan Tolep Coy');
+            firebase.auth().signOut().then(() => {
+              window.location.href = 'https://tolepcoy.github.io/SS/login-form.html';
+            });
+          } else {
+    // Jika user ID bukan Ane
+            if (userId !== 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
+    // Nonaktifkan elemen tertentu
+              document.getElementById('delCBC').style.pointerEvents = 'none';
+              document.getElementById('headerTolep').style.pointerEvents = 'none';
+              document.getElementById('messageFormCBC').style.display = 'none';
+              document.getElementById('messageInputCBC').style.display = 'none';
+              document.getElementById('sendButtonCBC').style.display = 'none';
+            }
+          }
+        } else {
+          console.log('Dokumen PRIVASI tidak ditemukan untuk user ini.');
+        }
+      }).catch((error) => {
+        console.error('Error membaca data PRIVASI:', error);
+      });
+    } else {
+      console.log('User belum login!');
+      window.location.href = 'https://tolepcoy.github.io/SS/login-form.html';
+    }
+  });
+};
 
 // ADUH
 document.addEventListener("DOMContentLoaded", function () {
@@ -162,7 +220,7 @@ firestore.collection(collection).add({
             hour: '2-digit',
             minute: '2-digit',
           })
-        : 'Zonk';
+        : '';
 const messageElement = document.createElement('div');
 
 messageElement.innerHTML = `
@@ -469,23 +527,6 @@ const namaEl = document.getElementById('nama');
 const editNamaBtn = document.getElementById('edit-nama');
 const kenoKeluar = document.getElementById('keluar');
 
-// CUSTOM ALERT
-function showAlert(message) {
-  const alertBox2 = document.createElement('div');
-  alertBox2.classList.add('custom-alert');
-  alertBox2.innerHTML = `
-<div class="alert-box">
-<span class="alert-message">${message}</span>
-<button class="alert-ok">OK</button>
-</div>`;
-    document.body.appendChild(alertBox2);
-    alertBox2.style.display = 'flex';
-    alertBox2.querySelector('.alert-ok').addEventListener('click', () => {
-      alertBox2.style.display = 'none';
-      document.body.removeChild(alertBox2);
-});}
-// END CUSTOM ALERT
-
 // Fungsi untuk handle klik tombol edit
 editNamaBtn.addEventListener('click', () => {
   editNamaBtn.style.display = 'none';
@@ -634,6 +675,29 @@ removeChatBtn.addEventListener('click', () => {
   removeAllChats();
 });
 
+/*! REMOVE CBC KHUSUS APP ANE 2 */
+const delCBC = document.getElementById('delCBC');
+
+async function removeAllChats2() {
+  try {
+  // Hapus di koleksi CHATBOX-CBC
+    const chatboxCBCdel2 = await firestore.collection('CHATBOX-CBC').get();
+    chatboxCBCdel2.forEach(async (doc) => {
+      await firestore.collection('CHATBOX-CBC').doc(doc.id).delete();
+    });
+
+    // Tampilkan pesan sukses
+    showAlert("Chat la dihapus.");
+  } catch(error) {
+  showAlert("Ado yang error mang!");
+  }
+}
+
+// Tambahkan event listener untuk tombol remove-chat
+delCBC.addEventListener('click', () => {
+  removeAllChats2();
+});
+
 // CLEAR TEXTAREA ON TOUCH MERAH
 const textareaMerah = document.querySelector('#messageInputCBC');
 
@@ -705,26 +769,17 @@ firebase.auth().onAuthStateChanged((user) => {
         hour: '2-digit',
         minute: '2-digit',
          })
-       : 'Zonk';
+       : '';
               
       // Buat elemen pesan
  const messageElement = document.createElement('div');
   messageElement.innerHTML = `
                 
 ${messageData.message}<br>
-${timestamp}
+<span style="color:transparent;font-size:1px;">${timestamp}</span>
 
 `;
               chatBoxCBC.appendChild(messageElement);
-/*
-// Hapus pesan setelah 5 detik
-const messageTimestamp = messageData.timestamp ? messageData.timestamp.toMillis() : 0;
-const currentTime = new Date().getTime();
-const timeDifference = currentTime - messageTimestamp;
-if (timeDifference > 60000) { // 1mnt
-  firestore.collection('CHATBOX-CBC').doc(doc.id).delete();
-}
-*/
 });
 
 // Scroll to bottom otomatis
