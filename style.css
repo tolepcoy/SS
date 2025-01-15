@@ -612,20 +612,23 @@ color: #f44;
   height: 96%;
   border: none;
   border-radius: 7px;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   box-sizing: border-box;
   padding: 2px;
 }
 
 #chatbox-center {
   width: 100%;
+  height: 100%;
   border-radius: 7px;
   border: none;
+  overflow-x: hidden;
   overflow-y: auto;
   text-align: center;
   color: #0F0;
   font-weight: bold;
-  opacity: 1;
+  display: block;
 }
 
 #chatbox-center::-webkit-scrollbar {
@@ -633,7 +636,7 @@ color: #f44;
 }
 
 #chatbox-center.action {
-  opacity: 0;
+  display: none;
 }
 
 #messageFormCBC {

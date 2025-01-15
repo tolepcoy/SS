@@ -686,7 +686,7 @@ firebase.auth().onAuthStateChanged((user) => {
   firestore.collection('CHATBOX-CBC')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
-       chatBoxCBC.innerHTML = ''; // Bersihkan chatbox
+       chatBoxCBC.innerHTML = '';
      snapshot.forEach((doc) => {
    const messageData = doc.data();
    const timestamp = messageData.timestamp
@@ -704,13 +704,13 @@ ${messageData.message}
    chatBoxCBC.appendChild(messageElement);
 });
 
-            chatBoxCBC.scrollTop = chatBoxCBC.scrollHeight;
+ chatBoxCBC.scrollTop = chatBoxCBC.scrollHeight;
           });
-      } else {
+} else {
         console.log('Data user tidak ditemukan di SS!');
       }
     });
-  } else {
-    console.log('User belum login!');
+} else {
+  console.log('User belum login!');
   }
 });
