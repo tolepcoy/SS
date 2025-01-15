@@ -646,13 +646,13 @@ firebase.auth().onAuthStateChanged(async (user) => {
 // Ambil data user di koleksi SS
       const userDoc = await firebase.firestore().collection('SS').doc(user.uid).get();
       if (userDoc.exists) {
-        const userName = userDoc.data().name || 'Anonim';
+        const userName = userDoc.data().nama;
 
 // Ambil data di koleksi CHATBOX-CBC
      firebase.firestore().collection('CHATBOX-CBC')
-   .orderBy('timestamp') // Urutkan berdasarkan waktu
+   .orderBy('timestamp')
    .onSnapshot((snapshot) => {
-   chatBoxCBC.innerHTML = ''; // Reset chatbox
+   chatBoxCBC.innerHTML = '';
      snapshot.forEach((doc) => {
       const message = doc.data();
   displayMessage(message.text, message.user);
