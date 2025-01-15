@@ -716,7 +716,7 @@ ${timestamp}
 
 `;
               chatBoxCBC.appendChild(messageElement);
-
+/*
 // Hapus pesan setelah 5 detik
 const messageTimestamp = messageData.timestamp ? messageData.timestamp.toMillis() : 0;
 const currentTime = new Date().getTime();
@@ -724,6 +724,7 @@ const timeDifference = currentTime - messageTimestamp;
 if (timeDifference > 60000) { // 1mnt
   firestore.collection('CHATBOX-CBC').doc(doc.id).delete();
 }
+*/
 });
 
 // Scroll to bottom otomatis
