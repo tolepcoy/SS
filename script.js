@@ -711,8 +711,8 @@ firebase.auth().onAuthStateChanged((user) => {
  const messageElement = document.createElement('div');
   messageElement.innerHTML = `
                 
-${messageData.message}
-<div style="font-size:0.1px;color:transparent;">${timestamp}</div>
+${messageData.message}<br>
+${timestamp}
 
 `;
               chatBoxCBC.appendChild(messageElement);
