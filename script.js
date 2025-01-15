@@ -615,6 +615,12 @@ async function removeAllChats() {
     chatboxTolepSnapshot.forEach(async (doc) => {
       await firestore.collection('CHATBOX-TOLEP').doc(doc.id).delete();
     });
+    
+    // Hapus di koleksi CHATBOX-CBC
+    const chatboxCBCdel = await firestore.collection('CHATBOX-CBC').get();
+    chatboxCBCdel.forEach(async (doc) => {
+      await firestore.collection('CHATBOX-CBC').doc(doc.id).delete();
+    });
 
     // Tampilkan pesan sukses
     showAlert("Chat sudah dihapus.");

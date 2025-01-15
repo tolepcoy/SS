@@ -612,8 +612,7 @@ color: #f44;
   height: 96%;
   border: none;
   border-radius: 7px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   box-sizing: border-box;
   padding: 2px;
 }
@@ -627,6 +626,10 @@ color: #f44;
   color: #0F0;
   font-weight: bold;
   opacity: 1;
+}
+
+#chatbox-center::-webkit-scrollbar {
+  display: none;
 }
 
 #chatbox-center.action {
