@@ -638,57 +638,55 @@ document.getElementById('chatbox-center-container').classList.add('closeCBC');
 const messageFormCBC = document.getElementById('messageForm');
 const messageInputCBC = document.getElementById('messageInput');
 const chatBoxCBC = document.getElementById('chatbox-mid-show');
-const sendButtonCBC = document.getElementById('sendButton');
 
 // Auth listener
 firebase.auth().onAuthStateChanged(async (user) => {
   if (user) {
     try {
-      // Ambil data user di koleksi SS
-      const userDoc = await firebase.firestore().collection('SS').doc(user.uid).get();
-      if (userDoc.exists) {
-        const userName = userDoc.data().nama;
+      const userDocCBC = await firebase.firestore().collection('SS').doc(user.uid).get();
+      if (userDocCBC.exists) {
+        const userNameCBC = userDocCBC.data().nama;
 
-        // Event listener mengirim pesan
+        // Event listener untuk mengirim pesan
         messageFormCBC.addEventListener('submit', async (e) => {
           e.preventDefault();
-          const text = messageInputCBC.value.trim();
-          if (text === '') return; // Kalau pesan kosong, jangan dikirim
+          const textCBC = messageInputCBC.value.trim();
+          if (textCBC === '') return;
 
-          // Validasi ~REGEX dengan +cbc
+          // Validasi dengan regex ~+cbc
           const regex = /^\+cbc(.+)/;
-          const match = text.match(regex);
+          const match = textCBC.match(regex);
 
           if (match) {
-            const cleanText = match[1].trim(); // Ambil teks setelah +cbc
-
-            const messageData = {
-              text: cleanText,
-              nama: userName,
+            const cleanText = match[1].trim();
+            const messageDataCBC = {
+              pesen: cleanText,
+              nama: userNameCBC,
               timestamp: firebase.firestore.FieldValue.serverTimestamp(),
               userId: user.uid,
             };
 
-            // Simpan ke koleksi CHATBOX-CBC dulu
-            await firebase.firestore().collection('CHATBOX-CBC').add(messageData);
+            // Simpan pesan ke koleksi CHATBOX-CBC
+            await firebase.firestore().collection('CHATBOX-CBC').add(messageDataCBC);
+            messageInputCBC.value = ''; // Reset input setelah kirim pesan
 
-            // Reset input setelah kirim pesan
-            messageInputCBC.value = '';
-
-            // Ambil data terbaru di koleksi CHATBOX-CBC
-            firebase.firestore().collection('CHATBOX-CBC')
-              .orderBy('timestamp')
-              .onSnapshot((snapshot) => {
-                chatBoxCBC.innerHTML = ''; // Clear chatbox sebelum menampilkan pesan baru
-                snapshot.forEach((doc) => {
-                  const message = doc.data();
-                  displayMessage(message.text, message.nama);
-                });
-              });
           } else {
             showAlert('Pesen dak dikirim!');
           }
         });
+
+        // Ambil data dari koleksi CHATBOX-CBC
+        firebase.firestore().collection('CHATBOX-CBC')
+          .orderBy('timestamp')
+          .onSnapshot((snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+              if (change.type === 'added') {
+                const messageCBC = change.doc.data();
+                displayMessageCBC(messageCBC.pesen, messageCBC.nama);
+              }
+            });
+          });
+
       } else {
         showAlert('Data user dak katek di koleksi SS.');
       }
@@ -700,11 +698,11 @@ firebase.auth().onAuthStateChanged(async (user) => {
 });
 
 // Fungsi untuk menampilkan pesan
-function displayMessage(text, user) {
-  const messageElement = document.createElement('div');
-  messageElement.classList.add('message');
-  messageElement.innerHTML = `<strong>${user}:</strong> ${text}`;
-  chatBoxCBC.appendChild(messageElement);
+function displayMessageCBC(pesen, user) {
+  const messageElementCBC = document.createElement('div');
+  messageElementCBC.classList.add('messageCBC');
+  messageElementCBC.innerHTML = `<strong>${user}:</strong> ${pesen}`;
+  chatBoxCBC.appendChild(messageElementCBC);
   chatBoxCBC.scrollTop = chatBoxCBC.scrollHeight;
 }
 // end chatbox center
