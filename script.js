@@ -665,7 +665,7 @@ firebase.auth().onAuthStateChanged(async (user) => {
           const text = messageInputCBC.value.trim();
 
 // Validasi ~REGEX dengan (cbc)
-   const regex = /^cbc(.+)/;
+   const regex = /^\+cbc(.+)/;
    const match = text.match(regex);
 
    if (match) {
