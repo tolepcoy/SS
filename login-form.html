@@ -38,36 +38,5 @@
   <script src="tolepcrypto.js"></script>
   <script src="login-form.js"></script>
  
- <!-- loading circle -->
-<script>
-const loadingParent = document.getElementById('loading');
-const RegChecker = document.getElementById('registerButton');
-const LogChecker = document.getElementById('loginButton');
-const EmChecker = document.getElementById('email');
-const PassChecker = document.getElementById('password');
-const loadingCircle = document.getElementById('loading-circle');
-
-loadingParent.style.display = 'flex';
-loadingCircle.style.display = 'block';
-RegChecker.style.pointerEvents = 'none';
-LogChecker.style.pointerEvents = 'none';
-EmChecker.disabled = true;
-PassChecker.disabled = true;
-
-  // Fungsi cek user login
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      window.location.href = "https://tolepcoy.github.io/SS/index.html";
-    } else {
-loadingParent.style.display = 'none';
-loadingCircle.style.display = 'none';
-loadingCircle.style.animation = 'none';
-  RegChecker.style.pointerEvents = 'auto';
-  LogChecker.style.pointerEvents = 'auto';
-  EmChecker.disabled = false;
-  PassChecker.disabled = false;
-    }
-  });
-</script>
 </body>
 </html>

@@ -1,37 +1,4 @@
-// FIREBASE CONFIGURATION
-    const firebaseConfig = {
-      apiKey: "AIzaSyAxhhXU90GluSwrjaoqxmP23bgfHR18ez4",
-      authDomain: "secretserver-chat.firebaseapp.com",
-      projectId: "secretserver-chat",
-      storageBucket: "secretserver-chat.firebasestorage.app",
-      messagingSenderId: "105772354036",
-      appId: "1:105772354036:web:b3962f9ec0260be47491a1",
-      measurementId: "G-2FY0BDMFWD"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const firestore = firebase.firestore();
-
-// CACHE
-firebase.firestore().enablePersistence()
-  .catch(function(err) {
-    if (err.code == 'failed-precondition') {
-      console.log('Offline caching gagal karena multi-tab.');
-    } else if (err.code == 'unimplemented') {
-      console.log('Offline caching tidak didukung di browser ini.');
-    }
-  });
-
-// FUNGSI REGISTER
-const registerButton = document.getElementById('registerButton');
-
-registerButton.addEventListener('click', () => {
-  const emailRegister = document.getElementById('email').value;
-  const passwordRegister = document.getElementById('password').value;
-
-// CUSTOM ALERT REGISTER
+// CUSTOM ALERT
   function showAlert(message) {
     const alertBox = document.createElement('div');
     alertBox.classList.add('custom-alert');
@@ -50,7 +17,110 @@ registerButton.addEventListener('click', () => {
       document.body.removeChild(alertBox);
     });
   }
-// END ALERT CUSTOM REGISTER
+// END ALERT CUSTOM
+
+// FIREBASE CONFIGURATION
+    const firebaseConfig = {
+      apiKey: "AIzaSyAxhhXU90GluSwrjaoqxmP23bgfHR18ez4",
+      authDomain: "secretserver-chat.firebaseapp.com",
+      projectId: "secretserver-chat",
+      storageBucket: "secretserver-chat.firebasestorage.app",
+      messagingSenderId: "105772354036",
+      appId: "1:105772354036:web:b3962f9ec0260be47491a1",
+      measurementId: "G-2FY0BDMFWD"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const firestore = firebase.firestore();
+
+// Check status login
+const loadingParent = document.getElementById('loading');
+const RegChecker = document.getElementById('registerButton');
+const LogChecker = document.getElementById('loginButton');
+const EmChecker = document.getElementById('email');
+const PassChecker = document.getElementById('password');
+const loadingCircle = document.getElementById('loading-circle');
+
+// Awal loading
+loadingParent.style.display = 'flex';
+loadingCircle.style.display = 'block';
+RegChecker.style.pointerEvents = 'none';
+LogChecker.style.pointerEvents = 'none';
+EmChecker.disabled = true;
+PassChecker.disabled = true;
+
+// Fungsi cek user login
+window.onload = function () {
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      // Cek koleksi PRIVASI untuk user yang login
+      firestore.collection('PRIVASI').doc(user.uid).get().then((doc) => {
+        if (doc.exists) {
+          const userData = doc.data();
+
+          if (userData.disabled) {
+            // Jika akun disabled
+            showAlert('Akun Ente belum aktif. Silakan tunggu persetujuan admin.');
+            firebase.auth().signOut().then(() => {
+              loadingParent.style.display = 'none';
+              loadingCircle.style.display = 'none';
+              loadingCircle.style.animation = 'none';
+              RegChecker.style.pointerEvents = 'auto';
+              LogChecker.style.pointerEvents = 'auto';
+              EmChecker.disabled = false;
+              PassChecker.disabled = false;
+            });
+          } else {
+            // Jika akun aktif
+            window.location.href = 'https://tolepcoy.github.io/SS/index.html';
+          }
+        } else {
+          showAlert('Data Ente tidak ditemukan. Silakan hubungi admin.');
+          firebase.auth().signOut().then(() => {
+            loadingParent.style.display = 'none';
+            loadingCircle.style.display = 'none';
+            loadingCircle.style.animation = 'none';
+            RegChecker.style.pointerEvents = 'auto';
+            LogChecker.style.pointerEvents = 'auto';
+            EmChecker.disabled = false;
+            PassChecker.disabled = false;
+          });
+        }
+      }).catch((error) => {
+        console.error('Error mengambil data user:', error);
+        showAlert('Terjadi kesalahan saat memeriksa akun. Silakan coba lagi.');
+      });
+    } else {
+      // Jika user belum login
+      loadingParent.style.display = 'none';
+      loadingCircle.style.display = 'none';
+      loadingCircle.style.animation = 'none';
+      RegChecker.style.pointerEvents = 'auto';
+      LogChecker.style.pointerEvents = 'auto';
+      EmChecker.disabled = false;
+      PassChecker.disabled = false;
+    }
+  });
+};
+
+// CACHE
+firebase.firestore().enablePersistence()
+  .catch(function(err) {
+    if (err.code == 'failed-precondition') {
+      console.log('Offline caching gagal karena multi-tab.');
+    } else if (err.code == 'unimplemented') {
+      console.log('Offline caching tidak didukung di browser ini.');
+    }
+  });
+
+// FUNGSI REGISTER
+const registerButton = document.getElementById('registerButton');
+
+registerButton.addEventListener('click', () => {
+  const emailRegister = document.getElementById('email').value;
+  const passwordRegister = document.getElementById('password').value;
 
   if (emailRegister && passwordRegister) {
     // Register User
@@ -111,31 +181,6 @@ const loginButton = document.getElementById('loginButton');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 
-// CUSTOM ALERT LOGIN
-function showAlertZ(message) {
-  const alertBoxZ = document.createElement('div');
-  alertBoxZ.classList.add('custom-alert');
-  alertBoxZ.innerHTML = `
-    <div class="alert-box">
-      <span class="alert-message">${message}</span>
-      <button class="alert-ok">OK</button>
-    </div>
-  `;
-
-  // Tambahkan alert ke body
-  document.body.appendChild(alertBoxZ);
-
-  // Menampilkan alert
-  alertBoxZ.style.display = 'flex';
-
-  // Close alert saat tombol OK diklik
-  alertBoxZ.querySelector('.alert-ok').addEventListener('click', () => {
-    alertBoxZ.style.display = 'none';
-    document.body.removeChild(alertBoxZ);
-  });
-}
-// CUSTOM ALERT Z END
-
 // Fungsi untuk login
 loginButton.addEventListener('click', () => {
   const emailLogin = emailInput.value;
@@ -144,35 +189,35 @@ loginButton.addEventListener('click', () => {
   if (emailLogin && passwordLogin) {
     firebase.auth().signInWithEmailAndPassword(emailLogin, passwordLogin)
       .then(userCredential => {
-        const user = userCredential.user;
-        console.log('Login berhasil:', user);
+ const user = userCredential.user;
+ console.log('Login berhasil:', user);
 
   // Cek status disabled di koleksi PRIVASI
         const userPrivasiRef = firestore.collection('PRIVASI').doc(user.uid);
         userPrivasiRef.get()
           .then(doc => {
             if (doc.exists) {
-              const userData = doc.data();
+    const userData = doc.data();
               if (userData.disabled && userData.disabled === true) {
 
-showAlertZ('Akun Anda belum aktif, tidak dapat login.');
+showAlertZ('Akun Ente belum aktif, nunggu diaktifke Tolep Coy dulu.');
    firebase.auth().signOut();
-     } else {
-  showAlertZ('Login berhasil');
-                window.location.href = "https://tolepcoy.github.io/SS/index.html";
-              }
-            }
-          })
+} else {
+  showAlert('Login berhasil');
+  window.location.href = "https://tolepcoy.github.io/SS/index.html";
+   }
+  }
+})
           .catch(error => {
             console.error("Error getting user data:", error);
-            showAlertZ('Terjadi kesalahan saat memeriksa status akun.');
+    showAlert('Terjadi kesalahan saat memeriksa status akun.');
           });
       })
       .catch(error => {
-        console.error('Login gagal:', error);
-        showAlertZ('Login gagal! Periksa email atau password Anda.');
+console.error('Login gagal:', error);
+        showAlert('Login gagal! Periksa email atau password Anda.');
       });
   } else {
-    showAlertZ('Isi email dan password dulu!');
+    showAlert('Isi email dan password dulu!');
   }
 });

@@ -76,71 +76,76 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 // -- end inisialisasi firebase
 
-// Firebase Auth Listener Check
-window.onload = function () {
+// GABUNG DI DOM CEK STATUS AKUN
+document.addEventListener("DOMContentLoaded", function () {
+
+  const wowAh = document.getElementById("wow");
+  const loadingParent = document.getElementById('loading');
+  const loadingCircle = document.getElementById('loading-circle');
+
+  // Fungsi untuk menangani proses logout dan redirect
+  function handleSignOut() {
+    firebase.auth().signOut().then(() => {
+      setTimeout(() => {
+        window.location.href = 'https://tolepcoy.github.io/SS/login-form.html';
+      }, 3000); // 3 detik delay
+    });
+  }
+
+  // Fungsi cek status login
+  function checkLoginStatus(user) {
+    const userId = user.uid;
+    console.log("User sudah login:", user.email);
+
+    // Cek koleksi "PRIVASI"
+    firestore.collection('PRIVASI').doc(userId).get().then((doc) => {
+      if (doc.exists) {
+        const userData = doc.data();
+
+        // Jika akun "disabled"
+        if (userData.disabled === true) {
+          showAlert('Akun Ente belum aktif, menunggu persetujuan Tolep Coy');
+          wowAh.style.pointerEvents = 'none';
+          loadingParent.style.display = 'none';
+          loadingCircle.style.display = 'none';
+          loadingCircle.style.animation = 'none';
+          handleSignOut();
+        } else {
+          // Jika user ID bukan Ane
+          if (userId !== 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
+            // Nonaktifkan elemen tertentu
+            wowAh.style.pointerEvents = 'auto';
+            document.getElementById('delCBC').style.pointerEvents = 'none';
+            document.getElementById('headerTolep').style.pointerEvents = 'none';
+            document.getElementById('messageFormCBC').style.display = 'none';
+            document.getElementById('messageInputCBC').style.display = 'none';
+            document.getElementById('sendButtonCBC').style.display = 'none';
+          }
+        }
+      } else {
+        console.log('Dokumen PRIVASI tidak ditemukan untuk user ini.');
+      }
+    }).catch((error) => {
+      console.error('Error membaca data PRIVASI:', error);
+    });
+  }
+
+  // Cek status login saat window load
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-      const userId = user.uid;
-
-      // Cek koleksi "PRIVASI"
-      firestore.collection('PRIVASI').doc(userId).get().then((doc) => {
-        if (doc.exists) {
-          const userData = doc.data();
-
-          // Jika akun "disabled"
-          if (userData.disabled === true) {
-            showAlert('Akun Ente belum aktif, menunggu persetujuan Tolep Coy');
-            firebase.auth().signOut().then(() => {
-              window.location.href = 'https://tolepcoy.github.io/SS/login-form.html';
-            });
-          } else {
-    // Jika user ID bukan Ane
-            if (userId !== 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
-    // Nonaktifkan elemen tertentu
-              document.getElementById('delCBC').style.pointerEvents = 'none';
-              document.getElementById('headerTolep').style.pointerEvents = 'none';
-              document.getElementById('messageFormCBC').style.display = 'none';
-              document.getElementById('messageInputCBC').style.display = 'none';
-              document.getElementById('sendButtonCBC').style.display = 'none';
-            }
-          }
-        } else {
-          console.log('Dokumen PRIVASI tidak ditemukan untuk user ini.');
-        }
-      }).catch((error) => {
-        console.error('Error membaca data PRIVASI:', error);
-      });
+      checkLoginStatus(user);
     } else {
       console.log('User belum login!');
+      wowAh.style.pointerEvents = 'none';
+      loadingParent.style.display = 'flex';
+      loadingCircle.style.display = 'block';
+      loadingCircle.style.animation = 'spin 1s linear infinite;';
       window.location.href = 'https://tolepcoy.github.io/SS/login-form.html';
     }
   });
-};
 
-// ADUH
-document.addEventListener("DOMContentLoaded", function () {
-
-const wowAh = document.getElementById("wow");
-const loadingParent = document.getElementById('loading');
-const loadingCircle = document.getElementById('loading-circle');
-
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-  console.log("User sudah login:", user.email);
-wowAh.style.pointerEvents = 'auto';
-loadingParent.style.display = 'none';
-loadingCircle.style.display = 'none';
-loadingCircle.style.animation = 'none';
-      } else {
-  console.log("User belum login, mengarahkan ke login-form.html...");
-wowAh.style.pointerEvents = 'none';
-loadingParent.style.display = 'flex';
-loadingCircle.style.display = 'block';
-  window.location.href = "https://tolepcoy.github.io/SS/login-form.html";
-      }
-    });
-  });
-// ADUH END
+});
+// END CEK STATUS AKUN LOGIN
 
 // CACHE
 firebase.firestore().enablePersistence()
