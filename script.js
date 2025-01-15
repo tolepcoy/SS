@@ -58,7 +58,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 // -- end inisialisasi firebase
-/*
+
 // ADUH
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -83,7 +83,7 @@ loadingCircle.style.display = 'block';
     });
   });
 // ADUH END
-*/
+
 // CACHE
 firebase.firestore().enablePersistence()
   .catch(function(err) {
@@ -632,7 +632,7 @@ removeChatBtn.addEventListener('click', () => {
 document.getElementById('close-chatbox-container-btn').addEventListener('click', function() {
 document.getElementById('chatbox-center-container').classList.add('active');
 });
-
+/*
 // CLEAR TEXTAREA ON TOUCH MERAH
 const textareaMerah = document.querySelector('#messageInputCBC');
 
@@ -645,7 +645,7 @@ textareaMerah.addEventListener('blur', () => {
     textareaMerah.setAttribute('placeholder', 'Isi...');
   }
 });
-
+*/
 // CHATBOX-CBC
 const chatboxCenterCBC = document.getElementById('chatbox-center');
 const messageInputCBC = document.getElementById('messageInputCBC');
