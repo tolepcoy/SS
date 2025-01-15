@@ -652,43 +652,45 @@ const messageInputCBC = document.getElementById('messageInputCBC');
 const messageFormCBC = document.getElementById('messageFormCBC');
 const sendButtonCBC = document.getElementById('sendButtonCBC');
 
+// Menampilkan chat secara realtime
 firestore.collection('CHATBOX-CBC').orderBy('timestamp')
     .onSnapshot(snapshot => {
-    chatboxCenterCBC.innerHTML = '';
+        chatboxCenterCBC.innerHTML = '';
         snapshot.forEach(doc => {
-    const data = doc.data();
-    const messageDiv = document.createElement('div');
-    messageDiv.innerHTML = `
-<div>${data.user}</div>
-<div>${data.message}</div>
-`;
-    chatboxCenterCBC.appendChild(messageDiv);
+            const data = doc.data();
+            const messageDiv = document.createElement('div');
+            messageDiv.innerHTML = `
+                <div>${data.user}</div>
+                <div>${data.message}</div>
+            `;
+            chatboxCenterCBC.appendChild(messageDiv);
         });
     });
 
+// Menangani pengiriman pesan
 messageFormCBC.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
+    e.preventDefault(); // Cegah reload halaman
+
     const message = messageInputCBC.value;
     if (message.trim() !== '') {
-
-        const userRef = firestore.collection('SS').doc('userId');
+        // Ambil user dari koleksi 'SS'
+        const userRef = firestore.collection('SS').doc('userId'); // Ganti 'userId' sesuai dengan user aktif
         userRef.get().then((doc) => {
             if (doc.exists) {
-  const userData = doc.data();
-  const userName = userData.nama;
+                const userData = doc.data();
+                const userName = userData.nama; // Pastikan field ini benar di Firestore
                 
- // Menyimpan pesan di Firestore
-   fitestore.collection('CHATBOX-CBC').add({
-   user: userName,
-   message: message,
-   timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                // Simpan pesan ke Firestore
+                firestore.collection('CHATBOX-CBC').add({
+                    user: userName,
+                    message: message,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
-                
-  messageInputCBC.value = '';
-      } else {
-console.log('User tidak ditemukan!');
+                // Kosongkan input setelah pesan terkirim
+                messageInputCBC.value = '';
+            } else {
+                console.log('User tidak ditemukan!');
             }
         });
     }
