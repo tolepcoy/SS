@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-
+/*
 //TERMINAL
 const terminal = document.getElementById("terminal");
 const wow = document.getElementById("wow");
@@ -440,7 +440,7 @@ wow.addEventListener("click", () => {
         runCommands(); 
     }
 });
-
+*/
 // CUSTOM DIALOG LOGOUT
 document.getElementById('keluar').addEventListener('click', () => {
   const dialog = document.getElementById('custom-logout-dialog');
@@ -668,20 +668,20 @@ firebase.auth().onAuthStateChanged(async (user) => {
 
 // Simpan pesan ke koleksi CHATBOX-CBC
             await firebase.firestore().collection('CHATBOX-CBC').add(messageDataCBC);
-  messageInputCBC.value = ''; // Reset input setelah kirim pesan
+  messageInputCBC.value = '';
 
           } else {
             showAlert('Pesen dak dikirim!');
           }
         });
 
-        // Ambil data dari koleksi CHATBOX-CBC
+// Ambil data dari koleksi CHATBOX-CBC
         firebase.firestore().collection('CHATBOX-CBC')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
             snapshot.docChanges().forEach((change) => {
-              if (change.type === 'added') {
-                const messageCBC = change.doc.data();
+   if (change.type === 'added') {
+  const messageCBC = change.doc.data();
                 displayMessageCBC(messageCBC.pesen, messageCBC.nama);
               }
             });

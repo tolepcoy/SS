@@ -604,11 +604,10 @@ color: #f44;
   box-sizing: border-box;
   padding: 0;
   pointer-events: none;
-  z-index: 99;
+  z-index: 999;
 }
 
 #chatbox-mid-show {
-  background: red;
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
