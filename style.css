@@ -608,6 +608,7 @@ color: #f44;
 }
 
 #chatbox-mid-show {
+  background: red;
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;

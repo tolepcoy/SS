@@ -647,13 +647,13 @@ firebase.auth().onAuthStateChanged(async (user) => {
       if (userDocCBC.exists) {
         const userNameCBC = userDocCBC.data().nama;
 
-        // Event listener untuk mengirim pesan
+// Event listener untuk mengirim pesan
         messageFormCBC.addEventListener('submit', async (e) => {
           e.preventDefault();
           const textCBC = messageInputCBC.value.trim();
           if (textCBC === '') return;
 
-          // Validasi dengan regex ~+cbc
+   // Validasi dengan regex +cbc
           const regex = /^\+cbc(.+)/;
           const match = textCBC.match(regex);
 
@@ -666,9 +666,9 @@ firebase.auth().onAuthStateChanged(async (user) => {
               userId: user.uid,
             };
 
-            // Simpan pesan ke koleksi CHATBOX-CBC
+// Simpan pesan ke koleksi CHATBOX-CBC
             await firebase.firestore().collection('CHATBOX-CBC').add(messageDataCBC);
-            messageInputCBC.value = ''; // Reset input setelah kirim pesan
+  messageInputCBC.value = ''; // Reset input setelah kirim pesan
 
           } else {
             showAlert('Pesen dak dikirim!');
@@ -700,8 +700,17 @@ firebase.auth().onAuthStateChanged(async (user) => {
 // Fungsi untuk menampilkan pesan
 function displayMessageCBC(pesen, user) {
   const messageElementCBC = document.createElement('div');
-  messageElementCBC.classList.add('messageCBC');
-  messageElementCBC.innerHTML = `<strong>${user}:</strong> ${pesen}`;
+  messageElementCBC.innerHTML = `
+<div id="chatbox-center-container">
+    <div id="chatbox-center-wrapper">
+    <div id="chatbox-center">
+${pesen}
+    </div>
+    </div>
+  <button id="close-chatbox-container-btn">x</button>
+     </div>
+`;
+
   chatBoxCBC.appendChild(messageElementCBC);
   chatBoxCBC.scrollTop = chatBoxCBC.scrollHeight;
 }
