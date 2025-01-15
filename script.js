@@ -648,53 +648,69 @@ textareaMerah.addEventListener('blur', () => {
 */
 
 // CHATBOX-CBC
-const chatboxCenterCBC = document.getElementById('chatbox-center');
-const messageInputCBC = document.getElementById('messageInputCBC');
+// CHATBOX-CBC
 const messageFormCBC = document.getElementById('messageFormCBC');
+const messageInputCBC = document.getElementById('messageInputCBC');
+const chatBoxCBC = document.getElementById('chatbox-center');
 
-// Realtime listener untuk CHATBOX-CBC
-firestore.collection('CHATBOX-CBC').orderBy('timestamp')
-    .onSnapshot(snapshot => {
-        chatboxCenterCBC.innerHTML = ''; // Kosongkan chatbox sebelum diisi ulang
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            const messageDiv = document.createElement('div');
-            messageDiv.innerHTML = `
-                <div><strong>${data.user}</strong></div>
-                <div>${data.message}</div>
-            `;
-            chatboxCenterCBC.appendChild(messageDiv);
+// Firebase Auth Listener
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    // Query ke koleksi SS berdasarkan UID
+    firestore.collection('SS').doc(user.uid).onSnapshot((doc) => {
+      if (doc.exists) {
+        const userName = doc.data().nama;
+
+        // Fungsi kirim pesan
+        messageFormCBC.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const message = messageInputCBC.value.trim();
+          if (message === '') return;
+
+          // Tambahkan pesan ke CHATBOX-CBC
+          firestore.collection('CHATBOX-CBC').add({
+            user: userName,
+            message: message,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            userId: user.uid,
+          });
+
+          messageInputCBC.value = '';
         });
+
+        // Listener untuk CHATBOX-CBC
+        firestore.collection('CHATBOX-CBC')
+          .orderBy('timestamp')
+          .onSnapshot((snapshot) => {
+            chatBoxCBC.innerHTML = ''; // Bersihkan chatbox
+            snapshot.forEach((doc) => {
+              const messageData = doc.data();
+              const timestamp = messageData.timestamp
+                ? new Date(messageData.timestamp.toMillis()).toLocaleTimeString('id-ID', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })
+                : 'Zonk';
+              const messageElement = document.createElement('div');
+              messageElement.innerHTML = `
+                <div id="sender">
+                  ${messageData.user}
+                  <div id="timetrex">${timestamp}</div>
+                </div>
+                <div id="text-chat" style="color: #090; margin-top: -15px;">
+                  ${messageData.message}
+                </div>
+              `;
+              chatBoxCBC.appendChild(messageElement);
+            });
+
+            chatBoxCBC.scrollTop = chatBoxCBC.scrollHeight;
+          });
+      } else {
+        console.log('Data user tidak ditemukan di SS!');
+      }
     });
-
-// Kirim pesan
-messageFormCBC.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const message = messageInputCBC.value.trim();
-
-    if (message !== '') {
-        // Ambil data user dari koleksi SS
-        const userRef = firestore.collection('SS').doc('userId'); // Ganti 'userId' dengan ID user yang sesuai
-        userRef.get().then(doc => {
-            if (doc.exists) {
-                const userData = doc.data();
-                const userName = userData.nama; // Ambil nama user dari koleksi SS
-                
-                // Tambahkan chat ke CHATBOX-CBC
-                firestore.collection('CHATBOX-CBC').add({
-                    user: userName,
-                    message: message,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    messageInputCBC.value = ''; // Kosongkan input
-                }).catch(error => {
-                    console.error('Gagal menyimpan chat:', error);
-                });
-            } else {
-                console.log('Data user tidak ditemukan di SS!');
-            }
-        }).catch(error => {
-            console.error('Error mengambil data user:', error);
-        });
-    }
+  } else {
+    console.log('User belum login!');
+  }
 });
