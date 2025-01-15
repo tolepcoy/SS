@@ -633,6 +633,7 @@ document.getElementById('close-chatbox-container-btn').addEventListener('click',
 document.getElementById('chatbox-center-container').classList.add('closeCBC');
 });
 */
+
 // CHATBOX MID
 const messageFormCBC = document.getElementById('messageForm');
 const messageInputCBC = document.getElementById('messageInput');
@@ -643,55 +644,59 @@ const sendButtonCBC = document.getElementById('sendButton');
 firebase.auth().onAuthStateChanged(async (user) => {
   if (user) {
     try {
-// Ambil data user di koleksi SS
+      // Ambil data user di koleksi SS
       const userDoc = await firebase.firestore().collection('SS').doc(user.uid).get();
       if (userDoc.exists) {
         const userName = userDoc.data().nama;
 
-// Ambil data di koleksi CHATBOX-CBC
-     firebase.firestore().collection('CHATBOX-CBC')
-   .orderBy('timestamp')
-   .onSnapshot((snapshot) => {
-   chatBoxCBC.innerHTML = '';
-     snapshot.forEach((doc) => {
-      const message = doc.data();
-  displayMessage(message.text, message.user);
-  });
-});
-
-// Event listener mengirim pesan
-  messageFormCBC.addEventListener('submit', async (e) => {
+        // Event listener mengirim pesan
+        messageFormCBC.addEventListener('submit', async (e) => {
           e.preventDefault();
           const text = messageInputCBC.value.trim();
+          if (text === '') return; // Kalau pesan kosong, jangan dikirim
 
-// Validasi ~REGEX dengan (cbc)
-   const regex = /^\+cbc(.+)/;
-   const match = text.match(regex);
+          // Validasi ~REGEX dengan +cbc
+          const regex = /^\+cbc(.+)/;
+          const match = text.match(regex);
 
-   if (match) {
-   const cleanText = match[1].trim(); // Ambil teks setelah (cbc)
+          if (match) {
+            const cleanText = match[1].trim(); // Ambil teks setelah +cbc
 
-   const messageData = {
-         text: cleanText,
-         user: userName,
-         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-};
+            const messageData = {
+              text: cleanText,
+              nama: userName,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+              userId: user.uid,
+            };
 
-// Simpan ke koleksi CHATBOX-CBC
-     await firebase.firestore().collection('CHATBOX-CBC').add(messageData);
-   messageInputCBC.value = ''; // Reset input
-} else {
-   showAlert('Pesen dak dikirim!');
+            // Simpan ke koleksi CHATBOX-CBC dulu
+            await firebase.firestore().collection('CHATBOX-CBC').add(messageData);
+
+            // Reset input setelah kirim pesan
+            messageInputCBC.value = '';
+
+            // Ambil data terbaru di koleksi CHATBOX-CBC
+            firebase.firestore().collection('CHATBOX-CBC')
+              .orderBy('timestamp')
+              .onSnapshot((snapshot) => {
+                chatBoxCBC.innerHTML = ''; // Clear chatbox sebelum menampilkan pesan baru
+                snapshot.forEach((doc) => {
+                  const message = doc.data();
+                  displayMessage(message.text, message.nama);
+                });
+              });
+          } else {
+            showAlert('Pesen dak dikirim!');
+          }
+        });
+      } else {
+        showAlert('Data user dak katek di koleksi SS.');
+      }
+    } catch (error) {
+      console.error('Error ngembek data user:', error);
+      showAlert('Error mang, cubo lagi nanti.');
+    }
   }
- });
-} else {
-  showAlert('Data user dak katek di koleksi SS.');
- }
-} catch (error) {
-console.error('Error ngembek data user:', error);
-  showAlert('Error mang, cubo lagi nanti.');
-  }
- }
 });
 
 // Fungsi untuk menampilkan pesan
