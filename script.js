@@ -703,7 +703,7 @@ firebase.auth().onAuthStateChanged((user) => {
          chatBoxCBC.innerHTML = '';
     snapshot.forEach((doc) => {
    const messageData = doc.data();
-              const timestamp = messageData.timestamp
+   const timestamp = messageData.timestamp
                 ? new Date(messageData.timestamp.toMillis()).toLocaleTimeString('id-ID', {
         hour: '2-digit',
            minute: '2-digit',
@@ -711,22 +711,22 @@ firebase.auth().onAuthStateChanged((user) => {
        : 'Zonk';
               
       // Buat elemen pesan
-              const messageElement = document.createElement('div');
+ const messageElement = document.createElement('div');
   messageElement.innerHTML = `
                 
-${messageData.message}
-<span style="display:none">${timestamp}</span>
+<div>${messageData.message}</div>
+<div style="transform:scale(0);font-size:0.001em;color:transparent;">${timestamp}</div>
 
 `;
               chatBoxCBC.appendChild(messageElement);
 
   // Hapus pesan setelah 5 detik
-              const messageTimestamp = messageData.timestamp ? messageData.timestamp.toMillis() : 0;
+    const messageTimestamp = messageData.timestamp ? messageData.timestamp.toMillis() : 0;
               const currentTime = new Date().getTime();
-              if (currentTime - messageTimestamp > 5000) { // 5 detik
+              if (currentTime - messageTimestamp > 15000) { // 5 detik
                 firestore.collection('CHATBOX-CBC').doc(doc.id).delete();
-              }
-            });
+  }
+});
 
 // Scroll to bottom otomatis
             chatBoxCBC.scrollTop = chatBoxCBC.scrollHeight;
