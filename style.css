@@ -588,49 +588,79 @@ color: #f44;
   100% { transform: rotate(360deg); }
 }
 
-.showQuoteImg {
-  background: #030;
+#chatbox-middle {
   position: fixed;
   width: 250px;
   height: 300px;
-  border: 1px dashed #0F0;
+  border: 1px dashed #F0F;
   border-radius: 7px;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -60%);
   overflow: visible;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  transform: translate(27%, -148%) scale(0.02);
+  padding: 0;
+  pointer-events: none;
   z-index: 99;
-  transition: transform 1s ease;
 }
 
-.showQuoteImg.active {
-  transform: translate(-50%, -60%) scale(1);
+#chatbox-mid-show {
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-.showQuoteImgWrapper {
+#chatbox-center-container {
+  background: #030;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  border: 1px dashed #0F0;
+  border-radius: 7px;
+  top: 0;
+  left: 0;
+  margin: 0;
+  overflow: visible;
+  display: flex;
+  opacity: 1;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  pointer-events: auto;
+  transform: scale(1);
+  transition: transform 1s ease, opacity 2s ease;
+}
+
+#chatbox-center-container.closeCBC {
+  transform: scale(0.02);
+  opacity: 0;
+}
+
+#chatbox-center-wrapper {
   background: #020;
   position: relative;
   width: 95%;
   height: 96%;
   border: 1.5px solid #0F0;
   border-radius: 7px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   box-sizing: border-box;
   padding: 2px;
 }
 
-.showQuoteImgWrapper img,
-#show-quote-img {
+#chatbox-center {
   width: 100%;
   border-radius: 7px;
+  overflow-y: auto;
+  text-align: center;
+  color: #0F0;
+  font-weight: bold;
 }
 
-#close-quote {
+#close-chatbox-container-btn {
   background: #700;
   position: absolute;
   width: 25px;
@@ -641,6 +671,7 @@ color: #f44;
   border: 1px solid #0F0;
   border-radius: 50%;
   cursor: pointer;
+  pointer-events: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -654,7 +685,7 @@ color: #f44;
   -webkit-tap-highlight-color: transparent;
 }
 
-#close-quote:hover {
+#close-chatbox-container-btn:hover {
   background: #0b0;
   color: #F00;
   border: 1.5px solid #F00;

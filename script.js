@@ -58,7 +58,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 // -- end inisialisasi firebase
-
+/*
 // ADUH
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -83,7 +83,7 @@ loadingCircle.style.display = 'block';
     });
   });
 // ADUH END
-
+*/
 // CACHE
 firebase.firestore().enablePersistence()
   .catch(function(err) {
@@ -120,104 +120,85 @@ const messageInput = document.getElementById('messageInput');
 const chatBox = document.getElementById('chatBox');
 const chatBoxTolep = document.getElementById('chatbox-tolep');
 const sendButton = document.getElementById('sendButton');
-const showSQI = document.querySelector('.showQuoteImg');
-const showQuoteImg = document.getElementById('show-quote-img');
+
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
 
     firestore.collection('SS').doc(user.uid).onSnapshot((doc) => {
       if (doc.exists) {
-   const userName = doc.data().nama;
+        const userName = doc.data().nama;
 
         // Fungsi kirim pesan
-   messageForm.addEventListener('submit', (e) => {
-  e.preventDefault();
+        messageForm.addEventListener('submit', (e) => {
+          e.preventDefault();
 
-  const message = messageInput.value.trim();
-   if (message === '') return;
+          const message = messageInput.value.trim();
+          if (message === '') return;
 
-// Cek format @SQI= dalam pesan
-  const sqiMatch = message.match(/@SQI=\s*(\S+)/);
-          if (sqiMatch) {
-  const imageUrl = sqiMatch[1];
-  showQuoteImg.src = imageUrl;
-  showSQI.classList.add('active');
+ // Jika UID cocok dengan ente, simpan di CHATBOX-TOLEP
+    const collection = user.uid === "c5AbAGemIcfsphDrXu56I8OZyEo1" ? 'CHATBOX-TOLEP' : 'CHATBOX';
 
- // Update field SQI di Firestore
-            firestore.collection('QUOTE').doc('docQUOTE').set({
-              SQI: imageUrl
-            }, { merge: true })
-            .then(() => {
-              console.log("Image URL updated in Firestore");
-            })
-            .catch((error) => {
-              console.error("Error updating Firestore:", error);
-            });
-          }
-
-  // Simpan di koleksi yang sesuai
-          const collection = user.uid === "c5AbAGemIcfsphDrXu56I8OZyEo1" ? 'CHATBOX-TOLEP' : 'CHATBOX';
-
-          firestore.collection(collection).add({
+firestore.collection(collection).add({
             nama: userName,
             text: message,
             timestamp: new Date(),
             userId: user.uid,
           });
 
-   messageInput.value = '';
+          messageInput.value = '';
         });
 
-  // Listener untuk CHATBOX (publik)
+ // Listener untuk CHATBOX (publik)
         firestore.collection('CHATBOX')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
             chatBox.innerHTML = '';
 
-     snapshot.forEach((doc) => {
-     const messageData = doc.data();
-     const timestamp = messageData.timestamp 
+            snapshot.forEach((doc) => {
+              const messageData = doc.data();
+              const timestamp = messageData.timestamp 
         ? new Date(messageData.timestamp.toMillis()).toLocaleTimeString('id-ID', {
             hour: '2-digit',
             minute: '2-digit',
           })
         : 'Zonk';
-   const messageElement = document.createElement('div');
+const messageElement = document.createElement('div');
 
-   messageElement.innerHTML = `
- <div id="sender">
- ${messageData.nama}
- <div id="timetrex">${timestamp}</div>
- </div>
- <div id="text-chat" style="color: #090;margin-top:-15px;">${messageData.text}</div>
+messageElement.innerHTML = `
+<div id="sender">
+${messageData.nama}
+<div id="timetrex">${timestamp}</div>
+</div>
+<div id="text-chat" style="color: #090;margin-top:-15px;">${messageData.text}</div>
 `;
-              chatBox.appendChild(messageElement);
-            });
+  chatBox.appendChild(messageElement);
+});
 
-            chatBox.scrollTop = chatBox.scrollHeight;
-        });
+   chatBox.scrollTop = chatBox.scrollHeight;
+});
 
-   // CHATBOX-TOLEP (khusus ente)
-firestore.collection('CHATBOX-TOLEP')
-        .orderBy('timestamp')
-        .onSnapshot((snapshot) => {
-    chatBoxTolep.innerHTML = '';
+ // CHATBOX-TOLEP (khusus ente)
+ firestore.collection('CHATBOX-TOLEP')
+          .orderBy('timestamp')
+          .onSnapshot((snapshot) => {
+      chatBoxTolep.innerHTML = '';
 
     snapshot.forEach((doc) => {
-    const messageData = doc.data();
-    const messageElement = document.createElement('div');
+  const messageData = doc.data();
+  const messageElement = document.createElement('div');
 
-   messageElement.innerHTML = `
-  <div style="color:#9d0" id="text-chat-tolep">${messageData.text}</div>
-              `;
-  chatBoxTolep.appendChild(messageElement);
+messageElement.innerHTML = `
+<div style="color:#9d0" id="text-chat-tolep">${messageData.text}</div>
+`;
+              chatBoxTolep.appendChild(messageElement);
             });
 
-            chatBoxTolep.scrollTop = chatBoxTolep.scrollHeight;
-          });
+   chatBoxTolep.scrollTop = chatBoxTolep.scrollHeight;
+});
       }
     });
+
   }
 });
 // -- end chatbox
@@ -336,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-
+/*
 //TERMINAL
 const terminal = document.getElementById("terminal");
 const wow = document.getElementById("wow");
@@ -459,7 +440,7 @@ wow.addEventListener("click", () => {
         runCommands(); 
     }
 });
-
+*/
 // CUSTOM DIALOG LOGOUT
 document.getElementById('keluar').addEventListener('click', () => {
   const dialog = document.getElementById('custom-logout-dialog');
@@ -647,10 +628,78 @@ removeChatBtn.addEventListener('click', () => {
   removeAllChats();
 });
 
-// TOMBOL CLOSE QUOTE IMG
-document.getElementById('close-quote').addEventListener('click', function() {
-    var quoteImg = document.querySelector('.showQuoteImg');
-    if (quoteImg.classList.contains('active')) {
-        quoteImg.classList.remove('active');
-    }
+// TOMBOL CLOSE Chatbox-Center
+document.getElementById('close-chatbox-container-btn').addEventListener('click', function() {
+document.getElementById('chatbox-center-container').classList.add('closeCBC');
 });
+
+// CHATBOX MID
+const messageFormCBC = document.getElementById('messageForm');
+const messageInputCBC = document.getElementById('messageInput');
+const chatBoxCBC = document.getElementById('chatbox-mid-show');
+const sendButtonCBC = document.getElementById('sendButton');
+
+// Auth listener
+firebase.auth().onAuthStateChanged(async (user) => {
+  if (user) {
+    try {
+// Ambil data user di koleksi SS
+      const userDoc = await firebase.firestore().collection('SS').doc(user.uid).get();
+      if (userDoc.exists) {
+        const userName = userDoc.data().name || 'Anonim';
+
+// Ambil data di koleksi CHATBOX-CBC
+     firebase.firestore().collection('CHATBOX-CBC')
+   .orderBy('timestamp') // Urutkan berdasarkan waktu
+   .onSnapshot((snapshot) => {
+   chatBoxCBC.innerHTML = ''; // Reset chatbox
+     snapshot.forEach((doc) => {
+      const message = doc.data();
+  displayMessage(message.text, message.user);
+  });
+});
+
+// Event listener mengirim pesan
+  messageFormCBC.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const text = messageInputCBC.value.trim();
+
+// Validasi ~REGEX dengan (cbc)
+   const regex = /^cbc(.+)/;
+   const match = text.match(regex);
+
+   if (match) {
+   const cleanText = match[1].trim(); // Ambil teks setelah (cbc)
+
+   const messageData = {
+         text: cleanText,
+         user: userName,
+         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+};
+
+// Simpan ke koleksi CHATBOX-CBC
+     await firebase.firestore().collection('CHATBOX-CBC').add(messageData);
+   messageInputCBC.value = ''; // Reset input
+} else {
+   showAlert('Pesen dak dikirim!');
+  }
+ });
+} else {
+  showAlert('Data user dak katek di koleksi SS.');
+ }
+} catch (error) {
+console.error('Error ngembek data user:', error);
+  showAlert('Error mang, cubo lagi nanti.');
+  }
+ }
+});
+
+// Fungsi untuk menampilkan pesan
+function displayMessage(text, user) {
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('message');
+  messageElement.innerHTML = `<strong>${user}:</strong> ${text}`;
+  chatBoxCBC.appendChild(messageElement);
+  chatBoxCBC.scrollTop = chatBoxCBC.scrollHeight;
+}
+// end chatbox center
