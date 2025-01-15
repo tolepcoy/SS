@@ -721,7 +721,7 @@ ${timestamp}
 const messageTimestamp = messageData.timestamp ? messageData.timestamp.toMillis() : 0;
 const currentTime = new Date().getTime();
 const timeDifference = currentTime - messageTimestamp;
-if (timeDifference > 5000) { // 5 detik
+if (timeDifference > 60000) { // 1mnt
   firestore.collection('CHATBOX-CBC').doc(doc.id).delete();
 }
 });
