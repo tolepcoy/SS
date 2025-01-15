@@ -655,7 +655,7 @@ const chatBoxCBC = document.getElementById('chatbox-center');
 // Regex Match
 const regexPatterns = [
   { pattern: /@bk\b/, replace: '<img src="gambar/besakkelakar.png">' },
-  { pattern: /@rx\b/, replace: '<img src="gambar/rx.jpg">' },
+  { pattern: /@rx\b/, replace: '<img src="admin/rx.jpg">' },
 ];
 
 // Firebase Auth Listener
@@ -689,10 +689,7 @@ firebase.auth().onAuthStateChanged((user) => {
               timestamp: firebase.firestore.FieldValue.serverTimestamp(),
               userId: user.uid,
             });
-
        messageInputCBC.value = '';
-          } else {
-   showAlert('Dak pacak!');
           }
         });
 
