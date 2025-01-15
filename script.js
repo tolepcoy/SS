@@ -630,9 +630,9 @@ removeChatBtn.addEventListener('click', () => {
 
 // TOMBOL CLOSE Chatbox-Center
 document.getElementById('close-chatbox-container-btn').addEventListener('click', function() {
-document.getElementById('chatbox-center-container').classList.add('active');
+document.getElementById('chatbox-center-container').classList.remove('action');
 });
-/*
+
 // CLEAR TEXTAREA ON TOUCH MERAH
 const textareaMerah = document.querySelector('#messageInputCBC');
 
@@ -645,13 +645,11 @@ textareaMerah.addEventListener('blur', () => {
     textareaMerah.setAttribute('placeholder', 'Isi...');
   }
 });
-*/
 
-// CHATBOX-CBC
 // CHATBOX-CBC
 const messageFormCBC = document.getElementById('messageFormCBC');
 const messageInputCBC = document.getElementById('messageInputCBC');
-const chatBoxCBC = document.getElementById('chatbox-center');
+const chatBoxCBC = document.getElementById('CBC');
 
 // Firebase Auth Listener
 firebase.auth().onAuthStateChanged((user) => {
@@ -667,7 +665,7 @@ firebase.auth().onAuthStateChanged((user) => {
           const message = messageInputCBC.value.trim();
           if (message === '') return;
 
-          // Tambahkan pesan ke CHATBOX-CBC
+ // Tambahkan pesan ke CHATBOX-CBC
           firestore.collection('CHATBOX-CBC').add({
             user: userName,
             message: message,
@@ -678,31 +676,32 @@ firebase.auth().onAuthStateChanged((user) => {
           messageInputCBC.value = '';
         });
 
-        // Listener untuk CHATBOX-CBC
-        firestore.collection('CHATBOX-CBC')
+   // Listener untuk CHATBOX-CBC
+  firestore.collection('CHATBOX-CBC')
           .orderBy('timestamp')
           .onSnapshot((snapshot) => {
-            chatBoxCBC.innerHTML = ''; // Bersihkan chatbox
-            snapshot.forEach((doc) => {
-              const messageData = doc.data();
-              const timestamp = messageData.timestamp
-                ? new Date(messageData.timestamp.toMillis()).toLocaleTimeString('id-ID', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })
-                : 'Zonk';
-              const messageElement = document.createElement('div');
-              messageElement.innerHTML = `
-                <div id="sender">
-                  ${messageData.user}
-                  <div id="timetrex">${timestamp}</div>
-                </div>
-                <div id="text-chat" style="color: #090; margin-top: -15px;">
-                  ${messageData.message}
-                </div>
-              `;
-              chatBoxCBC.appendChild(messageElement);
-            });
+       chatBoxCBC.innerHTML = ''; // Bersihkan chatbox
+     snapshot.forEach((doc) => {
+   const messageData = doc.data();
+   const timestamp = messageData.timestamp
+ ? new Date(messageData.timestamp.toMillis()).toLocaleTimeString('id-ID', {
+      hour: '2-digit',
+      minute: '2-digit',
+ })
+          : 'Zonk';
+   const messageElement = document.createElement('div');
+   messageElement.innerHTML = `
+<div id="chatbox-center-container" class="action">
+ <div id="chatbox-center-wrapper">
+<div id="chatbox-center">
+<img src="${messageData.message}" width="100%" />
+</div>
+ </div>
+  <button id="close-chatbox-container-btn">x</button>
+  </div>
+`;
+   chatBoxCBC.appendChild(messageElement);
+});
 
             chatBoxCBC.scrollTop = chatBoxCBC.scrollHeight;
           });
