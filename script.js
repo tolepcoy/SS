@@ -628,9 +628,9 @@ removeChatBtn.addEventListener('click', () => {
   removeAllChats();
 });
 
-// TOMBOL CLOSE Chatbox-Center
-document.getElementById('close-chatbox-container-btn').addEventListener('click', function() {
-document.getElementById('chatbox-center-container').classList.remove('action');
+// TOMBOL opacity Chatbox-Center
+document.getElementById('chatbox-center').addEventListener('click', function() {
+    this.classList.add('action');
 });
 
 // CLEAR TEXTAREA ON TOUCH MERAH
@@ -649,7 +649,7 @@ textareaMerah.addEventListener('blur', () => {
 // CHATBOX-CBC
 const messageFormCBC = document.getElementById('messageFormCBC');
 const messageInputCBC = document.getElementById('messageInputCBC');
-const chatBoxCBC = document.getElementById('CBC');
+const chatBoxCBC = document.getElementById('chatbox-center');
 
 // Firebase Auth Listener
 firebase.auth().onAuthStateChanged((user) => {
@@ -691,14 +691,9 @@ firebase.auth().onAuthStateChanged((user) => {
           : 'Zonk';
    const messageElement = document.createElement('div');
    messageElement.innerHTML = `
-<div id="chatbox-center-container" class="action">
- <div id="chatbox-center-wrapper">
-<div id="chatbox-center">
-<img src="${messageData.message}" width="100%" />
-</div>
- </div>
-  <button id="close-chatbox-container-btn">x</button>
-  </div>
+
+<span class="action">${messageData.message}</span>
+
 `;
    chatBoxCBC.appendChild(messageElement);
 });
