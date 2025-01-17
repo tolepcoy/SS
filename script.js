@@ -801,25 +801,20 @@ ${messageData.message}<br>
 });
 
 // DORRR!!!!
-document.getElementById('DOR').addEventListener('click', function() {
-  // Pastikan izin sudah diberikan
-  if (Notification.permission === 'granted') {
-    // Kirim notifikasi
-    new Notification('Mang!', {
-      body: 'Mang!',
-      icon: 'https://via.placeholder.com/50', // Ganti dengan icon yang diinginkan
-    });
-  } else {
-    // Minta izin jika belum diberikan
-    Notification.requestPermission().then(function(permission) {
-      if (permission === 'granted') {
-        new Notification('Mang!', {
-          body: 'Mang!',
-          icon: 'https://via.placeholder.com/50', // Ganti dengan icon yang diinginkan
-        });
-      } else {
-        alert('Izin notifikasi tidak diberikan!');
-      }
-    });
-  }
-});
+if (Notification.permission === 'granted') {
+  new Notification('Mang!', {
+    body: 'Mang!',
+    icon: 'https://via.placeholder.com/50',
+  });
+} else {
+  Notification.requestPermission().then(function(permission) {
+    if (permission === 'granted') {
+      new Notification('Mang!', {
+        body: 'Mang!',
+        icon: 'https://via.placeholder.com/50',
+      });
+    } else {
+      console.log('Notifikasi ditolak');
+    }
+  });
+}
