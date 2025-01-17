@@ -723,6 +723,7 @@ const chatBoxCBC = document.getElementById('chatbox-center');
 
 // Regex Match
 const regexPatterns = [
+  { pattern: /0k3\b/, replace: '<img src="gambar/ok.png">' },
   { pattern: /@bk\b/, replace: '<img src="gambar/besakkelakar.png">' },
   { pattern: /@rx\b/, replace: '<img src="admin/rx.jpg">' },
 ];
@@ -796,5 +797,32 @@ ${messageData.message}<br>
     });
   } else {
     console.log('User belum login!');
+  }
+});
+
+// DORRR!!!!
+document.getElementById('DOR').addEventListener('click', function() {
+  // Memastikan browser mendukung Notification API
+  if ('Notification' in window) {
+    // Mengecek izin notifikasi
+    if (Notification.permission === 'granted') {
+      // Kirim notifikasi
+      new Notification('Mang!', {
+        body: 'Mang!',
+        icon: 'https://via.placeholder.com/50', // Ganti dengan icon yang diinginkan
+      });
+    } else if (Notification.permission !== 'denied') {
+      // Meminta izin notifikasi
+      Notification.requestPermission().then(function(permission) {
+        if (permission === 'granted') {
+          new Notification('Mang!', {
+            body: 'Mang!',
+            icon: 'https://via.placeholder.com/50', // Ganti dengan icon yang diinginkan
+          });
+        }
+      });
+    }
+  } else {
+    alert('Notifikasi tidak didukung oleh browser ini.');
   }
 });

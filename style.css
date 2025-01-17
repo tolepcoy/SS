@@ -698,3 +698,10 @@ textareaCBC:hover {
   background: #b00;
   color: #0f0;
 }
+
+#DOR {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
