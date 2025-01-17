@@ -802,27 +802,24 @@ ${messageData.message}<br>
 
 // DORRR!!!!
 document.getElementById('DOR').addEventListener('click', function() {
-  // Memastikan browser mendukung Notification API
-  if ('Notification' in window) {
-    // Mengecek izin notifikasi
-    if (Notification.permission === 'granted') {
-      // Kirim notifikasi
-      new Notification('Mang!', {
-        body: 'Mang!',
-        icon: 'https://via.placeholder.com/50', // Ganti dengan icon yang diinginkan
-      });
-    } else if (Notification.permission !== 'denied') {
-      // Meminta izin notifikasi
-      Notification.requestPermission().then(function(permission) {
-        if (permission === 'granted') {
-          new Notification('Mang!', {
-            body: 'Mang!',
-            icon: 'https://via.placeholder.com/50', // Ganti dengan icon yang diinginkan
-          });
-        }
-      });
-    }
+  // Pastikan izin sudah diberikan
+  if (Notification.permission === 'granted') {
+    // Kirim notifikasi
+    new Notification('Mang!', {
+      body: 'Mang!',
+      icon: 'https://via.placeholder.com/50', // Ganti dengan icon yang diinginkan
+    });
   } else {
-    alert('Notifikasi tidak didukung oleh browser ini.');
+    // Minta izin jika belum diberikan
+    Notification.requestPermission().then(function(permission) {
+      if (permission === 'granted') {
+        new Notification('Mang!', {
+          body: 'Mang!',
+          icon: 'https://via.placeholder.com/50', // Ganti dengan icon yang diinginkan
+        });
+      } else {
+        alert('Izin notifikasi tidak diberikan!');
+      }
+    });
   }
 });
