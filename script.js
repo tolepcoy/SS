@@ -238,6 +238,9 @@ ${messageData.nama}
   chatBox.appendChild(messageElement);
 });
 
+if (navigator.vibrate) {
+              navigator.vibrate([200]);
+
    chatBox.scrollTop = chatBox.scrollHeight;
 });
 
@@ -256,6 +259,9 @@ messageElement.innerHTML = `
 `;
               chatBoxTolep.appendChild(messageElement);
             });
+
+if (navigator.vibrate) {
+              navigator.vibrate([200]);
 
    chatBoxTolep.scrollTop = chatBoxTolep.scrollHeight;
 });
