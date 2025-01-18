@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-/*
+
 //TERMINAL
 const terminal = document.getElementById("terminal");
 const wow = document.getElementById("wow");
@@ -503,7 +503,7 @@ wow.addEventListener("click", () => {
         runCommands(); 
     }
 });
-*/
+
 // CUSTOM DIALOG LOGOUT
 document.getElementById('keluar').addEventListener('click', () => {
   const dialog = document.getElementById('custom-logout-dialog');
@@ -801,45 +801,50 @@ ${messageData.message}<br>
 });
 
 // DORRR!!!!
-// Referensi ke dokumen di Firestore
-const docRef = firestore.collection('DOR').doc('vibrateON');
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        // Referensi ke dokumen di Firestore
+        const docRef = firestore.collection('DOR').doc('vibrateON');
 
-// Listener perubahan data Firestore
-docRef.onSnapshot((doc) => {
-    if (doc.exists) {
-        const data = doc.data();
-        if (data.vibrateON) {
-            console.log('Perubahan terdeteksi: vibrateON = true');
-            
-// Trigger native Android vibrasi
+        // Listener perubahan data Firestore
+        docRef.onSnapshot((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                if (data.vibrateON) {
+                    console.log('Perubahan terdeteksi: vibrateON = true');
+                    
+                    // Trigger native Android vibrasi
+                    if (typeof Android !== 'undefined' && Android.vibrate) {
+                        Android.vibrate();
+                    } else if (navigator.vibrate) {
+                        navigator.vibrate([200, 100, 200]);
+                    }
+
+                    // Reset ke false setelah selesai
+                    docRef.set({ vibrateON: false }, { merge: true });
+                }
+            }
+        });
+
+        // Event listener untuk tombol #DOR
+        document.getElementById('DOR').addEventListener('click', function () {
+            console.log('Tombol #DOR diklik');
+
+            // Set vibrateON = true di Firestore
+            docRef.set({
+                vibrateON: true
+            }, { merge: true }).then(() => {
+                console.log('Data vibrateON dikirim ke Firestore');
+            }).catch((error) => {
+                console.error('Error mengirim data ke Firestore: ', error);
+            });
+
+            // Getar perangkat lokal
             if (typeof Android !== 'undefined' && Android.vibrate) {
                 Android.vibrate();
             } else if (navigator.vibrate) {
                 navigator.vibrate([200, 100, 200]);
             }
-
-// Reset ke false setelah selesai
-            docRef.set({ vibrateON: false }, { merge: true });
-        }
-    }
-});
-
-document.getElementById('DOR').addEventListener('click', function () {
-    console.log('Tombol #DOR diklik');
-
-    // Set vibrateON = true di Firestore
-    docRef.set({
-        vibrateON: true
-    }, { merge: true }).then(() => {
-        console.log('Data vibrateON dikirim ke Firestore');
-    }).catch((error) => {
-        console.error('Error mengirim data ke Firestore: ', error);
-    });
-
-    // Getar perangkat lokal
-    if (typeof Android !== 'undefined' && Android.vibrate) {
-        Android.vibrate();
-    } else if (navigator.vibrate) {
-        navigator.vibrate([200, 100, 200]);
+        });
     }
 });
