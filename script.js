@@ -730,6 +730,8 @@ const chatBoxCBC = document.getElementById('chatbox-center');
 // Regex Match
 const regexPatterns = [
   { pattern: /@ok\b/, replace: '<img src="gambar/ok.png">' },
+  { pattern: /@apo\b/, replace: '<img src="gambar/apo.png">' },
+  { pattern: /@wk\b/, replace: '<img src="gambar/wk.webp">' },
   { pattern: /@bk\b/, replace: '<img src="gambar/besakkelakar.png">' },
   { pattern: /@rx\b/, replace: '<img src="admin/rx.jpg">' },
 ];
@@ -815,7 +817,7 @@ firebase.auth().onAuthStateChanged((user) => {
  // Listener perubahan data Firestore
         docRef.onSnapshot((doc) => {
             if (doc.exists) {
-                const data = doc.data();
+        const data = doc.data();
                 if (data.vibrateON) {
                     console.log('Perubahan terdeteksi: vibrateON = true');
     // Trigger native Android vibrasi
