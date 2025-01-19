@@ -708,7 +708,7 @@ textareaCBC:hover {
   padding-left: 10px;
   padding-bottom: 4px;
   border: 1px dashed #0b0;
-  z-index: 90000;
+  z-index: 995;
 }
 
 #delCBC.hover,
@@ -720,7 +720,7 @@ textareaCBC:hover {
 #DOR.hover {
   color: #0f0;
   background: #700;
-  animation: geter 0.4s ease;
+  animation: geter 1s ease;
 }
 
 @keyframes geter {

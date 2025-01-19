@@ -816,7 +816,7 @@ firebase.auth().onAuthStateChanged((user) => {
         if (typeof Android !== 'undefined' && Android.vibrate) {
         Android.vibrate();
    } else if (navigator.vibrate) {
-       navigator.vibrate([500, 100, 500]);
+       navigator.vibrate([1000, 100, 1000]);
 }
 
    // Reset ke false setelah selesai
@@ -842,7 +842,7 @@ firebase.auth().onAuthStateChanged((user) => {
             if (typeof Android !== 'undefined' && Android.vibrate) {
                 Android.vibrate();
             } else if (navigator.vibrate) {
-                navigator.vibrate([500, 100, 500]);
+                navigator.vibrate([1000, 100, 1000]);
             }
         });
     }
@@ -855,7 +855,7 @@ document.querySelector('#DOR').addEventListener('click', function() {
 
   setTimeout(() => {
     this.classList.remove('hover');
-  }, 500); // 500ms = 0.5 detik
+  }, 1000); // 1000ms = 1 detik
 });
 
 // HOVER headerTolep TOMBOL
@@ -865,7 +865,7 @@ document.getElementById('headerTolep').addEventListener('click', function() {
 
   setTimeout(() => {
     this.classList.remove('hover');
-  }, 500); // 500ms = 0.5 detik
+  }, 1000); // 1000ms = 1 detik
 });
 
 // HOVER delCBC TOMBOL
@@ -875,5 +875,5 @@ document.getElementById('delCBC').addEventListener('click', function() {
 
   setTimeout(() => {
     this.classList.remove('hover');
-  }, 500); // 500ms = 0.5 detik
+  }, 1000); // 1000ms = 1 detik
 });
