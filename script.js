@@ -723,7 +723,7 @@ const chatBoxCBC = document.getElementById('chatbox-center');
 
 // Regex Match
 const regexPatterns = [
-  { pattern: /0k3\b/, replace: '<img src="gambar/ok.png">' },
+  { pattern: /@ok\b/, replace: '<img src="gambar/ok.png">' },
   { pattern: /@bk\b/, replace: '<img src="gambar/besakkelakar.png">' },
   { pattern: /@rx\b/, replace: '<img src="admin/rx.jpg">' },
 ];
@@ -821,9 +821,9 @@ firebase.auth().onAuthStateChanged((user) => {
 
    // Reset ke false setelah selesai
    docRef.set({ vibrateON: false }, { merge: true });
-                }
-            }
-        });
+    }
+  }
+});
 
 // Event listener untuk tombol #DOR
         document.getElementById('DOR').addEventListener('click', function () {
@@ -838,7 +838,7 @@ firebase.auth().onAuthStateChanged((user) => {
                 console.error('Error mengirim data ke Firestore: ', error);
             });
 
-            // Getar perangkat lokal
+     // Getar perangkat lokal
             if (typeof Android !== 'undefined' && Android.vibrate) {
                 Android.vibrate();
             } else if (navigator.vibrate) {
@@ -846,4 +846,34 @@ firebase.auth().onAuthStateChanged((user) => {
             }
         });
     }
+});
+
+// HOVER DOR TOMBOL
+document.querySelector('#DOR').addEventListener('click', function() {
+
+  this.classList.toggle('hover');
+
+  setTimeout(() => {
+    this.classList.remove('hover');
+  }, 500); // 500ms = 0.5 detik
+});
+
+// HOVER headerTolep TOMBOL
+document.getElementById('headerTolep').addEventListener('click', function() {
+
+  this.classList.toggle('hover');
+
+  setTimeout(() => {
+    this.classList.remove('hover');
+  }, 500); // 500ms = 0.5 detik
+});
+
+// HOVER delCBC TOMBOL
+document.getElementById('delCBC').addEventListener('click', function() {
+
+  this.classList.toggle('hover');
+
+  setTimeout(() => {
+    this.classList.remove('hover');
+  }, 500); // 500ms = 0.5 detik
 });

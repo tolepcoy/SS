@@ -701,11 +701,42 @@ textareaCBC:hover {
 
 #DOR {
   position: absolute;
-  width: 150px;
-  height: 50px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: 1px dashed #09d;
+  box-sizing: border-box;
+  bottom: 45px;
+  left: 5px;
+  color: #fd0;
+  padding-left: 10px;
+  padding-bottom: 4px;
+  border: 1px dashed #0b0;
   z-index: 90000;
+}
+
+#delCBC.hover,
+#headerTolep.hover {
+  color: #0f0;
+  animation: geter 0.4s ease;
+}
+
+#DOR.hover {
+  color: #0f0;
+  background: #700;
+  animation: geter 0.4s ease;
+}
+
+@keyframes geter {
+  0% {transform: translateX(0);}
+  25% {transform: translateX(10px);}
+  50% {transform: translateX(-5px);}
+  75% {transform: translateX(5px);}
+  100% {transform: translateX(-3px);}
+}
+
+#DOR > b {
+  color: #0f0;
+  text-shadow: 0px 0px 3px gold;
+  font-size: 16px;
+}
+
+#DOR > b:hover {
+  color: gold;
 }
