@@ -833,8 +833,7 @@ firebase.auth().onAuthStateChanged((user) => {
 
 // Event listener untuk tombol #DOR
         document.getElementById('DOR').addEventListener('click', function () {
-            console.log('Tombol #DOR diklik');
-
+   console.log('Tombol #DOR diklik');
  // Set vibrateON = true di Firestore
             docRef.set({
                 vibrateON: true
@@ -857,10 +856,15 @@ firebase.auth().onAuthStateChanged((user) => {
 // HOVER DOR TOMBOL
 document.querySelector('#DOR').addEventListener('click', function() {
 
+  this.disabled = true;
   this.classList.toggle('hover');
+  this.innerHTML = 'Geterke Hp Tolep..!';
 
+// Setelah 1 detik, kembalikan semula
   setTimeout(() => {
     this.classList.remove('hover');
+    this.innerHTML = 'Mang<b>!</b>';
+    this.disabled = false;
   }, 1000); // 1000ms = 1 detik
 });
 
