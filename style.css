@@ -181,7 +181,7 @@ body {
 }
 
 #chatbox-tolep {
-  height: 89%;
+  height: 81%;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -282,7 +282,7 @@ textarea:hover {
 
 #look {
   position: absolute;
-  right: 17px;
+  right: 25px;
   bottom: 10px;
   height: 30px;
   padding: 0 17px;
@@ -392,6 +392,13 @@ textarea:hover {
   background: #700;
   color: #0f0;
   z-index: 2;
+}
+
+#nama-input,
+#nama-input:hover,
+#nama-input:active,
+#nama-input:focus {
+  color: gold;
 }
 
 #cancel-nama,
@@ -637,8 +644,8 @@ color: #f44;
 #messageFormCBC {
   position: fixed;
   height: 55px;
-  right: 15px;
-  bottom: 50px;
+  right: 17px;
+  bottom: 65px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -656,7 +663,7 @@ color: #f44;
   width: 90px;
   height: 25px;
   border-radius: 4px;
-  border: 0.5px dashed #e00;
+  border: 0.5px dashed #f00;
   font-size: 10px;
   color: gold;
   resize: none;
@@ -683,8 +690,8 @@ textareaCBC:hover {
 #sendButtonCBC {
   height: 20px;
   padding: 0 10px;
-  margin-top: 7px;
-  border: 0.5px dashed #a00;
+  margin-top: 5px;
+  border: 0.5px dashed #f00;
   background: #300;
   cursor: pointer;
   border-radius: 5px;
@@ -703,7 +710,7 @@ textareaCBC:hover {
   position: absolute;
   box-sizing: border-box;
   bottom: 45px;
-  left: 5px;
+  right: 17px;
   color: #fd0;
   padding-left: 10px;
   padding-bottom: 4px;

@@ -565,7 +565,7 @@ editNamaBtn.addEventListener('click', () => {
 
 // Ubah elemen nama menjadi input
           namaEl.innerHTML = `
-            <input type="text" id="nama-input" value="${currentNama}" maxlength="15" /><br>
+            <input type="text" id="nama-input" style="color:gold" value="${currentNama}" maxlength="15" /><br>
             <button id="cancel-nama">Batal</button>
             <button id="save-nama">Simpen</button>
           `;
@@ -865,7 +865,7 @@ document.querySelector('#DOR').addEventListener('click', function() {
 // Setelah 1 detik, kembalikan semula
   setTimeout(() => {
     this.classList.remove('hover');
-    this.innerHTML = 'Mang<b>!</b>';
+    this.innerHTML = 'Oi lep..<b>!</b>';
     this.disabled = false;
   }, 1000); // 1000ms = 1 detik
 });
