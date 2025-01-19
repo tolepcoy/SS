@@ -531,10 +531,12 @@ document.getElementById('keluar').addEventListener('click', () => {
 const namaEl = document.getElementById('nama');
 const editNamaBtn = document.getElementById('edit-nama');
 const kenoKeluar = document.getElementById('keluar');
+const DORnone = document.getElementById('DOR');
 
 // Fungsi untuk handle klik tombol edit
 editNamaBtn.addEventListener('click', () => {
   editNamaBtn.style.display = 'none';
+  DORnone.style.display = 'none';
   kenoKeluar.style.display = 'none';
 
   // Menunggu user login terlebih dahulu
@@ -553,6 +555,7 @@ editNamaBtn.addEventListener('click', () => {
             const remainingDays = 30 - Math.floor((now - lastUpdate) / (1000 * 60 * 60 * 24));
             showAlert(`Ente cuman biso ngubah namo setiap 30 hari. Siso waktu: ${remainingDays} hari.`);
   editNamaBtn.style.display = 'block';
+  DORnone.style.display = 'block';
   kenoKeluar.style.display = 'block';
             return;
           }
@@ -577,9 +580,10 @@ editNamaBtn.addEventListener('click', () => {
 
           // Handle klik tombol batal
           cancelBtnNama.addEventListener('click', () => {
-            namaEl.textContent = currentNama;
-            editNamaBtn.style.display = 'block';
-            kenoKeluar.style.display = 'block';
+  namaEl.textContent = currentNama;
+  editNamaBtn.style.display = 'block';
+  DORnone.style.display = 'block';
+  kenoKeluar.style.display = 'block';
           });
 
           // Handle klik tombol save
@@ -615,6 +619,7 @@ try {
     // Kembalikan tampilan awal
     namaEl.textContent = newNama;
     editNamaBtn.style.display = 'block';
+    DORnone.style.display = 'block';
     kenoKeluar.style.display = 'block';
 } catch (error) {
     showAlert("Gagal nyimpen namo baru, cubo lagi.");
@@ -628,6 +633,7 @@ try {
       }).catch(error => {
         showAlert("Ado yang error!, cubo lagi.");
         editNamaBtn.style.display = 'block';
+        DORnone.style.display = 'block';
         kenoKeluar.style.display = 'block';
       });
     }
