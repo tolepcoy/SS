@@ -54,6 +54,12 @@ PassChecker.disabled = true;
 // Fungsi cek user login
 window.onload = function () {
   firebase.auth().onAuthStateChanged((user) => {
+    
+if (!navigator.onLine) {
+  // Jika tidak ada koneksi internet
+ window.location.href = 'error.html';
+}
+    
     if (user) {
       // Cek koleksi PRIVASI untuk user yang login
       firestore.collection('PRIVASI').doc(user.uid).get().then((doc) => {

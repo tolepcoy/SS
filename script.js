@@ -111,9 +111,9 @@ document.addEventListener("DOMContentLoaded", function () {
           loadingCircle.style.animation = 'none';
           handleSignOut();
         } else {
-          // Jika user ID bukan Ane
+    // Jika user ID bukan Ane
           if (userId !== 'c5AbAGemIcfsphDrXu56I8OZyEo1') {
-            // Nonaktifkan elemen tertentu
+   // Nonaktifkan elemen tertentu
             wowAh.style.pointerEvents = 'auto';
             document.getElementById('delCBC').style.pointerEvents = 'none';
             document.getElementById('headerTolep').style.pointerEvents = 'none';
@@ -132,6 +132,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Cek status login saat window load
   firebase.auth().onAuthStateChanged((user) => {
+
+if (!navigator.onLine) {
+  // Jika tidak ada koneksi internet
+ window.location.href = 'error.html';
+}
+
     if (user) {
       checkLoginStatus(user);
     } else {
@@ -565,7 +571,7 @@ editNamaBtn.addEventListener('click', () => {
 
 // Ubah elemen nama menjadi input
           namaEl.innerHTML = `
-            <input type="text" id="nama-input" style="color:gold" value="${currentNama}" maxlength="15" /><br>
+            <input type="text" id="nama-input" style="color:#0f0;background:black;" value="${currentNama}" maxlength="15" /><br>
             <button id="cancel-nama">Batal</button>
             <button id="save-nama">Simpen</button>
           `;

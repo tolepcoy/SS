@@ -398,7 +398,10 @@ textarea:hover {
 #nama-input:hover,
 #nama-input:active,
 #nama-input:focus {
-  color: gold;
+  color: #0f0;
+  outline: none;
+  border: none;
+  background: black;
 }
 
 #cancel-nama,
