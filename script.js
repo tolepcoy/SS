@@ -133,11 +133,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Cek status login saat window load
   firebase.auth().onAuthStateChanged((user) => {
 
-if (!navigator.onLine) {
-  // Jika tidak ada koneksi internet
- window.location.href = 'error.html';
-}
-
     if (user) {
       checkLoginStatus(user);
     } else {
@@ -275,8 +270,8 @@ messageElement.innerHTML = `
 // CLEAR CHAT ADMIN
 function bersihkanChatboxLama() {
   const now = new Date();
-  const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-  
+  const cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
   const cutoffTimestamp = firebase.firestore.Timestamp.fromDate(cutoff);
 
   firestore.collection("CHATBOX")
@@ -814,10 +809,31 @@ ${messageData.message}<br>
   }
 });
 
-// DORRR!!!!
+/*!
+// DORRR!!!! versi perangkat lain
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-        // Referensi ke dokumen di Firestore
+
+        document.getElementById('DOR').addEventListener('click', function () {
+            console.log('Tombol #DOR diklik');
+// Set vibrateON = true di Firestore
+            const docRef = firestore.collection('DOR').doc('vibrateON');
+            docRef.set({
+                vibrateON: true
+            }, { merge: true }).then(() => {
+                console.log('Data vibrateON dikirim ke Firestore');
+            }).catch((error) => {
+                console.error('Error mengirim data ke Firestore: ', error);
+            });
+        });
+    }
+});
+*/
+
+// DORRR!!!! versi perangkat ane
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+// Referensi ke dokumen di Firestore
         const docRef = firestore.collection('DOR').doc('vibrateON');
 
  // Listener perubahan data Firestore
