@@ -652,7 +652,7 @@ color: #f44;
   position: fixed;
   height: 55px;
   right: 17px;
-  bottom: 65px;
+  bottom: 70px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -717,7 +717,7 @@ textareaCBC:hover {
   position: absolute;
   box-sizing: border-box;
   bottom: 45px;
-  right: 17px;
+  right: 15px;
   color: #fd0;
   padding-left: 10px;
   padding-bottom: 4px;

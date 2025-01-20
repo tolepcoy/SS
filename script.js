@@ -809,27 +809,6 @@ ${messageData.message}<br>
   }
 });
 
-/*!
-// DORRR!!!! versi perangkat lain
-firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-
-        document.getElementById('DOR').addEventListener('click', function () {
-            console.log('Tombol #DOR diklik');
-// Set vibrateON = true di Firestore
-            const docRef = firestore.collection('DOR').doc('vibrateON');
-            docRef.set({
-                vibrateON: true
-            }, { merge: true }).then(() => {
-                console.log('Data vibrateON dikirim ke Firestore');
-            }).catch((error) => {
-                console.error('Error mengirim data ke Firestore: ', error);
-            });
-        });
-    }
-});
-*/
-
 // DORRR!!!! versi perangkat ane
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
@@ -887,7 +866,7 @@ document.querySelector('#DOR').addEventListener('click', function() {
 // Setelah 1 detik, kembalikan semula
   setTimeout(() => {
     this.classList.remove('hover');
-    this.innerHTML = 'Oi lep..<b>!</b>';
+    this.innerHTML = 'Oi lep<b>!</b>';
     this.disabled = false;
   }, 1000); // 1000ms = 1 detik
 });
