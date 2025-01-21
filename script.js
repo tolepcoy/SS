@@ -117,9 +117,6 @@ document.addEventListener("DOMContentLoaded", function () {
             wowAh.style.pointerEvents = 'auto';
             document.getElementById('delCBC').style.pointerEvents = 'none';
             document.getElementById('headerTolep').style.pointerEvents = 'none';
-            document.getElementById('messageFormCBC').style.display = 'none';
-            document.getElementById('messageInputCBC').style.display = 'none';
-            document.getElementById('sendButtonCBC').style.display = 'none';
           }
         }
       } else {
@@ -231,7 +228,7 @@ const messageElement = document.createElement('div');
 
 messageElement.innerHTML = `
 <div id="sender">
-${messageData.nama}
+<span class="namoUwong">${messageData.nama}</span>
 <div id="timetrex">${timestamp}</div>
 </div>
 <div id="text-chat" style="color: #090;margin-top:-15px;">${messageData.text}</div>
@@ -361,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           snapshot.forEach((doc) => {
             const data = doc.data();
-            onlineUsers += `<div style="font-weight:bold;color: #0e0;font-size:12px;"><li>${data.nama}</li></div>`;
+            onlineUsers += `<div style="font-weight:bold;font-size:12px;" class="namoUwong"><li>${data.nama}</li></div>`;
           });
 
 // Tampilkan semua user yang online
@@ -545,7 +542,7 @@ editNamaBtn.addEventListener('click', () => {
     if (user) {
       const userDef = firestore.collection('SS').doc(user.uid);
 
-      // Ambil data terakhir update nama
+ // Ambil data terakhir update nama
       userDef.get().then(doc => {
         if (doc.exists) {
           const data = doc.data();
@@ -571,7 +568,7 @@ editNamaBtn.addEventListener('click', () => {
             <button id="save-nama">Simpen</button>
           `;
 
-          // Ambil elemen input dan tombol
+  // Ambil elemen input dan tombol
           const namaInput = document.getElementById('nama-input');
           const saveBtnNama = document.getElementById('save-nama');
           const cancelBtnNama = document.getElementById('cancel-nama');
@@ -579,7 +576,7 @@ editNamaBtn.addEventListener('click', () => {
           // Fokuskan input
           namaInput.focus();
 
-          // Handle klik tombol batal
+    // Handle klik tombol batal
           cancelBtnNama.addEventListener('click', () => {
   namaEl.textContent = currentNama;
   editNamaBtn.style.display = 'block';
@@ -587,7 +584,7 @@ editNamaBtn.addEventListener('click', () => {
   kenoKeluar.style.display = 'block';
           });
 
-          // Handle klik tombol save
+     // Handle klik tombol save
           saveBtnNama.addEventListener('click', async () => {
             let newNama = namaInput.value.trim();
             
@@ -607,7 +604,7 @@ function sanitizeInput(input) {
 newNama = sanitizeInput(newNama);
 // sanitasi end
 
-            // Simpan ke Firestore
+   // Simpan ke Firestore
 try {
     await userDef.update({
         nama: newNama,
@@ -730,74 +727,78 @@ const chatBoxCBC = document.getElementById('chatbox-center');
 
 // Regex Match
 const regexPatterns = [
+  { pattern: /@aptpkg\b/, replace: '<a href="https://github.com/tolepcoy/SS/raw/refs/heads/main/APK/C%20O%20Y_user.apk"><img src="icon/download.gif" style="width:50px;height:50px;border-radius:50%;border:3px solid #0f0;"/></a>' },
   { pattern: /@ok\b/, replace: '<img src="gambar/ok.png">' },
   { pattern: /@apo\b/, replace: '<img src="gambar/apo.png">' },
   { pattern: /@wk\b/, replace: '<img src="gambar/wk.webp">' },
   { pattern: /@bk\b/, replace: '<img src="gambar/besakkelakar.png">' },
   { pattern: /@rx\b/, replace: '<img src="admin/rx.jpg">' },
+  { pattern: /@tkl\b/, replace: '<img src="gambar/tekola.jpg">' },
 ];
 
 // Firebase Auth Listener
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
- // Query koleksi SS berdasarkan UID
+    // Query koleksi SS berdasarkan UID
     firestore.collection('SS').doc(user.uid).onSnapshot((doc) => {
       if (doc.exists) {
-   const userName = doc.data().nama;
+        const userName = doc.data().nama;
 
         // Fungsi kirim pesan
-        messageFormCBC.addEventListener('submit', (e) => {
-          e.preventDefault();
-          let message = messageInputCBC.value.trim();
-          if (message === '') return;
+messageFormCBC.addEventListener('submit', (e) => {
+  e.preventDefault();
+  let message = messageInputCBC.value.trim();
+  if (message === '') return;
 
-          // Cek pesan dengan regex
-          let validMessage = false;
-          regexPatterns.forEach((regex) => {
-            if (regex.pattern.test(message)) {
-              message = message.replace(regex.pattern, regex.replace); // Ganti sesuai regex
-              validMessage = true;
-            }
-          });
+  // Cek apakah ada kecocokan regex
+  let matched = false;
+  regexPatterns.forEach((regex) => {
+    if (regex.pattern.test(message)) {
+      // Jika ada kecocokan, replace seluruh pesan dengan hasil regex
+      message = regex.replace;
+      matched = true;
+    }
+  });
 
-          if (validMessage) {
-    // Tambahkan pesan ke CHATBOX-CBC
-            firestore.collection('CHATBOX-CBC').add({
-              user: userName,
-              message: message,
-              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-              userId: user.uid,
-            });
-       messageInputCBC.value = '';
-          }
-        });
+  // Tambahkan pesan ke database (baik cocok regex atau tidak)
+  firestore.collection('CHATBOX-CBC').add({
+    user: userName,
+    message: message, // Jika cocok, pesan sudah diubah. Kalau tidak cocok, pesan tetap.
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    userId: user.uid,
+  });
 
-   // Listener untuk CHATBOX-CBC
- firestore.collection('CHATBOX-CBC')
-          .orderBy('timestamp')
-          .onSnapshot((snapshot) => {
-         chatBoxCBC.innerHTML = '';
-    snapshot.forEach((doc) => {
-   const messageData = doc.data();
-   const timestamp = messageData.timestamp
-                ? new Date(messageData.timestamp.toMillis()).toLocaleTimeString('id-ID', {
-        hour: '2-digit',
-        minute: '2-digit',
-         })
-       : '';
-              
-      // Buat elemen pesan
- const messageElement = document.createElement('div');
-  messageElement.innerHTML = `
-                
-${messageData.message}<br>
-<span style="color:transparent;font-size:1px;">${timestamp}</span>
-
-`;
-              chatBoxCBC.appendChild(messageElement);
+  // Bersihkan input setelah submit
+  messageInputCBC.value = '';
 });
 
-// Scroll to bottom otomatis
+        // Listener untuk CHATBOX-CBC
+        firestore.collection('CHATBOX-CBC')
+          .orderBy('timestamp')
+          .onSnapshot((snapshot) => {
+            chatBoxCBC.innerHTML = '';
+            snapshot.forEach((doc) => {
+              const messageData = doc.data();
+              const timestamp = messageData.timestamp
+                ? new Date(messageData.timestamp.toMillis()).toLocaleTimeString('id-ID', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })
+                : '';
+
+  // Buat elemen pesan
+   const messageElement = document.createElement('div');
+   messageElement.innerHTML = `
+<div id="CBCsender">
+<span class="namoUwong"><b>${messageData.user}</b></span><br>
+${messageData.message}<br>
+<span style="color:transparent;font-size:1px;">${timestamp}</span>
+</div>
+`;
+              chatBoxCBC.appendChild(messageElement);
+            });
+
+ // Scroll to bottom otomatis
             chatBoxCBC.scrollTop = chatBoxCBC.scrollHeight;
           });
       } else {
@@ -861,7 +862,7 @@ document.querySelector('#DOR').addEventListener('click', function() {
 
   this.disabled = true;
   this.classList.toggle('hover');
-  this.innerHTML = 'Geterke Hp Tolep..!';
+  this.innerHTML = 'Hp Tolep berdering + geter!';
 
 // Setelah 1 detik, kembalikan semula
   setTimeout(() => {
@@ -889,4 +890,13 @@ document.getElementById('delCBC').addEventListener('click', function() {
   setTimeout(() => {
     this.classList.remove('hover');
   }, 1000); // 1000ms = 1 detik
+});
+
+// Toggle Button togCBCbtn center
+const togCBCbtn = document.getElementById('togCBCbtn');
+const CBCkontener = document.getElementById('chatbox-center-container');
+
+togCBCbtn.addEventListener('click', () => {
+  CBCkontener.classList.toggle('action');
+  togCBCbtn.classList.toggle('merah');
 });

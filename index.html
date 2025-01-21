@@ -27,15 +27,15 @@ Samo setiap chat yang di store ke database server ane, ane enkripsi jugo :<br>
 - Ane enkripsi di lokal storage pake Javascript<br>
 - Pas nak ngirim ane enkripsi lagi ke CryptoAES 256bit<br>
 - Pas dikirim ane enkripsi lagi jadi Base64<br>
-- Pas nyampe di database ane enkripsi manual pake ~REGEX<br>
 - Pas di transfer ke chatbox dengan onSnapshot baru ane dekripsi galo<br>
 - Sistem Upload & Download data transfer samo cak itu galo<br>
-- Setiap 24 jam dari ane login, otomatis chat dihapus!<br>
+- Cuman ane samo Ente yang bersangkutan yang biso nyingok & baco chat.<br>
 <p>Jadi chat disini dak pacak di sadap, di embek,<br>katek riwayat, katek jejak, katek notif, katek bunyi, katek galo-galo.</p>
-Jadi katek embekan nian memang aplikasi ini ni, screenshot be ku disable.<br>
-Yang pacak nyingok data di server ini kuraso cuman wong gilo samo wong sok tau bae.<br><br>
+Jadi katek embekan nian memang aplikasi ini ni, screenshot be dak pacak.<br>
+Yang pacak nyingok data di server ini kuraso cuman wong gilo bae.<br><br>
 
 Mokaseh.<br>
+Aplikasi ini dibuat untuk ngurangi beban ramDisk di hp ane dibandingke Whatsapp.<br>Samo lebih terenkripsi daripada ane make Whatsapp.<br>
 <span style="font-size:10px;font-weight:700;">Tolep Coy</i>
 </div>
 </div>
@@ -54,11 +54,13 @@ Mokaseh.<br>
 <!-- END CUSTOM DIALOG -->
   
 <!-- CBC -->
-<div id="chatbox-center-container" class="action">
+<div id="chatbox-center-container">
  <div id="chatbox-center-wrapper">
 <div id="chatbox-center"></div>
  </div>
   </div>
+  
+<button id="togCBCbtn">•••</button>
 
 <form id="messageFormCBC">
 <textarea id="messageInputCBC" placeholder="Isi..." required></textarea>
