@@ -312,6 +312,7 @@ textarea:hover {
   transform: translateX(-100%);
   overflow: hidden;
   transition: transform 0.4s linear;
+  z-index: 11;
 }
 
 #user-online.active {
@@ -598,19 +599,20 @@ color: #f44;
   border-radius: 7px;
   top: 50%;
   left: 50%;
-  transform: translate(-118%, 34%) scale(0.1, 0.03);
+  transform: translate(-118%, 35%) scale(0.1, 0.03);
   padding: 0;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  transition: transform 0.5s ease;
+  transition: transform 1s ease;
   z-index: 9;
 }
 
 #chatbox-center-container.action {
   transform: translate(-50%, -60%) scale(1);
+  transition: transform 1s ease;
 }
 
 #chatbox-center-wrapper {
@@ -635,6 +637,8 @@ color: #f44;
   text-align: left;
   color: #0F0;
   font-weight: bold;
+  box-sizing: border-box;
+  padding-left: 5px;
 }
 
 #chatbox-center img {
@@ -650,7 +654,7 @@ color: #f44;
 #togCBCbtn {
   position: absolute;
   left: 2%;
-  bottom: 7.5%;
+  bottom: 45px;
   padding: 1px 15px;
   border-radius: 5px;
   border: 0.5px solid #090;
@@ -665,20 +669,18 @@ color: #f44;
 }
 
 #CBCsender {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 #messageFormCBC {
-  position: fixed;
-  height: 55px;
+  position: absolute;
   left: 18%;
-  bottom: 2.5%;
+  bottom: 45px;
+  margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  flex-shrink: 0;
-  flex-grow: 0;
   z-index: 800;
 }
 
@@ -738,7 +740,6 @@ textareaCBC:hover {
   right: 15px;
   color: #fd0;
   padding-left: 10px;
-  padding-bottom: 4px;
   border: 1px dashed #0b0;
   z-index: 995;
 }
@@ -766,7 +767,6 @@ textareaCBC:hover {
 #DOR > b {
   color: #0f0;
   text-shadow: 0px 0px 3px gold;
-  font-size: 16px;
 }
 
 #DOR > b:hover {
