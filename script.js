@@ -727,13 +727,13 @@ const chatBoxCBC = document.getElementById('chatbox-center');
 
 // Regex Match
 const regexPatterns = [
-  { pattern: /@aptpkg\b/, replace: '<a href="https://github.com/tolepcoy/SS/raw/refs/heads/main/APK/C%20O%20Y_user.apk"><img src="icon/download.gif" style="width:50px;height:50px;border-radius:50%;border:3px solid #0f0;"/></a>' },
+  { pattern: /@aptpkg\b/, replace: '<a href="https://github.com/tolepcoy/SS/raw/refs/heads/main/APK/C%20O%20Y_user.apk"><img id="donglot" src="icon/download.gif" style="width:50px;height:50px;border-radius:50%;border:3px solid #0f0;"/></a>' },
   { pattern: /@ok\b/, replace: '<img src="gambar/ok.png" style="width:98%">' },
   { pattern: /@apo\b/, replace: '<img src="gambar/apo.png" style="width:98%">' },
   { pattern: /@wk\b/, replace: '<img src="gambar/wk.webp" style="width:98%;border:1px dashed #0F0;border-radius:5px">' },
   { pattern: /@bk\b/, replace: '<img src="gambar/besakkelakar.png" style="width:98%">' },
   { pattern: /@rx\b/, replace: '<img src="admin/rx.jpg" style="width:98%;border:1px dashed #0F0;border-radius:5px">' },
-  { pattern: /@tkl\b/, replace: '<img src="gambar/tekola.jpg" style="width:98%">' },
+  { pattern: /@tkl\b/, replace: '<img src="gambar/tekola.png" style="width:98%">' },
 ];
 
 // Firebase Auth Listener
@@ -790,7 +790,7 @@ messageFormCBC.addEventListener('submit', (e) => {
    const messageElement = document.createElement('div');
    messageElement.innerHTML = `
 <div id="CBCsender">
-<span class="namoUwong"><b>${messageData.user}</b></span><br>
+<span class="namoUwong" id="namotengah" style="margin-bottom:2px;"><b>${messageData.user}</b></span><br>
 ${messageData.message}<br>
 <span style="color:transparent;font-size:1px;">${timestamp}</span>
 </div>

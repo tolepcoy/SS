@@ -4,6 +4,8 @@
   font-size: 13px;
   font-weight: 200;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 /*! ETC */
@@ -639,13 +641,25 @@ color: #f44;
   color: #0F0;
   font-weight: bold;
   box-sizing: border-box;
-  padding-left: 5px;
+  padding: 5px;
 }
 
 #chatbox-center img {
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+}
+
+#donglot:hover {
+  transition: all 0.5s ease;
+}
+
+#donglot:active,
+#donglot:focus,
+#donglot:hover {
+  filter: invert(1);
+  width: 30px;
+  height: 30px;
 }
 
 #chatbox-center::-webkit-scrollbar {
@@ -671,6 +685,10 @@ color: #f44;
 
 #CBCsender {
   margin-bottom: 5px;
+}
+
+#namotengah {
+  margin-bottom: 2px;
 }
 
 #messageFormCBC {
