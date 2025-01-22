@@ -130,7 +130,7 @@ body {
   top: 20px;
   left: 0;
   width: 69%;
-  height: 520px;
+  height: 580px;
   margin: 0;
   padding: 2px 5px 2px 8px;
   overflow: hidden;
@@ -145,7 +145,7 @@ body {
 }
 
 #chatbox {
-  height: 99%;
+  height: 92%;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -155,7 +155,7 @@ body {
   top: 0;
   right: 0;
   width: 30%;
-  height: 540px;
+  height: 580px;
   margin: 0;
   padding: 2px 5px;
   overflow: hidden;
@@ -186,6 +186,7 @@ body {
   box-sizing: border-box;
   flex-shrink: 0;
   flex-grow: 0;
+  z-index: 11;
 }
 
 #messageInput {
@@ -599,7 +600,7 @@ color: #f44;
   border-radius: 7px;
   top: 50%;
   left: 50%;
-  transform: translate(-118%, 35%) scale(0.1, 0.03);
+  transform: translate(-118%, 38%) scale(0.1, 0.03);
   padding: 0;
   overflow: hidden;
   display: flex;
@@ -740,6 +741,7 @@ textareaCBC:hover {
   right: 15px;
   color: #fd0;
   padding-left: 10px;
+  transform: scaleX(1);
   border: 1px dashed #0b0;
   z-index: 995;
 }
@@ -753,15 +755,15 @@ textareaCBC:hover {
 #DOR.hover {
   color: #0f0;
   background: #700;
-  animation: geter 1s ease;
+  animation: geter 3s ease;
 }
 
 @keyframes geter {
-  0% {transform: translateX(0);}
-  25% {transform: translateX(10px);}
-  50% {transform: translateX(-5px);}
-  75% {transform: translateX(5px);}
-  100% {transform: translateX(-3px);}
+  0% {transform: translateX(-15px) scaleX(1.2);}
+  25% {transform: translateX(-90px) scaleX(1.2);}
+  50% {transform: translateX(-15px) scaleX(1.2);}
+  75% {transform: translateX(-90px) scaleX(1.2);}
+  100% {transform: translateX(-15px) scaleX(1.2);}
 }
 
 #DOR > b {
