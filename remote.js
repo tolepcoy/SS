@@ -1,15 +1,3 @@
-// Fungsi untuk memanggil Java untuk membersihkan cache
-function clearCache() {
-  if (typeof Android !== 'undefined' && Android.clearCache) {
-    Android.clearCache();  // Memanggil fungsi clearCache di Java
-  } else {
-    console.log("Fungsi clearCache tidak tersedia.");
-  }
-}
-
-// Call the function when needed
-clearCache();
-
 // Cek apakah elemen body sudah tersedia
 document.addEventListener("DOMContentLoaded", () => {
   // Buat elemen overlay
