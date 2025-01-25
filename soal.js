@@ -1,5 +1,3 @@
-const userId = firebase.auth().currentUser.uid;
-
 let questions = [
   { question: "1. <b><span style='font-size:15px;'>SELAMAT DATANG DI<h2>TESTING IQ & EQ</h2>SEMUA PERTANYAAN DISINI TIDAK AKAN BISA ENTE TEMUKAN JAWABANNYA DI GOOGLE<br>KARENA INI FULL ANE BIKIN SENDIRI, NAMUN TETAP SESUAI FAKTA DAN KEBENARAN<br>SESUAI CARA ENTE MIKIR</span><hr>SOAL NO. 1</b><hr>Si Jepri mempunyai 4 buah Apel, kemudian Jepri memakan 3 buah Apel miliknya.<br>Di karenakan lapar, lalu Jepri memakan Apel yang ke-4 tetapi tidak sampai habis dan menyisakan 30% dari Apel tersebut.<br>Jika nilai 100% adalah total dari seluruh Apel termasuk yang telah di makan Jepri, maka berapa persenkah Apel yang telah dimakan Jepri?",
   answer: "92.5%" },
@@ -27,29 +25,15 @@ let questions = [
 
   { question: "9. '<span class='quotE'>Pada hari minggu ku turut Ayah ke kota</span>'.<br>Kalimat di atas adalah potongan lirik dari lagu anak-anak masa dulu.<br>Siapakah nama anak yang tidak turut ke kota pada lagu tersebut?",
   answer: "Ratna" },
+   
+  
+      
 ];
-
 let currentQuestion = 0;
 let score = 0;
 let wrongAttempts = 0;
 let gameOver = false;
 
-// Cek Level User dan Set Current Soal
-firestore.collection("SS")
-  .doc(userId)
-  .get()
-  .then((doc) => {
-    if (doc.exists) {
-      const userData = doc.data();
-      currentQuestion = userData.soal || 0; // Jika field soal ada, pakai sebagai current soal
-      score = userData.poin || 0; // Jika field poin ada, gunakan sebagai skor awal
-      displayQuestion();
-      updateTopScore();
-    }
-  })
-  .catch((error) => console.error("Error getting user data:", error));
-
-// Tampilkan Pertanyaan
 function displayQuestion() {
   const questionElement = document.getElementById("question");
 
@@ -59,33 +43,36 @@ function displayQuestion() {
   } else {
     questionElement.innerHTML = "<b>Tunggu update berikutnya, Mang!</b>";
     gameOver = true;
-    document.getElementById("answer").style.pointerEvents = "none";
-    document.getElementById("answer").style.opacity = "0.4";
-    document.getElementById("jawab").style.pointerEvents = "none";
-    document.getElementById("jawab").style.opacity = "0.4";
+    document.getElementById("answer").style.pointerEvents = 'none';
+    document.getElementById("answer").style.opacity = '0.4';
+    document.getElementById("jawab").style.pointerEvents = 'none';
+    document.getElementById("jawab").style.opacity = '0.4';
   }
 }
 
-// Kirim Jawaban
 function submitAnswer() {
   const userAnswer = document.getElementById("answer").value.trim();
-  const feefirestoreack = document.getElementById("feedback");
+  const feedback = document.getElementById("feedback");
 
   // Validasi jika jawaban kosong
   if (userAnswer === "") {
-    feefirestoreack.innerHTML = "<span style='color: orange;'>Isi jawaban dulu, Mang!</span>";
-    return;
+    feedback.innerHTML = "<span style='color: orange;'>Isi jawaban dulu, Mang!</span>";
+    return; // Stop proses jika kosong
   }
 
   const correctAnswer = questions[currentQuestion].answer;
 
   let correctAnswerPattern;
+
+  // Tentukan pola berdasarkan soal yang aktif
   if (currentQuestion === 0) {
-    correctAnswerPattern = /92[.,]5[%\s]*$/;
+    correctAnswerPattern = /92[.,]5[%\s]*$/;  // Mengizinkan titik atau koma, diikuti dengan '%' atau spasi
   } else {
-    const userAnswerModified = userAnswer.replace(/-/g, " ");
-    const correctAnswerModified = correctAnswer.replace(/-/g, " ");
-    correctAnswerPattern = new RegExp(correctAnswerModified, "i");
+    // Gantikan tanda "-" dengan spasi dalam jawaban dan juga di jawaban yang benar
+    const userAnswerModified = userAnswer.replace(/-/g, ' ');
+    const correctAnswerModified = correctAnswer.replace(/-/g, ' ');
+
+    correctAnswerPattern = new RegExp(correctAnswerModified, 'i');
   }
 
   // Cek jawaban sesuai pola regex
@@ -94,23 +81,14 @@ function submitAnswer() {
     if (wrongAttempts === 0) {
       score += 100;
     } else {
-      score += 100 - wrongAttempts * 5;
+      score += (100 - (wrongAttempts * 5));
     }
-    feefirestoreack.innerHTML = "<span style='color: #0F0;'>Bolelah..bener mang!</span>";
+    feedback.innerHTML = "<span style='color: #0F0;'>Bolelah..bener mang!</span>";
     currentQuestion++;
     wrongAttempts = 0;
-
-    // Update level user di Firestore
-    firestore.collection("SS").doc(userId).update({
-      level: currentQuestion + 1,
-      levelIcon: currentQuestion + 1,
-      role: currentQuestion + 1,
-      soal: currentQuestion,
-      poin: score,
-    });
   } else {
     // Jawaban salah
-    feefirestoreack.innerHTML = "<span style='color: #F00;'>Salah mang!, cubo lagi!</span>";
+    feedback.innerHTML = "<span style='color: #F00;'>Salah mang!, cubo lagi!</span>";
     score -= 5;
     wrongAttempts++;
   }
@@ -121,22 +99,5 @@ function submitAnswer() {
   displayQuestion();
 }
 
-// Update Data Realtime di #topskor
-function updateTopScore() {
-  const topskorElement = document.getElementById("topskor");
-
-  firestore.collection("SS")
-    .orderBy("level", "desc")
-    .onSnapshot((snapshot) => {
-      topskorElement.innerHTML = ""; // Reset data lama
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        const div = document.createElement("div");
-        div.innerHTML = `Lv.${data.level} ${data.nama} : ${data.poin}`;
-        topskorElement.appendChild(div);
-      });
-    });
-}
-
-// Panggil Pertanyaan Awal
+// Panggil pertanyaan pertama
 displayQuestion();
