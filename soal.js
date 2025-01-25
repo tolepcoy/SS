@@ -26,3 +26,79 @@ let questions = [
   { question: "9. '<span class='quotE'>Pada hari minggu ku turut Ayah ke kota</span>'.<br>Kalimat di atas adalah potongan lirik dari lagu anak-anak masa dulu.<br>Siapakah nama anak yang tidak turut ke kota pada lagu tersebut?",
   answer: "Ratna" },
 ];
+
+let currentQuestion = 0;
+let score = 0;
+let wrongAttempts = 0;
+let gameOver = false;
+
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    const userId = user.uid;
+
+// Listener realtime untuk skor user
+    firestore.collection("SS").doc(userId).onSnapshot((doc) => {
+      if (doc.exists) {
+        const userData = doc.data();
+        score = userData.poin || 0;
+        document.getElementById("score-nya").innerText = score;
+      }
+    });
+
+// Listener realtime untuk top skor
+    firestore.collection("SS")
+      .orderBy("level", "desc")
+      .onSnapshot((snapshot) => {
+    const topskorElement = document.getElementById("topskor");
+    topskorElement.innerHTML = "";
+        snapshot.forEach((doc) => {
+          const datanya = doc.data();
+          const isiDiv = document.createElement("div");
+          isiDiv.innerHTML = `Lv.${datanya.level} ${datanya.nama} : <span style="text-align:right">${datanya.poin}</span>`;
+          topskorElement.appendChild(isiDiv);
+        });
+      });
+
+    // Fungsi validasi jawaban
+    function submitAnswer() {
+      const userAnswer = document.getElementById("answer").value.trim();
+      const feedback = document.getElementById("feedback");
+
+      if (userAnswer === "") {
+        feedback.innerHTML = "<span style='color: orange;'>Isi jawaban dulu, Mang!</span>";
+        return;
+      }
+
+      const correctAnswer = questions[currentQuestion].answer;
+      let correctAnswerPattern = currentQuestion === 0
+        ? /92[.,]5[%\s]*$/
+        : new RegExp(correctAnswer.replace(/-/g, " "), "i");
+
+      if (correctAnswerPattern.test(userAnswer)) {
+        score += (wrongAttempts === 0) ? 100 : 100 - wrongAttempts * 5;
+        feedback.innerHTML = "<span style='color: #0F0;'>Bolelah..bener mang!</span>";
+        currentQuestion++;
+        wrongAttempts = 0;
+
+        // Update Firestore
+        firestore.collection("SS").doc(userId).update({
+          level: currentQuestion + 1,
+          levelIcon: currentQuestion + 1,
+          role: currentQuestion + 1,
+          soal: currentQuestion,
+          poin: score,
+        });
+      } else {
+        feedback.innerHTML = "<span style='color: #F00;'>Salah mang!, cubo lagi!</span>";
+        score -= 5;
+        wrongAttempts++;
+      }
+
+      document.getElementById("answer").value = "";
+      displayQuestion();
+    }
+
+    // Panggil soal pertama
+    displayQuestion();
+  }
+});
